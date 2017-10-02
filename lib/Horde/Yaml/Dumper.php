@@ -181,7 +181,7 @@ class Horde_Yaml_Dumper
             $string = $spaces . '- ' . $value . "\n";
         } else {
             // It's mapped.
-            $string = $spaces . $key . ': ' . $value . "\n";
+            $string = $spaces . $key . ':' . (strlen($value) ? ' ' : '') . $value . "\n";
         }
 
         return $string;

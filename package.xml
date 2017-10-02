@@ -28,7 +28,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
-* 
+* [jan] Don&apos;t add trailing whitespace after keys.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -317,7 +317,7 @@
    <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* 
+* [jan] Don&apos;t add trailing whitespace after keys.
    </notes>
   </release>
  </changelog>
