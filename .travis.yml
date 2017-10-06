@@ -17,9 +17,7 @@ before_script:
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
   - pear channel-discover pear.horde.org
   - pear install channel://pear.horde.org/Horde_Test
-  - ls /home/travis/.phpenv/versions/5.6.31/share/pear
-  - ls /home/travis/.phpenv/versions/5.6.31/share/pear/Horde
-  - ls /home/travis/.phpenv/versions/5.6.31/share/pear/Horde/Test
+  - find /home/travis/.phpenv/ -name Horde
   - pear install package.xml
 script:
   - php $(find test -name AllTests.php)
