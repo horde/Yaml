@@ -16,7 +16,6 @@ matrix:
 before_script:
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
   - echo "include_path = .:$HOME/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - pear install channel://pear.horde.org/Horde_Test
-  - pear install package.xml
+  - pear install -a package.xml
 script:
   - php $(find test -name AllTests.php)
