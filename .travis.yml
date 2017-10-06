@@ -15,11 +15,12 @@ matrix:
     - php: nightly
 before_script:
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
-  - echo $TRAVIS_PHP_VERSION
   - if [ "$TRAVIS_PHP_VERSION" == "5.6" ] || [ "$TRAVIS_PHP_VERSION" == "7.0" ];
     then
+      echo "YES";
       echo "include_path = .:$HOME/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini;
     fi
+  - tail -n1 ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - pear install channel://pear.horde.org/Horde_Test
   - pear install -a -B package.xml
 script:
