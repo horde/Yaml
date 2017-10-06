@@ -15,7 +15,7 @@ matrix:
     - php: nightly
 before_script:
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
-  - echo "include_path = .:~/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "include_path = .:$HOME/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - pear channel-discover pear.horde.org
   - pear install channel://pear.horde.org/Horde_Test
   - pear list-files pear.horde.org/Horde_Test
