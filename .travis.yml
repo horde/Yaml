@@ -3,12 +3,12 @@ notifications:
   irc: "chat.freenode.net#horde"
 language: php
 php:
-#  - 5.4
-#  - 5.5
+  - 5.4
+  - 5.5
   - 5.6
-#  - 7.0
-#  - 7.1
-#  - nightly
+  - 7.0
+  - 7.1
+  - nightly
 matrix:
   fast_finish: true
   allow_failures:
@@ -16,11 +16,7 @@ matrix:
 before_script:
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
   - echo "include_path = .:$HOME/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - pear channel-discover pear.horde.org
   - pear install channel://pear.horde.org/Horde_Test
-  - pear list-files pear.horde.org/Horde_Test
-  - pear config-show
-  - find /home/travis/.phpenv/ -name Horde
   - pear install package.xml
 script:
   - php $(find test -name AllTests.php)
