@@ -17,7 +17,7 @@
   <email>mike@maintainable.com</email>
   <active>yes</active>
  </lead>
- <date>2017-05-03</date>
+ <date>2017-10-17</date>
  <version>
   <release>2.0.7</release>
   <api>1.0.0</api>
@@ -40,7 +40,6 @@
        <file name="example.yaml" role="doc" />
        <file name="load.php" role="doc" />
       </dir> <!-- /doc/Horde/Yaml/examples -->
-      <file name="COPYING" role="doc" />
      </dir> <!-- /doc/Horde/Yaml -->
     </dir> <!-- /doc/Horde -->
    </dir> <!-- /doc -->
@@ -73,6 +72,7 @@
      </dir> <!-- /test/Horde/Yaml -->
     </dir> <!-- /test/Horde -->
    </dir> <!-- /test -->
+   <file name="LICENSE" role="doc" />
   </dir> <!-- / -->
  </contents>
  <dependencies>
@@ -112,7 +112,6 @@
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="COPYING" name="doc/Horde/Yaml/COPYING" />
    <install as="examples/dump.php" name="doc/Horde/Yaml/examples/dump.php" />
    <install as="examples/example.yaml" name="doc/Horde/Yaml/examples/example.yaml" />
    <install as="examples/load.php" name="doc/Horde/Yaml/examples/load.php" />
@@ -121,16 +120,17 @@
    <install as="Horde/Yaml/Exception.php" name="lib/Horde/Yaml/Exception.php" />
    <install as="Horde/Yaml/Loader.php" name="lib/Horde/Yaml/Loader.php" />
    <install as="Horde/Yaml/Node.php" name="lib/Horde/Yaml/Node.php" />
+   <install as="LICENSE" name="LICENSE" />
    <install as="Horde/Yaml/AllTests.php" name="test/Horde/Yaml/AllTests.php" />
    <install as="Horde/Yaml/Autoload.php" name="test/Horde/Yaml/Autoload.php" />
    <install as="Horde/Yaml/bootstrap.php" name="test/Horde/Yaml/bootstrap.php" />
    <install as="Horde/Yaml/DumperTest.php" name="test/Horde/Yaml/DumperTest.php" />
+   <install as="Horde/Yaml/fixtures/basic.yml" name="test/Horde/Yaml/fixtures/basic.yml" />
+   <install as="Horde/Yaml/fixtures/references.yml" name="test/Horde/Yaml/fixtures/references.yml" />
    <install as="Horde/Yaml/Helpers.php" name="test/Horde/Yaml/Helpers.php" />
    <install as="Horde/Yaml/LoaderTest.php" name="test/Horde/Yaml/LoaderTest.php" />
    <install as="Horde/Yaml/NodeTest.php" name="test/Horde/Yaml/NodeTest.php" />
    <install as="Horde/Yaml/phpunit.xml" name="test/Horde/Yaml/phpunit.xml" />
-   <install as="Horde/Yaml/fixtures/basic.yml" name="test/Horde/Yaml/fixtures/basic.yml" />
-   <install as="Horde/Yaml/fixtures/references.yml" name="test/Horde/Yaml/fixtures/references.yml" />
   </filelist>
  </phprelease>
  <changelog>
@@ -316,7 +316,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-05-03</date>
+   <date>2017-10-17</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * 
