@@ -63,6 +63,11 @@ class Horde_Yaml_Loader
     /**
      * @var string
      */
+    protected $_lineEnd = '';
+
+    /**
+     * @var string
+     */
     protected $_blockEnd = '';
 
     /**
@@ -134,7 +139,7 @@ class Horde_Yaml_Loader
         }
         if ($this->_inBlock && empty($trimmed)) {
             $last =& $this->_allNodes[$this->_lastNode];
-            $last->data[key($last->data)] .= "\n";
+            $last->data[key($last->data)] .= $this->_blockEnd;
         } elseif ($trimmed[0] != '#' && substr($trimmed, 0, 3) != '---') {
             // Create a new node and get its indent
             $node = new Horde_Yaml_Node($this->_nodeId++);
@@ -145,7 +150,12 @@ class Horde_Yaml_Loader
                 // If we're in a block, add the text to the parent's data
                 if ($this->_inBlock) {
                     $parent =& $this->_allNodes[$this->_lastNode];
-                    $parent->data[key($parent->data)] .= $this->_blockEnd . trim($line);
+                    $parent->data[key($parent->data)] .= $this->_lineEnd
+                        . preg_replace(
+                            '/^ {' . $this->_lastIndent . '}/',
+                            '',
+                            $line
+                        );
                 } else {
                     // The current node's parent is the same as the previous
                     // node's
@@ -156,7 +166,7 @@ class Horde_Yaml_Loader
             } elseif ($this->_lastIndent < $node->indent) {
                 if ($this->_inBlock) {
                     $parent =& $this->_allNodes[$this->_lastNode];
-                    $parent->data[key($parent->data)] .= trim($line) . $this->_blockEnd;
+                    $parent->data[key($parent->data)] .= trim($line) . $this->_lineEnd;
                 } else {
                     // The current node's parent is the previous node
                     $node->parent = $this->_lastNode;
@@ -167,24 +177,40 @@ class Horde_Yaml_Loader
                     $parent =& $this->_allNodes[$node->parent];
                     $parent->children = true;
                     if (is_array($parent->data)) {
-                        if (isset($parent->data[key($parent->data)])) {
-                            $chk = $parent->data[key($parent->data)];
-                            if ($chk === '>') {
-                                $this->_inBlock = true;
-                                $this->_blockEnd = ' ';
-                                $parent->data[key($parent->data)] =
-                                    str_replace('>', '', $parent->data[key($parent->data)]);
-                                $parent->data[key($parent->data)] .= trim($line);
-                                $parent->children = false;
-                                $this->_lastIndent = $node->indent;
-                            } elseif ($chk === '|') {
-                                $this->_inBlock = true;
+                        $key = key($parent->data);
+                        if (isset($parent->data[$key])) {
+                            $chk = $parent->data[$key];
+                            if (!is_array($chk) &&
+                                preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
+                                if ($match[1] == '>') {
+                                    $this->_lineEnd = ' ';
+                                } else {
+                                    $this->_lineEnd = "\n";
+                                }
                                 $this->_blockEnd = "\n";
-                                $parent->data[key($parent->data)] =
-                                    str_replace('|', '', $parent->data[key($parent->data)]);
-                                $parent->data[key($parent->data)] .= trim($line);
+                                if ($match[2]) {
+                                    if (strpos($match[2], '-') !== false) {
+                                        $this->_blockEnd = '';
+                                    }
+                                    $match[2] = str_replace(
+                                        array('-', '+'), '', $match[2]
+                                    );
+                                }
+                                if ($match[2]) {
+                                    $this->_lastIndent = $match[2];
+                                } else {
+                                    $this->_lastIndent = $node->indent;
+                                }
+                                $this->_inBlock = true;
+                                $parent->data[$key] = str_replace(
+                                    $match[0], '', $parent->data[$key]
+                                );
+                                $parent->data[$key] .= preg_replace(
+                                    '/^ {' . $this->_lastIndent . '}/',
+                                    '',
+                                    $line
+                                );
                                 $parent->children = false;
-                                $this->_lastIndent = $node->indent;
                             }
                         }
                     }
@@ -193,10 +219,9 @@ class Horde_Yaml_Loader
                 // Any block we had going is dead now
                 if ($this->_inBlock) {
                     $this->_inBlock = false;
-                    if ($this->_blockEnd == "\n" || $this->_blockEnd == ' ') {
-                        $last =& $this->_allNodes[$this->_lastNode];
-                        $last->data[key($last->data)] .= "\n";
-                    }
+                    $last =& $this->_allNodes[$this->_lastNode];
+                    $last->data[key($last->data)] .= $this->_blockEnd;
+                    $this->_blockEnd = '';
                 }
 
                 // We don't know the parent of the node so we have to

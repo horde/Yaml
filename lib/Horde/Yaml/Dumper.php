@@ -199,6 +199,14 @@ class Horde_Yaml_Dumper
     {
         $exploded = explode("\n", $value);
         $newValue = '|';
+        if (strlen(end($exploded))) {
+            $newValue .= '-';
+        } else {
+            array_pop($exploded);
+            if (!strlen(end($exploded))) {
+                $newValue .= '+';
+            }
+        }
         $indent += $this->_options['indent'];
         $spaces = str_repeat(' ', $indent);
         foreach ($exploded as $line) {
