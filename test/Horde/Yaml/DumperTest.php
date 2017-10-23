@@ -184,6 +184,27 @@ class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testStringLiteral()
+    {
+        $value = array('string' => "foo\nbar\n");
+        $expected = "---\nstring: |\n  foo\n  bar\n";
+        $string = $this->dumper->dump($value);
+        $this->assertEquals($expected, $string);
+        $this->assertEquals($value, Horde_Yaml::load($string));
+
+        $value = array('string' => "foo\nbar");
+        $expected = "---\nstring: |-\n  foo\n  bar\n";
+        $string = $this->dumper->dump($value);
+        $this->assertEquals($expected, $string);
+        $this->assertEquals($value, Horde_Yaml::load($string));
+
+        $value = array('string' => "foo\nbar\n\n");
+        $expected = "---\nstring: |+\n  foo\n  bar\n  \n";
+        $string = $this->dumper->dump($value);
+        $this->assertEquals($expected, $string);
+        $this->assertEquals($value, Horde_Yaml::load($string));
+    }
+
     public function testShouldWrapStringsWithCommentDelimiterInQuotes()
     {
         $value = array('foo' => 'string # this is not a comment');
