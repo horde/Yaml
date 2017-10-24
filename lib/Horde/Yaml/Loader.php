@@ -186,8 +186,8 @@ class Horde_Yaml_Loader
                                     $this->_lineEnd = ' ';
                                 } else {
                                     $this->_lineEnd = "\n";
+                                    $this->_blockEnd = "\n";
                                 }
-                                $this->_blockEnd = "\n";
                                 if ($match[2]) {
                                     if (strpos($match[2], '-') !== false) {
                                         $this->_blockEnd = '';
