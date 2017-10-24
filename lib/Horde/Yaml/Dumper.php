@@ -172,7 +172,7 @@ class Horde_Yaml_Dumper
         // Quote strings if necessary, and not folded
         if (!$literal &&
             strpos($value, "\n") === false &&
-            strchr($value, '#')) {
+            (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
             $value = "'{$value}'";
         }
 
