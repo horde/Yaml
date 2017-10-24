@@ -264,7 +264,7 @@ class Horde_Yaml_Loader
                 if ($is_array && $isset && !is_array($nodeval) &&
                     !is_object($nodeval) && strlen($nodeval) &&
                     ($nodeval[0] == '&' || $nodeval[0] == '*') &&
-                    $nodeval[1] != ' ') {
+                    isset($nodeval[1]) && $nodeval[1] != ' ') {
                     $this->_haveRefs[] =& $this->_allNodes[$node->id];
                 } elseif ($is_array && $isset && is_array($nodeval)) {
                     // Incomplete reference making code. Needs to be
@@ -273,7 +273,7 @@ class Horde_Yaml_Loader
                         if (!is_array($d) &&
                             strlen($d) &&
                             ($d[0] == '&' || $d[0] == '*') &&
-                            $d[1] != ' ') {
+                            isset ($d[1]) && $d[1] != ' ') {
                             $this->_haveRefs[] =& $this->_allNodes[$node->id];
                         }
                     }
