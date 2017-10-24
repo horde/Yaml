@@ -178,7 +178,7 @@ class Horde_Yaml_Dumper
 
         if ($sequence) {
             // It's a sequence.
-            $string = $spaces . '- ' . $value . "\n";
+            $string = $spaces . '-' . (strlen($value) ? ' ' : '') . $value . "\n";
         } else {
             // It's mapped.
             $string = $spaces . $key . ':' . (strlen($value) ? ' ' : '') . $value . "\n";
