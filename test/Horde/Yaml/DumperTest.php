@@ -230,7 +230,6 @@ class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
         // round-trip assert
         // parsing keeps trailing newlines.
-        $value['foo'] .= "\n";
         $this->assertEquals($value, Horde_Yaml::load($actual));
     }
 
