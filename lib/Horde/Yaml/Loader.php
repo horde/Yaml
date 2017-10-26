@@ -56,7 +56,10 @@ class Horde_Yaml_Loader
 
     /**
      * Is the parser inside a block?
-     * @var boolean
+     *
+     * Contains the block character (| or >) if inside a block.
+     *
+     * @var boolean|string
      */
     protected $_inBlock = false;
 
@@ -139,8 +142,12 @@ class Horde_Yaml_Loader
         }
         if ($this->_inBlock && empty($trimmed)) {
             $last =& $this->_allNodes[$this->_lastNode];
-            $last->data[key($last->data)] .= $this->_blockEnd;
-        } elseif ($trimmed[0] != '#' && substr($trimmed, 0, 3) != '---') {
+            $last->data[key($last->data)] .=
+                ($this->_inBlock == '>' && $line !== false ? "\n" : $this->_blockEnd);
+        } elseif ($this->_inBlock ||
+                  (!$this->_inBlock &&
+                   $trimmed[0] != '#' &&
+                   substr($trimmed, 0, 3) != '---')) {
             // Create a new node and get its indent
             $node = new Horde_Yaml_Node($this->_nodeId++);
             $node->indent = $this->_getIndent($line);
@@ -171,9 +178,9 @@ class Horde_Yaml_Loader
                     // The current node's parent is the previous node
                     $node->parent = $this->_lastNode;
 
-                    // If the value of the last node's data was > or |
-                    // we need to start blocking i.e. taking in all
-                    // lines as a text value until we drop our indent.
+                    // If the value of the last node's data was > or | we need
+                    // to start blocking i.e. taking in all lines as a text
+                    // value until we drop our indent.
                     $parent =& $this->_allNodes[$node->parent];
                     $parent->children = true;
                     if (is_array($parent->data)) {
@@ -201,7 +208,7 @@ class Horde_Yaml_Loader
                                 } else {
                                     $this->_lastIndent = $node->indent;
                                 }
-                                $this->_inBlock = true;
+                                $this->_inBlock = $match[1];
                                 $parent->data[$key] = str_replace(
                                     $match[0], '', $parent->data[$key]
                                 );
