@@ -217,7 +217,7 @@ class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
 
-        $expected = "There isn't any time for your tricks!\n Do you understand?\n\n";
+        $expected = "There isn't any time for your tricks!\n Do you understand?\n";
         $actual = $parsed['no time'];
         $this->assertEquals($expected, $actual);
     }
@@ -793,9 +793,9 @@ class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
     public function testUnfolding()
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
-        $expected = "Line 1 Line 2\n";
+        $expected = "Line 1 Line 2";
         $this->assertEquals($expected, $parsed['foldedStringTest']);
-        $expected = "The Horde Application Framework is a flexible, modular, general-purpose web application framework written in PHP. It provides an extensive array of components that are targeted at the common problems and tasks involved in developing modern web applications.\n";
+        $expected = "The Horde Application Framework is a flexible, modular, general-purpose web application framework written in PHP. It provides an extensive array of components that are targeted at the common problems and tasks involved in developing modern web applications.";
         $this->assertEquals($expected, $parsed['description']);
     }
 
