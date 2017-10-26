@@ -173,7 +173,12 @@ class Horde_Yaml_Loader
             } elseif ($this->_lastIndent < $node->indent) {
                 if ($this->_inBlock) {
                     $parent =& $this->_allNodes[$this->_lastNode];
-                    $parent->data[key($parent->data)] .= trim($line) . $this->_lineEnd;
+                    $parent->data[key($parent->data)] .= $this->_lineEnd
+                        . preg_replace(
+                            '/^ {' . $this->_lastIndent . '}/',
+                            '',
+                            $line
+                        );
                 } else {
                     // The current node's parent is the previous node
                     $node->parent = $this->_lastNode;
