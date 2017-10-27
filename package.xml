@@ -17,7 +17,7 @@
   <email>mike@maintainable.com</email>
   <active>yes</active>
  </lead>
- <date>2017-10-20</date>
+ <date>2017-10-27</date>
  <version>
   <release>2.0.7</release>
   <api>1.0.0</api>
@@ -42,6 +42,7 @@
        <file name="example.yaml" role="doc" />
        <file name="load.php" role="doc" />
       </dir> <!-- /doc/Horde/Yaml/examples -->
+      <file name="CHANGES" role="doc" />
      </dir> <!-- /doc/Horde/Yaml -->
     </dir> <!-- /doc/Horde -->
    </dir> <!-- /doc -->
@@ -113,6 +114,7 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="CHANGES" name="doc/Horde/Yaml/CHANGES" />
    <install as="examples/dump.php" name="doc/Horde/Yaml/examples/dump.php" />
    <install as="examples/example.yaml" name="doc/Horde/Yaml/examples/example.yaml" />
    <install as="examples/load.php" name="doc/Horde/Yaml/examples/load.php" />
@@ -316,7 +318,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-20</date>
+   <date>2017-10-27</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * [jan] Correctly escape/quote special characters.
