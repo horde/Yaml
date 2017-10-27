@@ -1,0 +1,157 @@
+---
+2.0.7:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-10-20
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Correctly escape/quote special characters.
+    [jan] Implement block chomping.
+    [jan] Don't add trailing whitespace after keys.
+2.0.6:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-05-03
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Fix unfolding of multi-line strings and other incompatibilites with libyaml.
+2.0.5:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-02-02
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Mark PHP 7 as supported.
+2.0.4:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-04-28
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Fix issues with certain locales like Turkish.
+2.0.3:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-01-09
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Add Composer definition.
+2.0.2:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-05
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Correctly detect sequences when dumping and be more strict when loading sequences.
+2.0.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-19
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [mms] Use new Horde_Test layout.
+2.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-30
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    First stable release for Horde 5.
+2.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-07-19
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    First beta release for Horde 5.
+2.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: stable
+  date: 2012-07-06
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    First alpha release for Horde 5.
+1.0.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-11-22
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [jan] Fix tests to work with PHPUnit 3.6.
+1.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-06
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    First stable release for Horde 4.
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    Second release candidate for Horde 4.
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-24
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    First release candidate for Horde 4.
