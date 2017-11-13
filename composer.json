@@ -1,8 +1,8 @@
 {
     "name": "horde/yaml",
-    "description": "Horde YAML parsing and dumping routines",
+    "description": "YAML parsing and writing library",
     "type": "library",
-    "homepage": "https://pear.horde.org",
+    "homepage": "https://www.horde.org/libraries/Horde_Yaml",
     "license": "BSD-2-Clause",
     "authors": [
         {
@@ -17,7 +17,7 @@
         }
     ],
     "version": "2.0.7",
-    "time": "2017-10-20",
+    "time": "2017-11-11",
     "repositories": [
         {
             "type": "pear",
