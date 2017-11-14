@@ -72,7 +72,6 @@
       <file name="Helpers.php" role="test" />
       <file name="LoaderTest.php" role="test" />
       <file name="NodeTest.php" role="test" />
-      <file name="phpunit.xml" role="test" />
      </dir> <!-- /test/Horde/Yaml -->
     </dir> <!-- /test/Horde -->
    </dir> <!-- /test -->
@@ -132,7 +131,6 @@
    <install as="Horde/Yaml/Helpers.php" name="test/Horde/Yaml/Helpers.php" />
    <install as="Horde/Yaml/LoaderTest.php" name="test/Horde/Yaml/LoaderTest.php" />
    <install as="Horde/Yaml/NodeTest.php" name="test/Horde/Yaml/NodeTest.php" />
-   <install as="Horde/Yaml/phpunit.xml" name="test/Horde/Yaml/phpunit.xml" />
    <install as="Horde/Yaml/fixtures/basic.yml" name="test/Horde/Yaml/fixtures/basic.yml" />
    <install as="Horde/Yaml/fixtures/references.yml" name="test/Horde/Yaml/fixtures/references.yml" />
   </filelist>
