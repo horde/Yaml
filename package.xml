@@ -6,18 +6,18 @@
  <summary>YAML parsing and writing library</summary>
  <description>Classes for parsing YAML files into PHP arrays, and dumping PHP arrays into YAML encoding.</description>
  <lead>
-  <name>Chuck Hagenbuch</name>
-  <user>chuck</user>
-  <email>chuck@horde.org</email>
-  <active>yes</active>
- </lead>
- <lead>
   <name>Mike Naberezny</name>
   <user>mnaberez</user>
   <email>mike@maintainable.com</email>
   <active>yes</active>
  </lead>
- <date>2017-11-11</date>
+ <lead>
+  <name>Chuck Hagenbuch</name>
+  <user>chuck</user>
+  <email>chuck@horde.org</email>
+  <active>no</active>
+ </lead>
+ <date>2018-01-21</date>
  <version>
   <release>2.0.7</release>
   <api>1.0.0</api>
@@ -318,7 +318,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-11-11</date>
+   <date>2018-01-21</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * [jan] Correctly escape/quote special characters.
