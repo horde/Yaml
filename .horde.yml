@@ -33,6 +33,8 @@ license:
 dependencies:
   required:
     php: ^5.3 || ^7
+    ext:
+      ctype: '*'
     pear:
       pear.horde.org/Horde_Exception: ^2
       pear.horde.org/Horde_Util: ^2

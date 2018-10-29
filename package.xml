@@ -17,7 +17,7 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2018-01-21</date>
+ <date>2018-10-29</date>
  <version>
   <release>2.0.8</release>
   <api>1.0.0</api>
@@ -85,6 +85,9 @@
    <pearinstaller>
     <min>1.7.0</min>
    </pearinstaller>
+   <extension>
+    <name>ctype</name>
+   </extension>
    <package>
     <name>Horde_Exception</name>
     <channel>pear.horde.org</channel>
@@ -355,7 +358,7 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2018-01-21</date>
+   <date>2018-10-29</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * 
