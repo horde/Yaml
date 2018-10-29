@@ -287,21 +287,23 @@ class Horde_Yaml_Loader
                 $isset = isset($node->data[$key]);
                 if ($isset) {
                     $nodeval = $node->data[$key];
-                }
-                if ($is_array && $isset && !is_array($nodeval) &&
-                    !is_object($nodeval) && strlen($nodeval) &&
-                    ($nodeval[0] == '&' || $nodeval[0] == '*') &&
-                    isset($nodeval[1]) && $nodeval[1] != ' ') {
-                    $this->_haveRefs[] =& $this->_allNodes[$node->id];
-                } elseif ($is_array && $isset && is_array($nodeval)) {
-                    // Incomplete reference making code. Needs to be
-                    // cleaned up.
-                    foreach ($node->data[$key] as $d) {
-                        if (!is_array($d) &&
-                            strlen($d) &&
-                            ($d[0] == '&' || $d[0] == '*') &&
-                            isset ($d[1]) && $d[1] != ' ') {
+                    if ($is_array) {
+                        if (!is_array($nodeval) && !is_object($nodeval) &&
+                            strlen($nodeval) &&
+                            ($nodeval[0] == '&' || $nodeval[0] == '*') &&
+                            isset($nodeval[1]) && $nodeval[1] != ' ') {
                             $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                        } elseif (is_array($nodeval)) {
+                            // Incomplete reference making code. Needs to be
+                            // cleaned up.
+                            foreach ($node->data[$key] as $d) {
+                                if (!is_array($d) &&
+                                    strlen($d) &&
+                                    ($d[0] == '&' || $d[0] == '*') &&
+                                    isset ($d[1]) && $d[1] != ' ') {
+                                    $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                                }
+                            }
                         }
                     }
                 }
