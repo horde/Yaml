@@ -43,10 +43,22 @@ class Horde_Yaml_Loader
     protected $_allParent = array();
 
     /**
+     * References
+     * @var array
+     */
+    protected $_ref = array();
+
+    /**
      * Last indent level
      * @var integer
      */
     protected $_lastIndent = 0;
+
+    /**
+     * Nodes by indention level.
+     * @var array
+     */
+    protected $_indentSort = array();
 
     /**
      * Last node id
@@ -765,14 +777,14 @@ class Horde_Yaml_Loader
             // It is a reference
             $key = key($z->data);
             // Copy the data to this object for easy retrieval later
-            $this->ref[$z->ref] =& $z->data[$key];
+            $this->_ref[$z->ref] =& $z->data[$key];
         } elseif (isset($z->refKey)) {
             // It has a reference
-            if (isset($this->ref[$z->refKey])) {
+            if (isset($this->_ref[$z->refKey])) {
                 $key = key($z->data);
                 // Copy the data from this object to make the node a real
                 // reference
-                $z->data[$key] =& $this->ref[$z->refKey];
+                $z->data[$key] =& $this->_ref[$z->refKey];
             }
         }
     }
