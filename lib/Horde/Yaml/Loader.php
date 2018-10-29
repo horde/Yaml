@@ -116,6 +116,8 @@ class Horde_Yaml_Loader
      * Returns the PHP built from all YAML parsed so far.
      *
      * @return array  PHP version of parsed YAML.
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     public function toArray()
     {
@@ -130,9 +132,10 @@ class Horde_Yaml_Loader
     /**
      * Parses a line of a YAML file.
      *
-     * @param string $line  The line of YAML to parse.
+     * @param string $line The line of YAML to parse.
      *
-     * @return Horde_Yaml_Node YAML Node.
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     public function parse($line)
     {
@@ -324,9 +327,11 @@ class Horde_Yaml_Loader
     /**
      * Parses YAML code and returns an array for a node.
      *
-     * @param string $line  A line from the YAML file.
+     * @param string $line A line from the YAML file.
      *
      * @return array
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _parseLine($line)
     {
@@ -376,6 +381,8 @@ class Horde_Yaml_Loader
      * @param string $value
      *
      * @return mixed
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _toType($value)
     {
@@ -461,7 +468,10 @@ class Horde_Yaml_Loader
     /**
      * Handles PHP serialized data.
      *
-     * @param string &$data  Data to check for serialized PHP types.
+     * @param string &$data Data to check for serialized PHP types.
+     *
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _unserialize(&$data)
     {
@@ -601,6 +611,8 @@ class Horde_Yaml_Loader
      * Builds the PHP array from all the YAML nodes we've gathered.
      *
      * @return array
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _buildArray()
     {
@@ -652,11 +664,12 @@ class Horde_Yaml_Loader
     /**
      * Helper for _linkReferences().
      *
-     * @param Horde_Yaml_Node $n  Node.
-     * @param string $k           Key.
-     * @param mixed $v            Value.
+     * @param Horde_Yaml_Node $n Node.
+     * @param string $key        Key.
+     * @param string $k          Key.
+     * @param mixed $v           Value.
      */
-    protected function _linkRef(&$n, $key, $k = null, $v = null)
+    protected function _linkRef($n, $key, $k = null, $v = null)
     {
         if (empty($k) && empty($v)) {
             // Look for &refs
@@ -689,8 +702,11 @@ class Horde_Yaml_Loader
     /**
      * Finds the children of a node and aids in the building of the PHP array
      *
-     * @param  int    $nid   The id of the node whose children we're gathering
+     * @param  int $nid The id of the node whose children we're gathering
+     *
      * @return array
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _gatherChildren($nid)
     {
@@ -717,7 +733,10 @@ class Horde_Yaml_Loader
     /**
      * Turns a node's data and its children's data into a PHP array
      *
-     * @param array $node  The node which you want to arrayize.
+     * @param Horde_Yaml_Node $node The node which you want to arrayize.
+     *
+     * @throws Horde_Yaml_Exception
+     * @throws ReflectionException
      */
     protected function _nodeArrayizeData(&$node)
     {
