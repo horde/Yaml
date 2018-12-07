@@ -74,7 +74,7 @@ class Horde_Yaml
         if (strpos($yaml, "\r") !== false) {
             $yaml = str_replace(array("\r\n", "\r"), array("\n", "\n"), $yaml);
         }
-        $lines = explode("\n", $yaml);
+        $lines = explode("\n", rtrim($yaml, "\n"));
         $loader = new Horde_Yaml_Loader;
 
         foreach ($lines as $line) {

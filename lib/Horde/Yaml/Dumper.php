@@ -234,7 +234,9 @@ class Horde_Yaml_Dumper
             $indent += $this->_options['indent'];
             $indent = str_repeat(' ', $indent);
             $wrapped = wordwrap($value, $this->_options['wordwrap'], "\n$indent");
-            $value = ">\n" . $indent . $wrapped;
+            $value = '>'
+                . (preg_match('/\n$/', $value) ? '' : '-')
+                . "\n" . $indent . $wrapped;
         }
 
         return $value;

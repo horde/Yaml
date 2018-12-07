@@ -76,14 +76,15 @@ class Horde_Yaml_Loader
     protected $_inBlock = false;
 
     /**
+     * The chomp mode (strip: '-', keep: '+', clip: '')
      * @var string
      */
-    protected $_lineEnd = '';
+    protected $_chomp = '';
 
     /**
      * @var string
      */
-    protected $_blockEnd = '';
+    protected $_lineEnd = '';
 
     /**
      * @var boolean
@@ -121,6 +122,11 @@ class Horde_Yaml_Loader
      */
     public function toArray()
     {
+        // Chomp the final line break(s) if necessary;
+        if ($this->_inBlock) {
+            $this->_chomp();
+        }
+
         // Here we travel through node-space and pick out references
         // (& and *).
         $this->_linkReferences();
@@ -157,157 +163,179 @@ class Horde_Yaml_Loader
         }
         if ($this->_inBlock && empty($trimmed)) {
             $last =& $this->_allNodes[$this->_lastNode];
-            $last->data[key($last->data)] .=
-                ($this->_inBlock == '>' && $line !== false ? "\n" : $this->_blockEnd);
-        } elseif ($this->_inBlock ||
-                  (!$this->_inBlock &&
-                   $trimmed[0] != '#' &&
-                   substr($trimmed, 0, 3) != '---')) {
-            // Create a new node and get its indent
-            $node = new Horde_Yaml_Node($this->_nodeId++);
-            $node->indent = $this->_getIndent($line);
+            $key = key($last->data);
+            if ($this->_chomp != '+') {
+                $last->data[$key] = rtrim($last->data[$key]);
+            }
+            if ($this->_chomp != '-') {
+                $last->data[$key] .= "\n";
+            }
+            return;
+        }
+        if (!$this->_inBlock &&
+            (substr($trimmed, 0, 1) == '#' ||
+             substr($trimmed, 0, 3) == '---')) {
+            return;
+        }
 
-            // Check where the node lies in the hierarchy
-            if ($this->_lastIndent == $node->indent) {
-                // If we're in a block, add the text to the parent's data
-                if ($this->_inBlock) {
-                    $parent =& $this->_allNodes[$this->_lastNode];
-                    $parent->data[key($parent->data)] .= $this->_lineEnd
-                        . preg_replace(
-                            '/^ {' . $this->_lastIndent . '}/',
-                            '',
-                            $line
-                        );
-                } else {
-                    // The current node's parent is the same as the previous
-                    // node's
-                    if (isset($this->_allNodes[$this->_lastNode])) {
-                        $node->parent = $this->_allNodes[$this->_lastNode]->parent;
-                    }
-                }
-            } elseif ($this->_lastIndent < $node->indent) {
-                if ($this->_inBlock) {
-                    $parent =& $this->_allNodes[$this->_lastNode];
-                    $parent->data[key($parent->data)] .= $this->_lineEnd
-                        . preg_replace(
-                            '/^ {' . $this->_lastIndent . '}/',
-                            '',
-                            $line
-                        );
-                } else {
-                    // The current node's parent is the previous node
-                    $node->parent = $this->_lastNode;
+        // Create a new node and get its indent
+        $node = new Horde_Yaml_Node($this->_nodeId++);
+        $node->indent = $this->_getIndent($line);
 
-                    // If the value of the last node's data was > or | we need
-                    // to start blocking i.e. taking in all lines as a text
-                    // value until we drop our indent.
-                    $parent =& $this->_allNodes[$node->parent];
-                    $parent->children = true;
-                    if (is_array($parent->data)) {
-                        $key = key($parent->data);
-                        if (isset($parent->data[$key])) {
-                            $chk = $parent->data[$key];
-                            if (!is_array($chk) &&
-                                preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
-                                if ($match[1] == '>') {
-                                    $this->_lineEnd = ' ';
-                                } else {
-                                    $this->_lineEnd = "\n";
-                                    $this->_blockEnd = "\n";
-                                }
-                                if ($match[2]) {
-                                    if (strpos($match[2], '-') !== false) {
-                                        $this->_blockEnd = '';
-                                    }
-                                    $match[2] = str_replace(
-                                        array('-', '+'), '', $match[2]
-                                    );
-                                }
-                                if ($match[2]) {
-                                    $this->_lastIndent = $match[2];
-                                } else {
-                                    $this->_lastIndent = $node->indent;
-                                }
-                                $this->_inBlock = $match[1];
-                                $parent->data[$key] = str_replace(
-                                    $match[0], '', $parent->data[$key]
-                                );
-                                $parent->data[$key] .= preg_replace(
-                                    '/^ {' . $this->_lastIndent . '}/',
-                                    '',
-                                    $line
-                                );
-                                $parent->children = false;
-                            }
-                        }
-                    }
-                }
-            } elseif ($this->_lastIndent > $node->indent) {
-                // Any block we had going is dead now
-                if ($this->_inBlock) {
-                    $this->_inBlock = false;
-                    $last =& $this->_allNodes[$this->_lastNode];
-                    $last->data[key($last->data)] .= $this->_blockEnd;
-                    $this->_blockEnd = '';
-                }
-
-                // We don't know the parent of the node so we have to
-                // find it
-                foreach ($this->_indentSort[$node->indent] as $n) {
-                    if ($n->indent == $node->indent) {
-                        $node->parent = $n->parent;
-                    }
+        // Check where the node lies in the hierarchy
+        if ($this->_lastIndent == $node->indent) {
+            // If we're in a block, add the text to the parent's data
+            if ($this->_inBlock) {
+                $parent =& $this->_allNodes[$this->_lastNode];
+                $parent->data[key($parent->data)] .= preg_replace(
+                        '/^ {' . $this->_lastIndent . '}/',
+                        '',
+                        $line
+                    ) . $this->_lineEnd;
+            } else {
+                // The current node's parent is the same as the previous
+                // node's
+                if (isset($this->_allNodes[$this->_lastNode])) {
+                    $node->parent = $this->_allNodes[$this->_lastNode]->parent;
                 }
             }
+        } elseif ($this->_lastIndent < $node->indent) {
+            if ($this->_inBlock) {
+                $parent =& $this->_allNodes[$this->_lastNode];
+                $parent->data[key($parent->data)] .= preg_replace(
+                        '/^ {' . $this->_lastIndent . '}/',
+                        '',
+                        $line
+                    ) . $this->_lineEnd;
+            } else {
+                // The current node's parent is the previous node
+                $node->parent = $this->_lastNode;
 
-            if (!$this->_inBlock) {
-                // Set these properties with information from our
-                // current node
-                $this->_lastIndent = $node->indent;
-
-                // Set the last node
-                $this->_lastNode = $node->id;
-
-                // Parse the YAML line and return its data
-                $node->data = $this->_parseLine($line);
-
-                // Add the node to the master list
-                $this->_allNodes[$node->id] = $node;
-
-                // Add a reference to the parent list
-                $this->_allParent[intval($node->parent)][] = $node->id;
-
-                // Add a reference to the node in an indent array
-                $this->_indentSort[$node->indent][] =& $this->_allNodes[$node->id];
-
-                // Add a reference to the node in a References array
-                // if this node has a YAML reference in it.
-                $is_array = is_array($node->data);
-                $key = key($node->data);
-                $isset = isset($node->data[$key]);
-                if ($isset) {
-                    $nodeval = $node->data[$key];
-                    if ($is_array) {
-                        if (!is_array($nodeval) && !is_object($nodeval) &&
-                            strlen($nodeval) &&
-                            ($nodeval[0] == '&' || $nodeval[0] == '*') &&
-                            isset($nodeval[1]) && $nodeval[1] != ' ') {
-                            $this->_haveRefs[] =& $this->_allNodes[$node->id];
-                        } elseif (is_array($nodeval)) {
-                            // Incomplete reference making code. Needs to be
-                            // cleaned up.
-                            foreach ($node->data[$key] as $d) {
-                                if (!is_array($d) &&
-                                    strlen($d) &&
-                                    ($d[0] == '&' || $d[0] == '*') &&
-                                    isset ($d[1]) && $d[1] != ' ') {
-                                    $this->_haveRefs[] =& $this->_allNodes[$node->id];
-                                }
+                // If the value of the last node's data was > or | we need
+                // to start blocking i.e. taking in all lines as a text
+                // value until we drop our indent.
+                $parent =& $this->_allNodes[$node->parent];
+                $parent->children = true;
+                if (is_array($parent->data)) {
+                    $key = key($parent->data);
+                    if (isset($parent->data[$key])) {
+                        $chk = $parent->data[$key];
+                        if (!is_array($chk) &&
+                            preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
+                            if ($match[1] == '>') {
+                                $this->_lineEnd = ' ';
+                            } else {
+                                $this->_lineEnd = "\n";
                             }
+                            $this->_chomp = '';
+                            if ($match[2]) {
+                                if (strpos($match[2], '-') !== false) {
+                                    $this->_chomp = '-';
+                                } elseif (strpos($match[2], '+') !== false) {
+                                    $this->_chomp = '+';
+                                }
+                                $match[2] = str_replace(
+                                    array('-', '+'), '', $match[2]
+                                );
+                            }
+                            if ($match[2]) {
+                                $this->_lastIndent = $match[2];
+                            } else {
+                                $this->_lastIndent = $node->indent;
+                            }
+                            $this->_inBlock = $match[1];
+                            $parent->data[$key] = str_replace(
+                                $match[0], '', $parent->data[$key]
+                            );
+                            $parent->data[$key] .= preg_replace(
+                                '/^ {' . $this->_lastIndent . '}/',
+                                '',
+                                $line
+                            ) . $this->_lineEnd;
+                            $parent->children = false;
                         }
                     }
                 }
             }
+        } elseif ($this->_lastIndent > $node->indent) {
+            // Any block we had going is dead now
+            if ($this->_inBlock) {
+                $this->_inBlock = false;
+                $this->_chomp();
+            }
+
+            // We don't know the parent of the node so we have to
+            // find it
+            foreach ($this->_indentSort[$node->indent] as $n) {
+                if ($n->indent == $node->indent) {
+                    $node->parent = $n->parent;
+                    break;
+                }
+            }
+        }
+
+        if (!$this->_inBlock) {
+            // Set these properties with information from our
+            // current node
+            $this->_lastIndent = $node->indent;
+
+            // Set the last node
+            $this->_lastNode = $node->id;
+
+            // Parse the YAML line and return its data
+            $node->data = $this->_parseLine($line);
+
+            // Add the node to the master list
+            $this->_allNodes[$node->id] = $node;
+
+            // Add a reference to the parent list
+            $this->_allParent[intval($node->parent)][] = $node->id;
+
+            // Add a reference to the node in an indent array
+            $this->_indentSort[$node->indent][] =& $this->_allNodes[$node->id];
+
+            // Add a reference to the node in a References array
+            // if this node has a YAML reference in it.
+            $is_array = is_array($node->data);
+            $key = key($node->data);
+            $isset = isset($node->data[$key]);
+            if ($isset) {
+                $nodeval = $node->data[$key];
+                if ($is_array) {
+                    if (!is_array($nodeval) && !is_object($nodeval) &&
+                        strlen($nodeval) &&
+                        ($nodeval[0] == '&' || $nodeval[0] == '*') &&
+                        isset($nodeval[1]) && $nodeval[1] != ' ') {
+                        $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                    } elseif (is_array($nodeval)) {
+                        // Incomplete reference making code. Needs to be
+                        // cleaned up.
+                        foreach ($node->data[$key] as $d) {
+                            if (!is_array($d) &&
+                                strlen($d) &&
+                                ($d[0] == '&' || $d[0] == '*') &&
+                                isset ($d[1]) && $d[1] != ' ') {
+                                $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Chomps trailing white space if necessary.
+     */
+    protected function _chomp()
+    {
+        $last =& $this->_allNodes[$this->_lastNode];
+        $key = key($last->data);
+        if (!$this->_chomp) {
+            $last->data[$key] = rtrim($last->data[$key]) . "\n";
+        }
+        if ($this->_chomp == '-') {
+            $last->data[$key] = rtrim($last->data[$key]);
         }
     }
 
@@ -503,7 +531,7 @@ class Horde_Yaml_Loader
                 throw new Horde_Yaml_Exception("$class does not implement Serializable");
             }
 
-            $class_data = substr($data, $first_space + 1);
+            $class_data = trim(substr($data, $first_space + 1));
             $serialized = 'C:' . strlen($class) . ':"' . $class . '":' . strlen($class_data) . ':{' . $class_data . '}';
             $data = unserialize($serialized);
             break;
