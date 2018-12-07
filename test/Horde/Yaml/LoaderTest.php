@@ -217,7 +217,7 @@ class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
 
-        $expected = "There isn't any time for your tricks!\n Do you understand?\n";
+        $expected = "There isn't any time for your tricks!\nDo you understand?\n";
         $actual = $parsed['no time'];
         $this->assertEquals($expected, $actual);
     }
@@ -783,27 +783,45 @@ class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    // Test Helpers
-
-    public function fixture($name)
-    {
-        return __DIR__ . "/fixtures/{$name}.yml";
-    }
-
-    public function testUnfolding()
-    {
-        $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
-        $expected = "Line 1 Line 2";
-        $this->assertEquals($expected, $parsed['foldedStringTest']);
-        $expected = "The Horde Application Framework is a flexible, modular, general-purpose web application framework written in PHP. It provides an extensive array of components that are targeted at the common problems and tasks involved in developing modern web applications.";
-        $this->assertEquals($expected, $parsed['description']);
-    }
-
     public function testUnliteralizing()
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
         $expected = "Line #1\nLine #2\n";
         $this->assertEquals($expected, $parsed['literalStringTest']);
+    }
+
+    public function testUnfolding()
+    {
+        $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
+        $expected = "Line 1 Line 2\n";
+        $this->assertEquals($expected, $parsed['foldedStringTest']);
+        $expected = "The Horde Application Framework is a flexible, modular, general-purpose web application framework written in PHP. It provides an extensive array of components that are targeted at the common problems and tasks involved in developing modern web applications.\n";
+        $this->assertEquals($expected, $parsed['description']);
+    }
+
+    public function testChompClip()
+    {
+        $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
+        $this->assertEquals("Line 1\nLine 2\n", $parsed['chompClip']);
+    }
+
+    public function testChompStrip()
+    {
+        $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
+        $this->assertEquals("Line 1\nLine 2", $parsed['chompStrip']);
+    }
+
+    public function testChompKeep()
+    {
+        $parsed = Horde_Yaml::loadFile($this->fixture('basic'));
+        $this->assertEquals("Line 1\nLine 2\n\n\n", $parsed['chompKeep']);
+    }
+
+    // Test Helpers
+
+    public function fixture($name)
+    {
+        return __DIR__ . "/fixtures/{$name}.yml";
     }
 
 }

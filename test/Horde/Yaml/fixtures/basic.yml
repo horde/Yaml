@@ -21,3 +21,18 @@ description: >
   application framework written in PHP. It provides an extensive array of
   components that are targeted at the common problems and tasks involved in
   developing modern web applications.
+
+chompClip: |
+  Line 1
+  Line 2
+
+chompStrip: |-
+  Line 1
+  Line 2
+
+chompKeep: |+
+  Line 1
+  Line 2
+
+
+# end

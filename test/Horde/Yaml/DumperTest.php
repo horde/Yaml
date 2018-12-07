@@ -167,7 +167,7 @@ class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
     {
         $value = array('obj' => new Horde_Yaml_Test_Serializable('s'));
 
-        $expected = "---\nobj: >\n  !php/object::Horde_Yaml_Test_Serializable\n  s\n";
+        $expected = "---\nobj: >-\n  !php/object::Horde_Yaml_Test_Serializable\n  s\n";
         $actual = $this->dumper->dump($value);
         $this->assertEquals($expected, $actual);
     }
@@ -221,7 +221,7 @@ class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
         // stringWithHash: 'string # this is part of the string, not a comment'
         $value = array('foo' => 'string # this is not a comment but it is a long string that gets folded', 'bar' => 2);
         $expected = "---\n"
-                    . "foo: >\n"
+                    . "foo: >-\n"
                     . "  string # this is not a comment but it is\n"
                     . "  a long string that gets folded\n"
                     . "bar: 2\n";
