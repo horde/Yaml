@@ -1,5 +1,5 @@
 ---
-2.0.8:
+2.1.0:
   api: 1.0.0
   state:
     release: stable
@@ -8,8 +8,8 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |+
-    
+  notes: |
+    [jan] Add support for reading chomp operators.
 2.0.7:
   api: 1.0.0
   state:
