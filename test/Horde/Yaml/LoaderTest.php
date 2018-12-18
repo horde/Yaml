@@ -774,11 +774,54 @@ class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
               . "      - Needs to be backed up\n"
               . "      - Needs to be normalized\n"
               . "    type: mysql\n";
-
         $expected = array('databases' => array(array('name' => 'spartan',
                                                      'notes' => array('Needs to be backed up',
                                                                       'Needs to be normalized'),
                                                      'type' => 'mysql')));
+        $actual = Horde_Yaml::load($yaml);
+        $this->assertEquals($expected, $actual);
+
+        $yaml = <<<YAML
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+dependencies:
+  required:
+    php: ^5
+    pear:
+      pear.php.net/Console_Getopt: '*'
+  optional:
+    pear:
+      pecl.php.net/PECL: '*'
+YAML;
+        $expected = array(
+            'authors' => array(
+                array(
+                    'name' => 'Gunnar Wrobel',
+                    'user' => 'wrobel',
+                    'email' => 'p@rdus.de',
+                    'active' => true,
+                    'role' => 'lead',
+                )
+            ),
+            'dependencies' => array(
+                'required' => array(
+                    'php' => '^5',
+                    'pear' => array(
+                        'pear.php.net/Console_Getopt' => '*',
+                    )
+                ),
+                'optional' => array(
+                    'pear' => array(
+                        'pecl.php.net/PECL' => '*'
+                    )
+                )
+            )
+        );
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
     }

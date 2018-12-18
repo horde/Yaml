@@ -266,7 +266,8 @@ class Horde_Yaml_Loader
 
             // We don't know the parent of the node so we have to
             // find it
-            foreach ($this->_indentSort[$node->indent] as $n) {
+            foreach (array_reverse(array_keys($this->_indentSort[$node->indent])) as $key) {
+                $n = $this->_indentSort[$node->indent][$key];
                 if ($n->indent == $node->indent) {
                     $node->parent = $n->parent;
                     break;
