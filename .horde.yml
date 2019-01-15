@@ -10,10 +10,16 @@ type: library
 homepage: https://www.horde.org/libraries/Horde_Yaml
 authors:
   -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
     name: Mike Naberezny
     user: mnaberez
     email: mike@maintainable.com
-    active: true
+    active: false
     role: lead
   -
     name: Chuck Hagenbuch
