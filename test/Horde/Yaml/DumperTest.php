@@ -89,6 +89,15 @@ class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
         $this->assertSame($value, Horde_Yaml::load(Horde_Yaml::dump($value)));
     }
 
+    public function testEmtpyArray()
+    {
+        $value = array('foo' => array());
+
+        $expected = "---\nfoo: []\n";
+        $actual = $this->dumper->dump($value);
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testDumpsArrayAsMap()
     {
         $value = array('foo' => 'bar');

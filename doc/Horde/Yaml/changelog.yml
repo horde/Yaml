@@ -9,6 +9,7 @@
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
   notes: |
+    [jan] Fix dumping empty arrays.
     [jan] Add support for reading chomp operators.
 2.0.7:
   api: 1.0.0

@@ -90,9 +90,9 @@ class Horde_Yaml_Dumper
             $data = '!php/object::' . get_class($value)
                 . ' ' . $value->serialize();
             $string = $this->_dumpNode($key, $data, $indent, $sequence);
-        } elseif (is_array($value) || $value instanceof Traversable) {
+        } elseif (is_array($value)) {
             // It has children.  Make it the right kind of item.
-            $string = $this->_dumpNode($key, null, $indent, $sequence);
+            $string = $this->_dumpNode($key, $value, $indent, $sequence);
 
             // Add the indent.
             $indent += $this->_options['indent'];
@@ -144,18 +144,15 @@ class Horde_Yaml_Dumper
      */
     protected function _dumpNode($key, $value, $indent, $sequence = false)
     {
-        $literal = false;
-        // Do some folding here, for blocks.
-        if (strpos($value, "\n") !== false ||
-            strpos($value, ': ') !== false ||
-            strpos($value, '- ') !== false) {
-            $value = $this->_doLiteralBlock($value, $indent);
-            $literal = true;
-        } else {
-            $value = $this->_fold($value, $indent);
-        }
-
-        if (is_bool($value)) {
+        if (null === $value) {
+            $value = '~';
+        } elseif (is_array($value)) {
+            if (count($value)) {
+                $value = '';
+            } else {
+                $value = '[]';
+            }
+        } elseif (is_bool($value)) {
             $value = ($value) ? 'true' : 'false';
         } elseif (is_float($value)) {
             if (is_nan($value)) {
@@ -165,17 +162,29 @@ class Horde_Yaml_Dumper
             } elseif ($value === -INF) {
                 $value = '-.INF';
             }
+        } elseif (is_string($value)) {
+            $literal = false;
+            // Do some folding here, for blocks.
+            if (strpos($value, "\n") !== false ||
+                strpos($value, ': ') !== false ||
+                strpos($value, '- ') !== false) {
+                $value = $this->_doLiteralBlock($value, $indent);
+                $literal = true;
+            } else {
+                $value = $this->_fold($value, $indent);
+            }
+
+
+            // Quote strings if necessary, and not folded
+            if (!$literal &&
+                strlen($value) &&
+                strpos($value, "\n") === false &&
+                (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
+                $value = "'{$value}'";
+            }
         }
 
         $spaces = str_repeat(' ', $indent);
-
-        // Quote strings if necessary, and not folded
-        if (!$literal &&
-            strlen($value) &&
-            strpos($value, "\n") === false &&
-            (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
-            $value = "'{$value}'";
-        }
 
         if ($sequence) {
             // It's a sequence.
