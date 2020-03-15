@@ -303,8 +303,7 @@ class Horde_Yaml_Loader
             if ($isset) {
                 $nodeval = $node->data[$key];
                 if ($is_array) {
-                    if (!is_array($nodeval) && !is_object($nodeval) &&
-                        strlen($nodeval) &&
+                    if (is_string($nodeval) && strlen($nodeval) &&
                         ($nodeval[0] == '&' || $nodeval[0] == '*') &&
                         isset($nodeval[1]) && $nodeval[1] != ' ') {
                         $this->_haveRefs[] =& $this->_allNodes[$node->id];
