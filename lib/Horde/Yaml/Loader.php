@@ -311,8 +311,7 @@ class Horde_Yaml_Loader
                         // Incomplete reference making code. Needs to be
                         // cleaned up.
                         foreach ($node->data[$key] as $d) {
-                            if (!is_array($d) &&
-                                strlen($d) &&
+                            if (is_string($d) && strlen($d) &&
                                 ($d[0] == '&' || $d[0] == '*') &&
                                 isset ($d[1]) && $d[1] != ' ') {
                                 $this->_haveRefs[] =& $this->_allNodes[$node->id];
