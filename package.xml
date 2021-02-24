@@ -4,12 +4,18 @@
  <channel>pear.horde.org</channel>
  <extends>Yaml</extends>
  <summary>YAML parsing and writing library</summary>
- <description>Classes for parsing YAML files into PHP arrays, and dumping PHP arrays into YAML encoding.</description>
+ <description>A library for parsing YAML files into PHP arrays, and dumping PHP arrays into YAML encoding.</description>
+ <lead>
+  <name>Jan Schneider</name>
+  <user>jan</user>
+  <email>jan@horde.org</email>
+  <active>yes</active>
+ </lead>
  <lead>
   <name>Mike Naberezny</name>
   <user>mnaberez</user>
   <email>mike@maintainable.com</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Chuck Hagenbuch</name>
@@ -17,14 +23,14 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2019-01-14</date>
+ <date>2021-02-24</date>
  <version>
-  <release>2.1.0</release>
-  <api>1.0.0</api>
+  <release>3.0.0alpha1</release>
+  <api>3.0.0alpha1</api>
  </version>
  <stability>
-  <release>stable</release>
-  <api>stable</api>
+  <release>alpha</release>
+  <api>alpha</api>
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
@@ -351,14 +357,14 @@
   </release>
   <release>
    <version>
-    <release>2.1.0</release>
-    <api>1.0.0</api>
+    <release>3.0.0alpha1</release>
+    <api>3.0.0alpha1</api>
    </version>
    <stability>
-    <release>stable</release>
-    <api>stable</api>
+    <release>alpha</release>
+    <api>alpha</api>
    </stability>
-   <date>2019-01-14</date>
+   <date>2021-02-24</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * [jan] Add support for reading chomp operators.
