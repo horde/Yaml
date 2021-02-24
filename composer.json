@@ -42,9 +42,6 @@
     "autoload": {
         "psr-0": {
             "Horde_Yaml": "lib/"
-        },
-        "psr-4": {
-            "Horde\\Yaml\\": "src/"
         }
     }
 }
