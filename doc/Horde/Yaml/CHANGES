@@ -1,13 +1,6 @@
-------
-v2.1.1
-------
-
-
-
-
-------
-v2.1.0
-------
+------------
+v3.0.0alpha1
+------------
 
 [jan] Fix dumping empty arrays.
 [jan] Add support for reading chomp operators.
