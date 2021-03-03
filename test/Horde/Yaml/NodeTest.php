@@ -1,6 +1,6 @@
 <?php
 /**
- * Horde_Yaml_Node test
+ * Horde\Yaml\Node test
  *
  * @author  Mike Naberezny <mike@maintainable.com>
  * @license http://www.horde.org/licenses/bsd BSD
@@ -8,16 +8,16 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
+namespace Horde\Yaml;
+use \PHPUnit\Framework\TestCase;
+use \Horde_Yaml_Node;
 
 /**
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
  */
-
-namespace Horde\Yaml;
-
-class NodeTest extends \PHPUnit\Framework\TestCase
+class NodeTest extends TestCase
 {
     public function testConstructorAssignsId()
     {

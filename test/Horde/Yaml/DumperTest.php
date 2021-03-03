@@ -1,6 +1,6 @@
 <?php
 /**
- * Horde_Yaml_Node test
+ * Horde\Yaml\Dumper test
  *
  * @author  Mike Naberezny <mike@maintainable.com>
  * @license http://www.horde.org/licenses/bsd BSD
@@ -8,18 +8,22 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
+namespace Horde\Yaml;
+use \ArrayObject;
+use PHPUnit\Framework\TestCase;
+use \Horde_Yaml;
+use \Horde_Yaml_Dumper;
+use \Horde\Yaml\Helper\TestSerializable;
+use \InvalidArgumentException;
 
 /**
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
  */
-
-namespace Horde\Yaml;
-
-class DumperTest extends \PHPUnit\Framework\TestCase
+class DumperTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->dumper = new Horde_Yaml_Dumper();
     }
@@ -28,7 +32,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
 
     public function testPassThruConvenienceFunction()
     {
-        $value = array();
+        $value = [];
 
         // Disable any external dumper function
         $oldDumpFunc = Horde_Yaml::$dumpfunc;
@@ -52,7 +56,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
             $this->dumper->dump(array(), $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/options.*array/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/options.*array/i', $e->getMessage());
         }
     }
 
@@ -63,7 +67,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
             $this->dumper->dump(array(), $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/indent.*integer/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/indent.*integer/i', $e->getMessage());
         }
     }
 
@@ -74,7 +78,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
             $this->dumper->dump(array(), $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/wordwrap.*integer/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/wordwrap.*integer/i', $e->getMessage());
         }
     }
 
@@ -83,7 +87,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     public function testDumpAlwaysStartsNewYamlDocument()
     {
         $dump = $this->dumper->dump(array());
-        $this->assertRegExp("/^---\n/", $dump);
+        $this->assertMatchesRegularExpression("/^---\n/", $dump);
     }
 
     public function testNumericStrings()
@@ -177,9 +181,9 @@ class DumperTest extends \PHPUnit\Framework\TestCase
 
     public function testSerializable()
     {
-        $value = array('obj' => new Horde_Yaml_Test_Serializable('s'));
+        $value = array('obj' => new TestSerializable('s'));
 
-        $expected = "---\nobj: >-\n  !php/object::Horde_Yaml_Test_Serializable\n  s\n";
+        $expected = "---\nobj: >-\n  !php/object::Horde\Yaml\Helper\TestSerializable\n  s\n";
         $actual = $this->dumper->dump($value);
         $this->assertEquals($expected, $actual);
     }

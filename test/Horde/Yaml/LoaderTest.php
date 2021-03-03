@@ -8,18 +8,23 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
+namespace Horde\Yaml;
+use \ArrayObject;
+use \Horde_Yaml;
+use \Horde_Yaml_Exception;
+use \Horde\Yaml\Helper\LoaderTestMockLoader;
+use \Horde\Yaml\Helper\TestNotSerializable;
+use \InvalidArgumentException;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
  */
-
-namespace Horde\Yaml;
-
-class LoaderTest extends \PHPUnit\Framework\TestCase
+class LoaderTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         Horde_Yaml::$loadfunc = 'nonexistant_callback';
     }
@@ -28,7 +33,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        $expected = array('foo' => 'bar');
+        $expected = ['foo' => 'bar'];
         $actual = Horde_Yaml::load('foo: bar');
 
         $this->assertEquals($expected, $actual);
@@ -36,10 +41,10 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadUsesCallbackForParsingIfAvailable()
     {
-        Horde_Yaml::$loadfunc = 'Horde_Yaml_LoaderTest_MockLoader::returnArray';
+        Horde_Yaml::$loadfunc = '\Horde\Yaml\Helper\LoaderTestMockLoader::returnArray';
 
         $yaml = 'foo';
-        $expected = Horde_Yaml_LoaderTest_MockLoader::returnArray($yaml);
+        $expected = LoaderTestMockLoader::returnArray($yaml);
         $actual   = Horde_Yaml::load($yaml);
 
         $this->assertEquals($expected, $actual);
@@ -52,7 +57,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::load($notString);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/must be a string/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/must be a string/i', $e->getMessage());
         }
     }
 
@@ -63,7 +68,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::load($emptyString);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/cannot be empty/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/cannot be empty/i', $e->getMessage());
         }
     }
 
@@ -88,7 +93,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::loadFile($notString);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/must be a string/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/must be a string/i', $e->getMessage());
         }
     }
 
@@ -99,7 +104,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::loadFile($emptyString);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/cannot be empty/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/cannot be empty/i', $e->getMessage());
         }
     }
 
@@ -110,7 +115,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::loadFile($nonexistant);
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertRegExp('/failed to open/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/failed to open/i', $e->getMessage());
         }
     }
 
@@ -129,28 +134,28 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         try {
             Horde_Yaml::loadStream($notResource);
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/stream resource/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/stream resource/i', $e->getMessage());
         }
     }
 
     public function testLoadStreamThrowsWhenStreamIsResourceButNotStream()
     {
         $resourceButNotStream = xml_parser_create();
-        $this->assertInternalType('resource', $resourceButNotStream);
+        $this->assertIsResource($resourceButNotStream);
 
         try {
             Horde_Yaml::loadStream($resourceButNotStream);
         } catch (InvalidArgumentException $e) {
-            $this->assertRegExp('/stream resource/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/stream resource/i', $e->getMessage());
         }
     }
 
     public function testLoadStreamUsesCallbackForParsingIfAvailable()
     {
-        Horde_Yaml::$loadfunc = 'Horde_Yaml_LoaderTest_MockLoader::returnArray';
+        Horde_Yaml::$loadfunc = 'Horde\Yaml\Helper\LoaderTestMockLoader::returnArray';
 
         $stream = fopen('php://memory', 'r');
-        $expected = Horde_Yaml_LoaderTest_MockLoader::returnArray($stream);
+        $expected = LoaderTestMockLoader::returnArray($stream);
         $actual   = Horde_Yaml::loadStream($stream);
 
         $this->assertEquals($expected, $actual);
@@ -278,12 +283,12 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('ao' => new ArrayObject(array(1, 2, 3))), Horde_Yaml::load('ao: !php/array::ArrayObject [1, 2, 3]'));
 
         // Horde_Yaml_Test_NotSerializable doesn't implement ArrayAccess: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde_Yaml_Test_NotSerializable';
+        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
         try {
-            Horde_Yaml::load('array: !php/array::Horde_Yaml_Test_NotSerializable []');
+            Horde_Yaml::load('array: !php/array::Horde\Yaml\Helper\TestNotSerializable []');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde_Yaml_Test_NotSerializable does not implement ArrayAccess', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
         // Horde_Yaml_Test_OtherClass doesn't exist: FAILURE
@@ -317,12 +322,12 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         );
 
         // Horde_Yaml_Test_NotSerializable doesn't implement ArrayAccess: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde_Yaml_Test_NotSerializable';
+        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
         try {
-            Horde_Yaml::load('hash: !php/hash::Horde_Yaml_Test_NotSerializable {}');
+            Horde_Yaml::load('hash: !php/hash::Horde\Yaml\Helper\TestNotSerializable {}');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde_Yaml_Test_NotSerializable does not implement ArrayAccess', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
         // Horde_Yaml_Test_OtherClass doesn't exist: FAILURE
@@ -345,21 +350,21 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testSerializable()
     {
-        Horde_Yaml::$allowedClasses[] = 'Horde_Yaml_Test_Serializable';
+        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestSerializable';
         $result = Horde_Yaml::load('obj: >
-  !php/object::Horde_Yaml_Test_Serializable
+  !php/object::Horde\Yaml\Helper\TestSerializable
   string');
 
-        $this->assertInstanceOf('Horde_Yaml_Test_Serializable', $result['obj']);
+        $this->assertInstanceOf('Horde\Yaml\Helper\TestSerializable', $result['obj']);
         $this->assertSame('string', $result['obj']->test());
 
         // Horde_Yaml_Test_NotSerializable doesn't implement Serializable: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde_Yaml_Test_NotSerializable';
+        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
         try {
-            Horde_Yaml::load('o: !php/object::Horde_Yaml_Test_NotSerializable string');
+            Horde_Yaml::load('o: !php/object::Horde\Yaml\Helper\TestNotSerializable string');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde_Yaml_Test_NotSerializable does not implement Serializable', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
         }
 
         // Horde_Yaml_Test_Disallowed is not whitelisted
@@ -685,7 +690,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::load("\tfoo: bar");
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertRegExp('/indent contains a tab/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
 
@@ -695,16 +700,27 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             Horde_Yaml::load(" \tfoo: bar");
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertRegExp('/indent contains a tab/i', $e->getMessage());
+            $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
 
     public function testDoesNotThrowOnAnEmptyLineWithTabsOrSpaces()
     {
-        Horde_Yaml::load(" ");
-        Horde_Yaml::load("\t");
-        Horde_Yaml::load(" \t");
-        Horde_Yaml::load("\t ");
+        /**
+         * Workaround: There is no specific method to show no exception is
+         * raised. Just running code without any asserts will get the unit
+         * test marked "risky" by phpunit > 6
+         */
+        $exception = null;
+        try {
+            Horde_Yaml::load(" ");
+            Horde_Yaml::load("\t");
+            Horde_Yaml::load(" \t");
+            Horde_Yaml::load("\t ");
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertNull($exception);
     }
 
     // Comments
@@ -870,27 +886,6 @@ YAML;
     public function fixture($name)
     {
         return __DIR__ . "/fixtures/{$name}.yml";
-    }
-
-}
-
-
-/**
- * Used to test Horde_Yaml::$loadfunc callback.
- *
- * @package    Yaml
- * @subpackage UnitTests
- */
-class Horde_Yaml_LoaderTest_MockLoader
-{
-    public static function returnArray($yaml)
-    {
-        return array('loaded');
-    }
-
-    public static function returnFalse($yaml)
-    {
-        return false;
     }
 
 }
