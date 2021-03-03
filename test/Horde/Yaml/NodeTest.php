@@ -14,7 +14,10 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-class Horde_Yaml_NodeTest extends PHPUnit_Framework_TestCase
+
+namespace Horde\Yaml;
+
+class NodeTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorAssignsId()
     {

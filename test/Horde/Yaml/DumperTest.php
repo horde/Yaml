@@ -14,9 +14,12 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-class Horde_Yaml_DumperTest extends PHPUnit_Framework_TestCase
+
+namespace Horde\Yaml;
+
+class DumperTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->dumper = new Horde_Yaml_Dumper();
     }
