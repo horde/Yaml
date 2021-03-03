@@ -11,4 +11,7 @@
  * @license    http://www.horde.org/licenses/bsd BSD
  */
 
+if ( !class_exists('Horde_Test_Helpers') ) {
+     require_once __DIR__ . '/Helpers.php';
+}
 require_once __DIR__ . '/Helpers.php';

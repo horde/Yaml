@@ -14,9 +14,12 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-class Horde_Yaml_LoaderTest extends PHPUnit_Framework_TestCase
+
+namespace Horde\Yaml;
+
+class LoaderTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         Horde_Yaml::$loadfunc = 'nonexistant_callback';
     }
