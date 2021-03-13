@@ -23,7 +23,7 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-02-24</date>
+ <date>2021-03-13</date>
  <version>
   <release>3.0.0alpha3</release>
   <api>3.0.0alpha1</api>
@@ -34,7 +34,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
-* 
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -68,11 +68,15 @@
        <file name="basic.yml" role="test" />
        <file name="references.yml" role="test" />
       </dir> <!-- /test/Horde/Yaml/fixtures -->
+      <dir name="Helper">
+       <file name="LoaderTestMockLoader.php" role="test" />
+       <file name="TestNotSerializable.php" role="test" />
+       <file name="TestSerializable.php" role="test" />
+      </dir> <!-- /test/Horde/Yaml/Helper -->
       <file name="AllTests.php" role="test" />
       <file name="Autoload.php" role="test" />
       <file name="bootstrap.php" role="test" />
       <file name="DumperTest.php" role="test" />
-      <file name="Helpers.php" role="test" />
       <file name="LoaderTest.php" role="test" />
       <file name="NodeTest.php" role="test" />
      </dir> <!-- /test/Horde/Yaml -->
@@ -114,28 +118,14 @@
    <install as="Horde/Yaml/DumperTest.php" name="test/Horde/Yaml/DumperTest.php" />
    <install as="Horde/Yaml/fixtures/basic.yml" name="test/Horde/Yaml/fixtures/basic.yml" />
    <install as="Horde/Yaml/fixtures/references.yml" name="test/Horde/Yaml/fixtures/references.yml" />
-   <install as="Horde/Yaml/Helpers.php" name="test/Horde/Yaml/Helpers.php" />
+   <install as="Horde/Yaml/Helper/LoaderTestMockLoader.php" name="test/Horde/Yaml/Helper/LoaderTestMockLoader.php" />
+   <install as="Horde/Yaml/Helper/TestNotSerializable.php" name="test/Horde/Yaml/Helper/TestNotSerializable.php" />
+   <install as="Horde/Yaml/Helper/TestSerializable.php" name="test/Horde/Yaml/Helper/TestSerializable.php" />
    <install as="Horde/Yaml/LoaderTest.php" name="test/Horde/Yaml/LoaderTest.php" />
    <install as="Horde/Yaml/NodeTest.php" name="test/Horde/Yaml/NodeTest.php" />
   </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>1.0.0RC1</release>
@@ -391,7 +381,7 @@
    <date>2021-02-24</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* 
+* |+
    </notes>
   </release>
  </changelog>
