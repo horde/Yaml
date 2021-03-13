@@ -1,7 +1,7 @@
 {
     "name": "horde/yaml",
     "description": "YAML parsing and writing library",
-    "type": "horde-library",
+    "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Yaml",
     "license": "BSD-2-Clause",
     "authors": [
@@ -21,8 +21,7 @@
             "role": "lead"
         }
     ],
-    "version": "3.0.0alpha3",
-    "time": "2021-02-24",
+    "time": "2021-03-13",
     "repositories": [
         {
             "type": "composer",
@@ -30,7 +29,6 @@
         }
     ],
     "require": {
-        "horde/horde-installer-plugin": "*",
         "php": "^7",
         "ext-ctype": "*",
         "horde/exception": "^3",
