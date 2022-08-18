@@ -42,6 +42,16 @@ class TestSerializable implements Serializable
         $this->string = $serialized;
     }
 
+    public function __serialize(): array
+    {
+        return [$this->string];
+    }
+
+    public function __unserialize(array $serialized): void
+    {
+        $this->string = array_pop($serialized);
+    }
+
     public function test()
     {
         return $this->string;
