@@ -44,7 +44,9 @@ dependencies:
   optional:
     composer:
       horde/exception: ^3
+      horde/util: ^3
   dev:
     composer:
       horde/exception: ^3
       horde/test: ^3
+      horde/util: ^3

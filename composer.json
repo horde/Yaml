@@ -38,8 +38,7 @@
     },
     "require-dev": {
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/test": "^3 || dev-FRAMEWORK_6_0",
-        "phpunit/phpunit": "10.0.x-dev"
+        "horde/test": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
         "psr-0": {
