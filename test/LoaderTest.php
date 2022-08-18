@@ -12,13 +12,16 @@
 namespace Horde\Yaml\Test;
 
 use ArrayObject;
+use DomainException;
+use Horde\Yaml\Test\Helper\LoaderTestMockLoader;
+use Horde\Yaml\Test\Helper\TestNotSerializable;
+use Horde\Yaml\Test\Helper\TestSerializable;
 use Horde_Yaml;
 use Horde_Yaml_Exception;
-use Horde\Yaml\Test\Helper\LoaderTestMockLoader;
-use Horde\Yaml\Test\Helper\TestSerializable;
-use Horde\Yaml\Test\Helper\TestNotSerializable;
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use XMLParser;
 
 /**
@@ -79,7 +82,7 @@ class LoaderTest extends TestCase
     public function testLoadReturnsEmptyArrayWhenStringCannotBeParsedAsYaml()
     {
         $notYaml = 'notyaml';
-        $this->assertEquals(array(), Horde_Yaml::load($notYaml));
+        $this->assertEquals([], Horde_Yaml::load($notYaml));
     }
 
     // Loading: loadFile()
@@ -118,7 +121,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::loadFile($nonexistant);
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | RuntimeException $e) {
             $this->assertMatchesRegularExpression('/failed to open/i', $e->getMessage());
         }
     }
@@ -147,7 +150,7 @@ class LoaderTest extends TestCase
      *
      * This test becomes less useful
      * as there are few resources left in PHP 8.x
-     * 
+     *
      * @return void
      */
     public function testLoadStreamThrowsWhenStreamIsResourceButNotStream()
@@ -209,7 +212,7 @@ class LoaderTest extends TestCase
 
     public function testMappingBooleanTrue()
     {
-        $trues = array('TRUE', 'True', 'true', 'On', 'on', '+', 'YES', 'Yes', 'yes');
+        $trues = ['TRUE', 'True', 'true', 'On', 'on', '+', 'YES', 'Yes', 'yes'];
         foreach ($trues as $true) {
             $yaml = "True: $true";
             $parsed = Horde_Yaml::load($yaml);
@@ -219,7 +222,7 @@ class LoaderTest extends TestCase
 
     public function testMappingBooleanFalse()
     {
-        $falses = array('FALSE', 'False', 'false', 'Off', 'off', '-', 'NO', 'No', 'no');
+        $falses = ['FALSE', 'False', 'false', 'Off', 'off', '-', 'NO', 'No', 'no'];
         foreach ($falses as $false) {
             $yaml = "False: $false";
             $parsed = Horde_Yaml::load($yaml);
@@ -229,7 +232,7 @@ class LoaderTest extends TestCase
 
     public function testMappingNullValue()
     {
-        $nulls = array('NULL', 'Null', 'null', '', '~');
+        $nulls = ['NULL', 'Null', 'null', '', '~'];
         foreach ($nulls as $null) {
             $yaml = "Null: $null";
             $parsed = Horde_Yaml::load($yaml);
@@ -250,7 +253,7 @@ class LoaderTest extends TestCase
     {
         $yaml = "foo:\n"
               . "  bar: baz";
-        $expected = array('foo' => array('bar' => 'baz'));
+        $expected = ['foo' => ['bar' => 'baz']];
         $actual   = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
     }
@@ -259,22 +262,22 @@ class LoaderTest extends TestCase
 
     public function testFloatExponential()
     {
-        $this->assertSame(array('e' => 10.0), Horde_Yaml::load('e: 1.0e+1'));
-        $this->assertSame(array('e' => 0.1), Horde_Yaml::load('e: 1.0e-1'));
+        $this->assertSame(['e' => 10.0], Horde_Yaml::load('e: 1.0e+1'));
+        $this->assertSame(['e' => 0.1], Horde_Yaml::load('e: 1.0e-1'));
     }
 
     public function testInfinity()
     {
-        $this->assertSame(array('i' => INF), Horde_Yaml::load('i: .inf'));
-        $this->assertSame(array('i' => INF), Horde_Yaml::load('i: .Inf'));
-        $this->assertSame(array('i' => INF), Horde_Yaml::load('i: .INF'));
+        $this->assertSame(['i' => INF], Horde_Yaml::load('i: .inf'));
+        $this->assertSame(['i' => INF], Horde_Yaml::load('i: .Inf'));
+        $this->assertSame(['i' => INF], Horde_Yaml::load('i: .INF'));
     }
 
     public function testNegativeInfinity()
     {
-        $this->assertSame(array('i' => -INF), Horde_Yaml::load('i: -.inf'));
-        $this->assertSame(array('i' => -INF), Horde_Yaml::load('i: -.Inf'));
-        $this->assertSame(array('i' => -INF), Horde_Yaml::load('i: -.INF'));
+        $this->assertSame(['i' => -INF], Horde_Yaml::load('i: -.inf'));
+        $this->assertSame(['i' => -INF], Horde_Yaml::load('i: -.Inf'));
+        $this->assertSame(['i' => -INF], Horde_Yaml::load('i: -.INF'));
     }
 
     public function testNan()
@@ -290,20 +293,20 @@ class LoaderTest extends TestCase
 
     public function testArray()
     {
-        $this->assertEquals(array('a' => array()), Horde_Yaml::load('a: []'));
-        $this->assertEquals(array('a' => array('a', 'b', 'c')), Horde_Yaml::load('a: [a, b, c]'));
-        $this->assertEquals(array('a' => array()), Horde_Yaml::load('a: !php/array []'));
+        $this->assertEquals(['a' => []], Horde_Yaml::load('a: []'));
+        $this->assertEquals(['a' => ['a', 'b', 'c']], Horde_Yaml::load('a: [a, b, c]'));
+        $this->assertEquals(['a' => []], Horde_Yaml::load('a: !php/array []'));
 
         // ArrayObject implements ArrayAccess: OK
-        $this->assertEquals(array('ao' => new ArrayObject()), Horde_Yaml::load('ao: !php/array::ArrayObject []'));
-        $this->assertEquals(array('ao' => new ArrayObject(array(1, 2, 3))), Horde_Yaml::load('ao: !php/array::ArrayObject [1, 2, 3]'));
+        $this->assertEquals(['ao' => new ArrayObject()], Horde_Yaml::load('ao: !php/array::ArrayObject []'));
+        $this->assertEquals(['ao' => new ArrayObject([1, 2, 3])], Horde_Yaml::load('ao: !php/array::ArrayObject [1, 2, 3]'));
 
         // Horde_Yaml_Test_NotSerializable doesn't implement ArrayAccess: FAILURE
         Horde_Yaml::$allowedClasses[] = TestNotSerializable::class;
         try {
             Horde_Yaml::load('array: !php/array::Horde\Yaml\Test\Helper\TestNotSerializable []');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -312,7 +315,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('array: !php/array::Horde_Yaml_Test_OtherClass []');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -320,20 +323,20 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('array: !php/array::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
 
     public function testHash()
     {
-        $this->assertEquals(array('a' => array()), Horde_Yaml::load('a: {}'));
-        $this->assertEquals(array('a' => array('a', 'b', 'c')), Horde_Yaml::load('a: {0: a, 1: b, 2: c}'));
+        $this->assertEquals(['a' => []], Horde_Yaml::load('a: {}'));
+        $this->assertEquals(['a' => ['a', 'b', 'c']], Horde_Yaml::load('a: {0: a, 1: b, 2: c}'));
 
         // ArrayObject implements ArrayAccess: OK
-        $this->assertEquals(array('ao' => new ArrayObject()), Horde_Yaml::load('ao: !php/hash::ArrayObject {}'));
+        $this->assertEquals(['ao' => new ArrayObject()], Horde_Yaml::load('ao: !php/hash::ArrayObject {}'));
         $this->assertEquals(
-            array('ao' => new ArrayObject(array('a' => 1, 'b' => 2, 3 => 3, 4 => 'd', 'e' => 5))),
+            ['ao' => new ArrayObject(['a' => 1, 'b' => 2, 3 => 3, 4 => 'd', 'e' => 5])],
             Horde_Yaml::load('ao: !php/hash::ArrayObject {a: 1, b: 2, 3: 3, 4: d, e: 5}')
         );
 
@@ -342,7 +345,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde\Yaml\Test\Helper\TestNotSerializable {}');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -351,7 +354,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde_Yaml_Test_OtherClass {}');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -359,7 +362,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -379,7 +382,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('o: !php/object::Horde\Yaml\Test\Helper\TestNotSerializable string');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
         }
 
@@ -387,7 +390,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('o: !php/object::Horde_Yaml_Test_Disallowed string');
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -413,8 +416,8 @@ class LoaderTest extends TestCase
               . "  - Your config files will never be the same.";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("YAML is so easy to learn.",
-                          "Your config files will never be the same.");
+        $expected = ["YAML is so easy to learn.",
+                          "Your config files will never be the same.", ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -427,7 +430,7 @@ class LoaderTest extends TestCase
               . "  os : os x 10.4.1";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("cpu" => "1.5ghz", "ram" => "1 gig", "os" => "os x 10.4.1");
+        $expected = ["cpu" => "1.5ghz", "ram" => "1 gig", "os" => "os x 10.4.1"];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual, 'Sequence of mappings');
     }
@@ -439,7 +442,7 @@ class LoaderTest extends TestCase
               . "  - php.net\n";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("yaml.org", "php.net");
+        $expected = ["yaml.org", "php.net"];
         $actual = $parsed['domains'];
         $this->assertEquals($expected, $actual);
     }
@@ -451,7 +454,7 @@ class LoaderTest extends TestCase
               . "  type: Chat Client\n";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("program" => "Adium", "platform" => "OS X", "type" => "Chat Client");
+        $expected = ["program" => "Adium", "platform" => "OS X", "type" => "Chat Client"];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -462,7 +465,7 @@ class LoaderTest extends TestCase
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('references'));
 
-        $expected = array('Perl', 'Python', 'PHP', 'Ruby');
+        $expected = ['Perl', 'Python', 'PHP', 'Ruby'];
         $actual = $parsed['dynamic languages'];
         $this->assertEquals($expected, $actual);
     }
@@ -471,7 +474,7 @@ class LoaderTest extends TestCase
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('references'));
 
-        $expected = array('C/C++', 'Java');
+        $expected = ['C/C++', 'Java'];
         $actual = $parsed['compiled languages'];
         $this->assertEquals($expected, $actual);
     }
@@ -480,10 +483,10 @@ class LoaderTest extends TestCase
     {
         $parsed = Horde_Yaml::loadFile($this->fixture('references'));
 
-        $assignment1 = array('Perl', 'Python', 'PHP', 'Ruby');
-        $assignment2 = array('C/C++', 'Java');
+        $assignment1 = ['Perl', 'Python', 'PHP', 'Ruby'];
+        $assignment2 = ['C/C++', 'Java'];
 
-        $expected = array($assignment1, $assignment2);
+        $expected = [$assignment1, $assignment2];
         $actual = $parsed['all languages'];
 
         $this->assertEquals($expected, $actual);
@@ -496,7 +499,7 @@ class LoaderTest extends TestCase
         $yaml = '- [One, Two, Three, Four]';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("One", "Two", "Three", "Four");
+        $expected = ["One", "Two", "Three", "Four"];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -506,7 +509,7 @@ class LoaderTest extends TestCase
         $yaml = "- ['complex: string', 'another [string]']";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array('complex: string', 'another [string]');
+        $expected = ['complex: string', 'another [string]'];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -516,7 +519,7 @@ class LoaderTest extends TestCase
         $yaml = '- [One, [Two, And, Three], Four, Five]';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("One", array("Two", "And", "Three"), "Four", "Five");
+        $expected = ["One", ["Two", "And", "Three"], "Four", "Five"];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -526,7 +529,7 @@ class LoaderTest extends TestCase
         $yaml = '- [a, [\'1\', "2"], b]';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array('a', array('1', '2'), 'b');
+        $expected = ['a', ['1', '2'], 'b'];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -536,8 +539,8 @@ class LoaderTest extends TestCase
         $yaml = '- [This, [Is, Getting, [Ridiculous, Guys]], Seriously, [Show, Mercy]]';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("This", array("Is", "Getting", array("Ridiculous", "Guys")),
-                                            "Seriously", array("Show", "Mercy"));
+        $expected = ["This", ["Is", "Getting", ["Ridiculous", "Guys"]],
+                                            "Seriously", ["Show", "Mercy"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -547,7 +550,7 @@ class LoaderTest extends TestCase
         $yaml = '- []';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array();
+        $expected = [];
         $actual = $parsed[0];
         $this->assertEquals($actual, $expected);
     }
@@ -557,7 +560,7 @@ class LoaderTest extends TestCase
         $yaml = "- [ \t]";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array();
+        $expected = [];
         $actual = $parsed[0];
         $this->assertEquals($actual, $expected);
     }
@@ -567,7 +570,7 @@ class LoaderTest extends TestCase
         $yaml = '- {name: chris, age: young, brand: lucky strike}';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("name" => "chris", "age" => "young", "brand" => "lucky strike");
+        $expected = ["name" => "chris", "age" => "young", "brand" => "lucky strike"];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -577,7 +580,7 @@ class LoaderTest extends TestCase
         $yaml = '- {}';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array();
+        $expected = [];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -587,7 +590,7 @@ class LoaderTest extends TestCase
         $yaml = "- { \t}";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array();
+        $expected = [];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -597,7 +600,7 @@ class LoaderTest extends TestCase
         $yaml = '- {name: "Foo, Bar\'s", age: 20}';
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array('name' => "Foo, Bar's", 'age' => 20);
+        $expected = ['name' => "Foo, Bar's", 'age' => 20];
         $actual = $parsed[0];
 
         $this->assertEquals($expected, $actual);
@@ -608,7 +611,7 @@ class LoaderTest extends TestCase
     {
         $yaml = 'outer: { inner1: "foo bar", inner2: \'baz qux\' }';
 
-        $expected = array('outer' => array('inner1' => "foo bar", 'inner2' => "baz qux"));
+        $expected = ['outer' => ['inner1' => "foo bar", 'inner2' => "baz qux"]];
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
     }
@@ -618,8 +621,8 @@ class LoaderTest extends TestCase
         $yaml = "- {name: mark, age: older than chris, brand: [marlboro, lucky strike]}";
         $parsed = Horde_Yaml::load($yaml);
 
-        $expected = array("name" => "mark", "age" => "older than chris",
-                                             "brand" => array("marlboro", "lucky strike"));
+        $expected = ["name" => "mark", "age" => "older than chris",
+                                             "brand" => ["marlboro", "lucky strike"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -715,6 +718,8 @@ class LoaderTest extends TestCase
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
             $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
+        } catch (DomainException $e) {
+            $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
 
@@ -723,7 +728,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load(" \tfoo: bar");
             $this->fail();
-        } catch (Horde_Yaml_Exception $e) {
+        } catch (Horde_Yaml_Exception | DomainException $e) {
             $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
@@ -752,7 +757,7 @@ class LoaderTest extends TestCase
     public function testCommentOnEmptyLine()
     {
         $yaml = "# foo\nbar: baz";
-        $expected = array('bar' => 'baz');
+        $expected = ['bar' => 'baz'];
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
     }
@@ -837,54 +842,54 @@ class LoaderTest extends TestCase
               . "      - Needs to be backed up\n"
               . "      - Needs to be normalized\n"
               . "    type: mysql\n";
-        $expected = array('databases' => array(array('name' => 'spartan',
-                                                     'notes' => array('Needs to be backed up',
-                                                                      'Needs to be normalized'),
-                                                     'type' => 'mysql')));
+        $expected = ['databases' => [['name' => 'spartan',
+                                                     'notes' => ['Needs to be backed up',
+                                                                      'Needs to be normalized', ],
+                                                     'type' => 'mysql', ]]];
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
 
         $yaml = <<<YAML
-authors:
-  -
-    name: Gunnar Wrobel
-    user: wrobel
-    email: p@rdus.de
-    active: true
-    role: lead
-dependencies:
-  required:
-    php: ^5
-    pear:
-      pear.php.net/Console_Getopt: '*'
-  optional:
-    pear:
-      pecl.php.net/PECL: '*'
-YAML;
-        $expected = array(
-            'authors' => array(
-                array(
+            authors:
+              -
+                name: Gunnar Wrobel
+                user: wrobel
+                email: p@rdus.de
+                active: true
+                role: lead
+            dependencies:
+              required:
+                php: ^5
+                pear:
+                  pear.php.net/Console_Getopt: '*'
+              optional:
+                pear:
+                  pecl.php.net/PECL: '*'
+            YAML;
+        $expected = [
+            'authors' => [
+                [
                     'name' => 'Gunnar Wrobel',
                     'user' => 'wrobel',
                     'email' => 'p@rdus.de',
                     'active' => true,
                     'role' => 'lead',
-                )
-            ),
-            'dependencies' => array(
-                'required' => array(
+                ],
+            ],
+            'dependencies' => [
+                'required' => [
                     'php' => '^5',
-                    'pear' => array(
+                    'pear' => [
                         'pear.php.net/Console_Getopt' => '*',
-                    )
-                ),
-                'optional' => array(
-                    'pear' => array(
-                        'pecl.php.net/PECL' => '*'
-                    )
-                )
-            )
-        );
+                    ],
+                ],
+                'optional' => [
+                    'pear' => [
+                        'pecl.php.net/PECL' => '*',
+                    ],
+                ],
+            ],
+        ];
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
     }

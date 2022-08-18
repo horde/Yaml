@@ -11,8 +11,8 @@
 
 namespace Horde\Yaml\Test;
 
-use PHPUnit\Framework\TestCase;
 use Horde_Yaml_Node;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @category   Horde

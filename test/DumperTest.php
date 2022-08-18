@@ -12,11 +12,11 @@
 namespace Horde\Yaml\Test;
 
 use ArrayObject;
-use PHPUnit\Framework\TestCase;
+use Horde\Yaml\Test\Helper\TestSerializable;
 use Horde_Yaml;
 use Horde_Yaml_Dumper;
-use Horde\Yaml\Test\Helper\TestSerializable;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @category   Horde
@@ -56,7 +56,7 @@ class DumperTest extends TestCase
     {
         $options = 42;
         try {
-            $this->dumper->dump(array(), $options);
+            $this->dumper->dump([], $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
             $this->assertMatchesRegularExpression('/options.*array/i', $e->getMessage());
@@ -65,9 +65,9 @@ class DumperTest extends TestCase
 
     public function testThrowsWhenOptionIndentIsNotAnInteger()
     {
-        $options = array('indent' => 'foo');
+        $options = ['indent' => 'foo'];
         try {
-            $this->dumper->dump(array(), $options);
+            $this->dumper->dump([], $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
             $this->assertMatchesRegularExpression('/indent.*integer/i', $e->getMessage());
@@ -76,9 +76,9 @@ class DumperTest extends TestCase
 
     public function testThrowsWhenOptionWordwrapIsNotAnInteger()
     {
-        $options = array('wordwrap' => 'foo');
+        $options = ['wordwrap' => 'foo'];
         try {
-            $this->dumper->dump(array(), $options);
+            $this->dumper->dump([], $options);
             $this->fail();
         } catch (InvalidArgumentException $e) {
             $this->assertMatchesRegularExpression('/wordwrap.*integer/i', $e->getMessage());
@@ -89,19 +89,19 @@ class DumperTest extends TestCase
 
     public function testDumpAlwaysStartsNewYamlDocument()
     {
-        $dump = $this->dumper->dump(array());
+        $dump = $this->dumper->dump([]);
         $this->assertMatchesRegularExpression("/^---\n/", $dump);
     }
 
     public function testNumericStrings()
     {
-        $value = array('foo' => '73,123');
+        $value = ['foo' => '73,123'];
         $this->assertSame($value, Horde_Yaml::load(Horde_Yaml::dump($value)));
     }
 
     public function testEmtpyArray()
     {
-        $value = array('foo' => array());
+        $value = ['foo' => []];
 
         $expected = "---\nfoo: []\n";
         $actual = $this->dumper->dump($value);
@@ -110,7 +110,7 @@ class DumperTest extends TestCase
 
     public function testDumpsArrayAsMap()
     {
-        $value = array('foo' => 'bar');
+        $value = ['foo' => 'bar'];
 
         $expected = "---\nfoo: bar\n";
         $actual = $this->dumper->dump($value);
@@ -119,7 +119,7 @@ class DumperTest extends TestCase
 
     public function testDumpsTraversableAsMap()
     {
-        $value = new ArrayObject(array('foo' => 'bar'));
+        $value = new ArrayObject(['foo' => 'bar']);
 
         $expected = "---\nfoo: bar\n";
         $actual = $this->dumper->dump($value);
@@ -137,7 +137,7 @@ class DumperTest extends TestCase
 
     public function testMixedArray()
     {
-        $arr = array('test', 'a' => 'test2', 'test3');
+        $arr = ['test', 'a' => 'test2', 'test3'];
 
         $string = $this->dumper->dump($arr);
         $arr2 = Horde_Yaml::load($string);
@@ -147,7 +147,7 @@ class DumperTest extends TestCase
 
     public function testNegativeKeysArray()
     {
-        $arr = array(-1 => 'test', -2 => 'test2', 0 => 'test3');
+        $arr = [-1 => 'test', -2 => 'test2', 0 => 'test3'];
 
         $string = $this->dumper->dump($arr);
         $arr2 = Horde_Yaml::load($string);
@@ -157,7 +157,7 @@ class DumperTest extends TestCase
 
     public function testInfinity()
     {
-        $value = array('foo' => INF);
+        $value = ['foo' => INF];
 
         $expected = "---\nfoo: .INF\n";
         $actual = $this->dumper->dump($value);
@@ -166,7 +166,7 @@ class DumperTest extends TestCase
 
     public function testNegativeInfinity()
     {
-        $value = array('foo' => -INF);
+        $value = ['foo' => -INF];
 
         $expected = "---\nfoo: -.INF\n";
         $actual = $this->dumper->dump($value);
@@ -175,7 +175,7 @@ class DumperTest extends TestCase
 
     public function testNan()
     {
-        $value = array('foo' => NAN);
+        $value = ['foo' => NAN];
 
         $expected = "---\nfoo: .NAN\n";
         $actual = $this->dumper->dump($value);
@@ -184,7 +184,7 @@ class DumperTest extends TestCase
 
     public function testSerializable()
     {
-        $value = array('obj' => new TestSerializable('s'));
+        $value = ['obj' => new TestSerializable('s')];
 
         $expected = "---\nobj: >-\n  !php/object::Horde\Yaml\Test\Helper\TestSerializable\n  s\n";
         $actual = $this->dumper->dump($value);
@@ -193,7 +193,7 @@ class DumperTest extends TestCase
 
     public function testDumpSequence()
     {
-        $value = array('foo', 'bar');
+        $value = ['foo', 'bar'];
 
         $expected = "---\n"
                   . "- foo\n"
@@ -205,19 +205,19 @@ class DumperTest extends TestCase
 
     public function testStringLiteral()
     {
-        $value = array('string' => "foo\nbar\n");
+        $value = ['string' => "foo\nbar\n"];
         $expected = "---\nstring: |\n  foo\n  bar\n";
         $string = $this->dumper->dump($value);
         $this->assertEquals($expected, $string);
         $this->assertEquals($value, Horde_Yaml::load($string));
 
-        $value = array('string' => "foo\nbar");
+        $value = ['string' => "foo\nbar"];
         $expected = "---\nstring: |-\n  foo\n  bar\n";
         $string = $this->dumper->dump($value);
         $this->assertEquals($expected, $string);
         $this->assertEquals($value, Horde_Yaml::load($string));
 
-        $value = array('string' => "foo\nbar\n\n");
+        $value = ['string' => "foo\nbar\n\n"];
         $expected = "---\nstring: |+\n  foo\n  bar\n  \n";
         $string = $this->dumper->dump($value);
         $this->assertEquals($expected, $string);
@@ -226,7 +226,7 @@ class DumperTest extends TestCase
 
     public function testShouldWrapStringsWithCommentDelimiterInQuotes()
     {
-        $value = array('foo' => 'string # this is not a comment');
+        $value = ['foo' => 'string # this is not a comment'];
         $expected = "---\n"
                     . "foo: '{$value['foo']}'\n";
         $actual = $this->dumper->dump($value);
@@ -238,7 +238,7 @@ class DumperTest extends TestCase
     public function testShouldNotWrapStringsWithCommentDelimiterForFoldedStrings()
     {
         // stringWithHash: 'string # this is part of the string, not a comment'
-        $value = array('foo' => 'string # this is not a comment but it is a long string that gets folded', 'bar' => 2);
+        $value = ['foo' => 'string # this is not a comment but it is a long string that gets folded', 'bar' => 2];
         $expected = "---\n"
                     . "foo: >-\n"
                     . "  string # this is not a comment but it is\n"
