@@ -28,7 +28,7 @@ jobs:
       matrix:
         operating-system: ['ubuntu-20.04']
         php-versions: ['7.4', '8.0', '8.1', 'latest']
-        phpunit-versions: ['latest', '9.5']
+        phpunit-versions: ['9.5']
     steps:
     - name: Setup github ssh key
       run:  mkdir -p ~/.ssh/ && ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
@@ -49,6 +49,7 @@ jobs:
       run: |
         ## For unclear reasons, github action fails randomly if we do not install before we require.
         COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer config minimum-stability dev
+        COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer --no-plugins --global config allow-plugins true
         COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer install
     - name: run phpunit
       run: phpunit --bootstrap test/bootstrap.php

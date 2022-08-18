@@ -36,6 +36,7 @@ jobs:
           composer global config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
           composer global config repositories.0 composer https://horde-satis.maintaina.com
           composer global config minimum-stability dev
+          composer global config --no-plugins allow-plugins true
           composer global require horde/components "dev-FRAMEWORK_6_0"
           alias horde-components="~/.config/composer/web/components/bin/horde-components"
     - name: create new composer.json
