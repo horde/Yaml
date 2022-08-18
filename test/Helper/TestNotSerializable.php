@@ -8,9 +8,9 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-namespace Horde\Yaml\Helper;
-use \Serializable;
-use \Exception;
+
+namespace Horde\Yaml\Test\Helper;
+
 /**
  * @category   Horde
  * @package    Yaml
