@@ -8,13 +8,15 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-namespace Horde\Yaml;
-use \ArrayObject;
+
+namespace Horde\Yaml\Test;
+
+use ArrayObject;
 use PHPUnit\Framework\TestCase;
-use \Horde_Yaml;
-use \Horde_Yaml_Dumper;
-use \Horde\Yaml\Helper\TestSerializable;
-use \InvalidArgumentException;
+use Horde_Yaml;
+use Horde_Yaml_Dumper;
+use Horde\Yaml\Test\Helper\TestSerializable;
+use InvalidArgumentException;
 
 /**
  * @category   Horde
@@ -23,6 +25,7 @@ use \InvalidArgumentException;
  */
 class DumperTest extends TestCase
 {
+    protected Horde_Yaml_Dumper $dumper;
     public function setUp(): void
     {
         $this->dumper = new Horde_Yaml_Dumper();
@@ -183,7 +186,7 @@ class DumperTest extends TestCase
     {
         $value = array('obj' => new TestSerializable('s'));
 
-        $expected = "---\nobj: >-\n  !php/object::Horde\Yaml\Helper\TestSerializable\n  s\n";
+        $expected = "---\nobj: >-\n  !php/object::Horde\Yaml\Test\Helper\TestSerializable\n  s\n";
         $actual = $this->dumper->dump($value);
         $this->assertEquals($expected, $actual);
     }
@@ -248,5 +251,4 @@ class DumperTest extends TestCase
         // parsing keeps trailing newlines.
         $this->assertEquals($value, Horde_Yaml::load($actual));
     }
-
 }

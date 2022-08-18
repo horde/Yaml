@@ -22,7 +22,7 @@
             "role": "lead"
         }
     ],
-    "time": "2021-03-13",
+    "time": "2022-08-18",
     "repositories": [
         {
             "type": "composer",
@@ -31,16 +31,24 @@
     ],
     "require": {
         "php": "^7.4 || ^8",
-        "ext-ctype": "*",
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0"
+        "ext-ctype": "*"
     },
     "suggest": {
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
+    },
+    "require-dev": {
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/test": "^3 || dev-FRAMEWORK_6_0",
+        "phpunit/phpunit": "10.0.x-dev"
     },
     "autoload": {
         "psr-0": {
             "Horde_Yaml": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Horde\\Yaml\\Test\\": "test/"
         }
     }
 }

@@ -8,7 +8,8 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-namespace Horde\Yaml\Helper;
+
+namespace Horde\Yaml\Test\Helper;
 
 /**
  * Used to test Horde_Yaml::$loadfunc callback.
@@ -27,5 +28,4 @@ class LoaderTestMockLoader
     {
         return false;
     }
-
 }

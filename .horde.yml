@@ -41,9 +41,10 @@ dependencies:
     php: ^7.4 || ^8
     ext:
       ctype: '*'
-    composer:
-      horde/exception: ^3
-      horde/util: ^3
   optional:
     composer:
+      horde/exception: ^3
+  dev:
+    composer:
+      horde/exception: ^3
       horde/test: ^3

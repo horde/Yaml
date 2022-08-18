@@ -8,14 +8,18 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-namespace Horde\Yaml;
-use \ArrayObject;
-use \Horde_Yaml;
-use \Horde_Yaml_Exception;
-use \Horde\Yaml\Helper\LoaderTestMockLoader;
-use \Horde\Yaml\Helper\TestNotSerializable;
-use \InvalidArgumentException;
-use \PHPUnit\Framework\TestCase;
+
+namespace Horde\Yaml\Test;
+
+use ArrayObject;
+use Horde_Yaml;
+use Horde_Yaml_Exception;
+use Horde\Yaml\Test\Helper\LoaderTestMockLoader;
+use Horde\Yaml\Test\Helper\TestSerializable;
+use Horde\Yaml\Test\Helper\TestNotSerializable;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use XMLParser;
 
 /**
  * @category   Horde
@@ -41,7 +45,7 @@ class LoaderTest extends TestCase
 
     public function testLoadUsesCallbackForParsingIfAvailable()
     {
-        Horde_Yaml::$loadfunc = '\Horde\Yaml\Helper\LoaderTestMockLoader::returnArray';
+        Horde_Yaml::$loadfunc = '\Horde\Yaml\Test\Helper\LoaderTestMockLoader::returnArray';
 
         $yaml = 'foo';
         $expected = LoaderTestMockLoader::returnArray($yaml);
@@ -138,10 +142,22 @@ class LoaderTest extends TestCase
         }
     }
 
+    /**
+     * Correctly error on non-stream resource
+     *
+     * This test becomes less useful
+     * as there are few resources left in PHP 8.x
+     * 
+     * @return void
+     */
     public function testLoadStreamThrowsWhenStreamIsResourceButNotStream()
     {
         $resourceButNotStream = xml_parser_create();
-        $this->assertIsResource($resourceButNotStream);
+        if (PHP_VERSION_ID > 80000) {
+            $this->assertInstanceOf(XMLParser::class, $resourceButNotStream);
+        } else {
+            $this->assertIsResource($resourceButNotStream);
+        }
 
         try {
             Horde_Yaml::loadStream($resourceButNotStream);
@@ -152,7 +168,7 @@ class LoaderTest extends TestCase
 
     public function testLoadStreamUsesCallbackForParsingIfAvailable()
     {
-        Horde_Yaml::$loadfunc = 'Horde\Yaml\Helper\LoaderTestMockLoader::returnArray';
+        Horde_Yaml::$loadfunc = 'Horde\Yaml\Test\Helper\LoaderTestMockLoader::returnArray';
 
         $stream = fopen('php://memory', 'r');
         $expected = LoaderTestMockLoader::returnArray($stream);
@@ -283,12 +299,12 @@ class LoaderTest extends TestCase
         $this->assertEquals(array('ao' => new ArrayObject(array(1, 2, 3))), Horde_Yaml::load('ao: !php/array::ArrayObject [1, 2, 3]'));
 
         // Horde_Yaml_Test_NotSerializable doesn't implement ArrayAccess: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
+        Horde_Yaml::$allowedClasses[] = TestNotSerializable::class;
         try {
-            Horde_Yaml::load('array: !php/array::Horde\Yaml\Helper\TestNotSerializable []');
+            Horde_Yaml::load('array: !php/array::Horde\Yaml\Test\Helper\TestNotSerializable []');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
         // Horde_Yaml_Test_OtherClass doesn't exist: FAILURE
@@ -322,12 +338,12 @@ class LoaderTest extends TestCase
         );
 
         // Horde_Yaml_Test_NotSerializable doesn't implement ArrayAccess: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
+        Horde_Yaml::$allowedClasses[] = TestNotSerializable::class;
         try {
-            Horde_Yaml::load('hash: !php/hash::Horde\Yaml\Helper\TestNotSerializable {}');
+            Horde_Yaml::load('hash: !php/hash::Horde\Yaml\Test\Helper\TestNotSerializable {}');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
         // Horde_Yaml_Test_OtherClass doesn't exist: FAILURE
@@ -350,21 +366,21 @@ class LoaderTest extends TestCase
 
     public function testSerializable()
     {
-        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestSerializable';
+        Horde_Yaml::$allowedClasses[] = TestSerializable::class;
         $result = Horde_Yaml::load('obj: >
-  !php/object::Horde\Yaml\Helper\TestSerializable
+  !php/object::Horde\Yaml\Test\Helper\TestSerializable
   string');
 
-        $this->assertInstanceOf('Horde\Yaml\Helper\TestSerializable', $result['obj']);
+        $this->assertInstanceOf(TestSerializable::class, $result['obj']);
         $this->assertSame('string', $result['obj']->test());
 
-        // Horde_Yaml_Test_NotSerializable doesn't implement Serializable: FAILURE
-        Horde_Yaml::$allowedClasses[] = 'Horde\Yaml\Helper\TestNotSerializable';
+        // Horde\Yaml\Test\Helper\TestNotSerializable doesn't implement Serializable: FAILURE
+        Horde_Yaml::$allowedClasses[] = TestNotSerializable::class;
         try {
-            Horde_Yaml::load('o: !php/object::Horde\Yaml\Helper\TestNotSerializable string');
+            Horde_Yaml::load('o: !php/object::Horde\Yaml\Test\Helper\TestNotSerializable string');
             $this->fail();
         } catch (Horde_Yaml_Exception $e) {
-            $this->assertEquals('Horde\Yaml\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
+            $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
         }
 
         // Horde_Yaml_Test_Disallowed is not whitelisted
@@ -618,17 +634,25 @@ class LoaderTest extends TestCase
               . "- two\"quotes\" on line\n";
         $parsed = Horde_Yaml::load($yaml);
 
-        $this->assertEquals("one'apostrophe on line",
-                            $parsed[0]);
+        $this->assertEquals(
+            "one'apostrophe on line",
+            $parsed[0]
+        );
 
-        $this->assertEquals("two'apostrophes' on line",
-                            $parsed[1]);
+        $this->assertEquals(
+            "two'apostrophes' on line",
+            $parsed[1]
+        );
 
-        $this->assertEquals('one"quote on line',
-                            $parsed[2]);
+        $this->assertEquals(
+            'one"quote on line',
+            $parsed[2]
+        );
 
-        $this->assertEquals('two"quotes" on line',
-                            $parsed[3]);
+        $this->assertEquals(
+            'two"quotes" on line',
+            $parsed[3]
+        );
     }
 
     public function testQuotesCanBeUsedForComplexKeys()
@@ -887,5 +911,4 @@ YAML;
     {
         return __DIR__ . "/fixtures/{$name}.yml";
     }
-
 }

@@ -8,9 +8,11 @@
  * @package    Yaml
  * @subpackage UnitTests
  */
-namespace Horde\Yaml;
-use \PHPUnit\Framework\TestCase;
-use \Horde_Yaml_Node;
+
+namespace Horde\Yaml\Test;
+
+use PHPUnit\Framework\TestCase;
+use Horde_Yaml_Node;
 
 /**
  * @category   Horde
@@ -25,5 +27,4 @@ class NodeTest extends TestCase
         $node = new Horde_Yaml_Node($id);
         $this->assertEquals($id, $node->id);
     }
-
 }

@@ -8,8 +8,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |+
-    
+  notes: |+    
 3.0.0alpha3:
   api: 3.0.0alpha1
   state:
@@ -36,6 +35,28 @@
     release: stable
     api: stable
   date: 2021-02-24
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [rla] Initial composer version
+2.1.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2021-10-24
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |+
+    
+2.1.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2021-10-24
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
