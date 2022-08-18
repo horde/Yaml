@@ -23,7 +23,7 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-03-13</date>
+ <date>2022-08-18</date>
  <version>
   <release>3.0.0alpha4</release>
   <api>3.0.0alpha1</api>
@@ -34,10 +34,20 @@
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
-* 
+* [rla] Make horde/yaml work standalone without horde/exception and horde/util if they are not installed.
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name=".github">
+    <dir name="workflows">
+     <file name="ci.yml" role="php" />
+     <file name="phpdoc.yml" role="php" />
+     <file name="release.yml" role="php" />
+     <file name="update-composer-json.yml" role="php" />
+     <file name="update-satis.yml" role="php" />
+    </dir> <!-- /.github/workflows -->
+   </dir> <!-- /.github -->
    <dir name="doc">
     <dir name="Horde">
      <dir name="Yaml">
@@ -62,25 +72,21 @@
     </dir> <!-- /lib/Horde -->
    </dir> <!-- /lib -->
    <dir name="test">
-    <dir name="Horde">
-     <dir name="Yaml">
-      <dir name="fixtures">
-       <file name="basic.yml" role="test" />
-       <file name="references.yml" role="test" />
-      </dir> <!-- /test/Horde/Yaml/fixtures -->
-      <dir name="Helper">
-       <file name="LoaderTestMockLoader.php" role="test" />
-       <file name="TestNotSerializable.php" role="test" />
-       <file name="TestSerializable.php" role="test" />
-      </dir> <!-- /test/Horde/Yaml/Helper -->
-      <file name="AllTests.php" role="test" />
-      <file name="Autoload.php" role="test" />
-      <file name="bootstrap.php" role="test" />
-      <file name="DumperTest.php" role="test" />
-      <file name="LoaderTest.php" role="test" />
-      <file name="NodeTest.php" role="test" />
-     </dir> <!-- /test/Horde/Yaml -->
-    </dir> <!-- /test/Horde -->
+    <dir name="fixtures">
+     <file name="basic.yml" role="test" />
+     <file name="references.yml" role="test" />
+    </dir> <!-- /test/fixtures -->
+    <dir name="Helper">
+     <file name="LoaderTestMockLoader.php" role="test" />
+     <file name="TestNotSerializable.php" role="test" />
+     <file name="TestSerializable.php" role="test" />
+    </dir> <!-- /test/Helper -->
+    <file name="AllTests.php" role="test" />
+    <file name="Autoload.php" role="test" />
+    <file name="bootstrap.php" role="test" />
+    <file name="DumperTest.php" role="test" />
+    <file name="LoaderTest.php" role="test" />
+    <file name="NodeTest.php" role="test" />
    </dir> <!-- /test -->
    <file name="LICENSE" role="doc" />
   </dir> <!-- / -->
@@ -88,9 +94,9 @@
  <dependencies>
   <required>
    <php>
-    <min>7.0.0</min>
-    <max>8.0.0alpha1</max>
-    <exclude>8.0.0alpha1</exclude>
+    <min>7.4.0</min>
+    <max>9.0.0alpha1</max>
+    <exclude>9.0.0alpha1</exclude>
    </php>
    <pearinstaller>
     <min>1.7.0</min>
@@ -102,6 +108,11 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="workflows/ci.yml" name=".github/workflows/ci.yml" />
+   <install as="workflows/phpdoc.yml" name=".github/workflows/phpdoc.yml" />
+   <install as="workflows/release.yml" name=".github/workflows/release.yml" />
+   <install as="workflows/update-composer-json.yml" name=".github/workflows/update-composer-json.yml" />
+   <install as="workflows/update-satis.yml" name=".github/workflows/update-satis.yml" />
    <install as="CHANGES" name="doc/Horde/Yaml/CHANGES" />
    <install as="examples/dump.php" name="doc/Horde/Yaml/examples/dump.php" />
    <install as="examples/example.yaml" name="doc/Horde/Yaml/examples/example.yaml" />
@@ -112,37 +123,20 @@
    <install as="Horde/Yaml/Loader.php" name="lib/Horde/Yaml/Loader.php" />
    <install as="Horde/Yaml/Node.php" name="lib/Horde/Yaml/Node.php" />
    <install as="LICENSE" name="LICENSE" />
-   <install as="Horde/Yaml/AllTests.php" name="test/Horde/Yaml/AllTests.php" />
-   <install as="Horde/Yaml/Autoload.php" name="test/Horde/Yaml/Autoload.php" />
-   <install as="Horde/Yaml/bootstrap.php" name="test/Horde/Yaml/bootstrap.php" />
-   <install as="Horde/Yaml/DumperTest.php" name="test/Horde/Yaml/DumperTest.php" />
-   <install as="Horde/Yaml/fixtures/basic.yml" name="test/Horde/Yaml/fixtures/basic.yml" />
-   <install as="Horde/Yaml/fixtures/references.yml" name="test/Horde/Yaml/fixtures/references.yml" />
-   <install as="Horde/Yaml/Helper/LoaderTestMockLoader.php" name="test/Horde/Yaml/Helper/LoaderTestMockLoader.php" />
-   <install as="Horde/Yaml/Helper/TestNotSerializable.php" name="test/Horde/Yaml/Helper/TestNotSerializable.php" />
-   <install as="Horde/Yaml/Helper/TestSerializable.php" name="test/Horde/Yaml/Helper/TestSerializable.php" />
-   <install as="Horde/Yaml/LoaderTest.php" name="test/Horde/Yaml/LoaderTest.php" />
-   <install as="Horde/Yaml/NodeTest.php" name="test/Horde/Yaml/NodeTest.php" />
+   <install as="AllTests.php" name="test/AllTests.php" />
+   <install as="Autoload.php" name="test/Autoload.php" />
+   <install as="bootstrap.php" name="test/bootstrap.php" />
+   <install as="DumperTest.php" name="test/DumperTest.php" />
+   <install as="fixtures/basic.yml" name="test/fixtures/basic.yml" />
+   <install as="fixtures/references.yml" name="test/fixtures/references.yml" />
+   <install as="Helper/LoaderTestMockLoader.php" name="test/Helper/LoaderTestMockLoader.php" />
+   <install as="Helper/TestNotSerializable.php" name="test/Helper/TestNotSerializable.php" />
+   <install as="Helper/TestSerializable.php" name="test/Helper/TestSerializable.php" />
+   <install as="LoaderTest.php" name="test/LoaderTest.php" />
+   <install as="NodeTest.php" name="test/NodeTest.php" />
   </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>1.0.0RC1</release>
@@ -357,6 +351,37 @@
   </release>
   <release>
    <version>
+    <release>2.1.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-10-24</date>
+   <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
+   <notes>
+* [jan] Fix dumping empty arrays.
+* [jan] Add support for reading chomp operators.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.1.1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-10-24</date>
+   <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
+   <notes>
+* |+
+   </notes>
+  </release>
+  <release>
+   <version>
     <release>3.0.0alpha1</release>
     <api>3.0.0alpha1</api>
    </version>
@@ -367,8 +392,7 @@
    <date>2021-02-24</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* [jan] Fix dumping empty arrays.
-* [jan] Add support for reading chomp operators.
+* [rla] Initial composer version
    </notes>
   </release>
   <release>
@@ -413,7 +437,8 @@
    <date>2021-03-13</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* 
+* [rla] Make horde/yaml work standalone without horde/exception and horde/util if they are not installed.
+* |+
    </notes>
   </release>
  </changelog>
