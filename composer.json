@@ -22,19 +22,24 @@
         }
     ],
     "time": "2022-08-18",
-    "repositories": [],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://horde-satis.maintaina.com"
+        }
+    ],
     "require": {
         "php": "^7.4 || ^8",
         "ext-ctype": "*"
     },
     "require-dev": {
-        "horde/exception": "^3",
-        "horde/test": "^3",
-        "horde/util": "^3"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/test": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
-        "horde/exception": "^3",
-        "horde/util": "^3"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
         "psr-0": {
