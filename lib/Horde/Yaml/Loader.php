@@ -140,7 +140,7 @@ class Horde_Yaml_Loader
      *
      * @param string $line The line of YAML to parse.
      *
-     * @throws Horde_Yaml_Exception
+     * @throws Horde_Yaml_Exception|DomainException if indention contains tab
      * @throws ReflectionException
      */
     public function parse($line)
@@ -155,7 +155,11 @@ class Horde_Yaml_Loader
         if (preg_match('/^ *(\t) *[^\t ]/', $line)) {
             $msg = "Line {$this->_lineNumber} indent contains a tab.  "
                  . 'YAML only allows spaces for indentation.';
-            throw new Horde_Yaml_Exception($msg);
+            if (class_exists('Horde_Exception')) {
+                throw new Horde_Yaml_Exception($msg);
+            } else {
+                throw new DomainException($msg);
+            }
         }
 
         if (!$this->_inBlock && empty($trimmed)) {
@@ -422,7 +426,11 @@ class Horde_Yaml_Loader
         }
 
         // Used in a lot of cases.
-        $lower_value = Horde_String::lower($value);
+        if (class_exists('Horde_String')) {
+            $lower_value = Horde_String::lower($value);
+        } else {
+            $lower_value = mb_strtolower($value);
+        }
 
         if (preg_match('/^("(.*)"|\'(.*)\')/', $value, $matches)) {
             $value = (string)str_replace(array('\'\'', '\\\''), "'", end($matches));
@@ -499,8 +507,9 @@ class Horde_Yaml_Loader
      *
      * @param string &$data Data to check for serialized PHP types.
      *
-     * @throws Horde_Yaml_Exception
-     * @throws ReflectionException
+     * @throws Horde_Yaml_Exception|LogicException if a class is whitelisted but
+     *                                             not serializable
+     * @throws ReflectionException if a class is not whitelisted
      */
     protected function _unserialize(&$data)
     {
@@ -515,19 +524,29 @@ class Horde_Yaml_Loader
             list($type, $class) = explode('::', $type);
 
             if (!in_array($class, Horde_Yaml::$allowedClasses)) {
-                throw new Horde_Yaml_Exception("$class is not in the list of allowed classes");
+                if (class_exists('Horde_Exception')){
+                    throw new Horde_Yaml_Exception("$class is not in the list of allowed classes");
+                }
+                throw new LogicException("$class is not in the list of allowed classes");
             }
         }
 
         switch ($type) {
         case 'object':
             if (!class_exists($class)) {
-                throw new Horde_Yaml_Exception("$class is not defined");
+                if (class_exists('Horde_Exception')) {
+                    throw new Horde_Yaml_Exception("$class is not defined");
+                }
+                throw new LogicException("$class is not defined");
             }
 
             $reflector = new ReflectionClass($class);
             if (!$reflector->implementsInterface('Serializable')) {
-                throw new Horde_Yaml_Exception("$class does not implement Serializable");
+                if (class_exists('Horde_Exception')) {
+                    throw new Horde_Yaml_Exception("$class does not implement Serializable");
+                } else {
+                    throw new LogicException("$class does not implement Serializable");
+                }
             }
 
             $class_data = trim(substr($data, $first_space + 1));
@@ -545,12 +564,18 @@ class Horde_Yaml_Loader
                 break;
             }
             if (!class_exists($class)) {
-                throw new Horde_Yaml_Exception("$class is not defined");
+                if (class_exists('Horde_Exception')) {
+                    throw new Horde_Yaml_Exception("$class is not defined");
+                }
+                throw new LogicException("$class is not defined");
             }
 
             $array = new $class;
             if (!$array instanceof ArrayAccess) {
-                throw new Horde_Yaml_Exception("$class does not implement ArrayAccess");
+                if (class_exists('Horde_Exception')) {
+                    throw new Horde_Yaml_Exception("$class does not implement ArrayAccess");
+                }
+                throw new LogicException("$class does not implement ArrayAccess");
             }
 
             foreach ($array_data['a'] as $key => $val) {

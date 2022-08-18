@@ -1,4 +1,5 @@
 <?php
+
 use Horde\Test\Bootstrap;
 
 $candidates = [
@@ -13,6 +14,6 @@ foreach ($candidates as $candidate) {
     }
 }
 // Try to run without horde/test if it is not there.
-if (class_exists(Bootstrap::class)){
+if (class_exists(Bootstrap::class)) {
     Bootstrap::bootstrap(dirname(__FILE__));
 }

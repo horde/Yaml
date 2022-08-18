@@ -11,8 +11,8 @@
 
 namespace Horde\Yaml\Test\Helper;
 
-use Serializable;
 use Exception;
+use Serializable;
 
 /**
  * @category   Horde

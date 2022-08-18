@@ -21,7 +21,7 @@ class LoaderTestMockLoader
 {
     public static function returnArray($yaml)
     {
-        return array('loaded');
+        return ['loaded'];
     }
 
     public static function returnFalse($yaml)

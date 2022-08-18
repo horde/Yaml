@@ -93,7 +93,7 @@ class Horde_Yaml
      * @param  string  $filename     Filename to load
      * @return array                 PHP array representation of YAML content
      * @throws IllegalArgumentException  If $filename is invalid
-     * @throws Horde_Yaml_Exception  If the file cannot be opened.
+     * @throws Horde_Yaml_Exception|RuntimeException If the file cannot be opened.
      */
     public static function loadFile($filename)
     {
@@ -104,7 +104,11 @@ class Horde_Yaml
 
         $stream = @fopen($filename, 'rb');
         if (!$stream) {
-            throw new Horde_Yaml_Exception('Failed to open file: ', error_get_last());
+            $lastError = error_get_last();
+            if (class_exists('Horde_Exception')) {
+                throw new Horde_Yaml_Exception('Failed to open file: ', $lastError);
+            }
+            throw new RuntimeException('Failed to open file: ', $lastError['type'] ?? 0);
         }
 
         return self::loadStream($stream);
