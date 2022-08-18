@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/yaml",
     "description": "YAML parsing and writing library",
     "type": "library",
@@ -23,22 +22,19 @@
         }
     ],
     "time": "2022-08-18",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://horde-satis.maintaina.com/"
-        }
-    ],
+    "repositories": [],
     "require": {
         "php": "^7.4 || ^8",
         "ext-ctype": "*"
     },
-    "suggest": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
-    },
     "require-dev": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "horde/exception": "^3",
+        "horde/test": "^3",
+        "horde/util": "^3"
+    },
+    "suggest": {
+        "horde/exception": "^3",
+        "horde/util": "^3"
     },
     "autoload": {
         "psr-0": {
@@ -48,6 +44,11 @@
     "autoload-dev": {
         "psr-4": {
             "Horde\\Yaml\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
         }
     }
 }
