@@ -1,0 +1,27 @@
+---
+3.0.1:
+  api: 3.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2026-02-28
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [rla] Add PSR-4 autoloading support with Horde\Yaml namespace.
+    [rla] Maintain backward compatibility with PSR-0 Horde_Yaml classes.
+    [rla] Modernize tests to PHPUnit 12 with test/unit structure.
+    [rla] Add strict types and full type declarations.
+    [rla] Update PHP requirement to ^8.2.
+3.0.0alpha5:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: ~
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    Previous alpha release.

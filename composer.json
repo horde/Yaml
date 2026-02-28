@@ -30,19 +30,21 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8",
+        "php": "^8.2",
         "ext-ctype": "*"
     },
     "require-dev": {
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0"
+        "phpunit/phpunit": "^12"
     },
     "suggest": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
+        "psr-4": {
+            "Horde\\Yaml\\": "src/"
+        },
         "psr-0": {
             "Horde_Yaml": "lib/"
         }
