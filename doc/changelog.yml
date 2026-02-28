@@ -14,14 +14,13 @@
     [rla] Modernize tests to PHPUnit 12 with test/unit structure.
     [rla] Add strict types and full type declarations.
     [rla] Update PHP requirement to ^8.2.
-3.0.0alpha5:
-  api: 3.0.0alpha1
+3.0.0-alpha5:
+  api: 3.0.0-alpha1
   state:
     release: alpha
     api: alpha
-  date: ~
+  date: 2026-02-28
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    Previous alpha release.
+  notes: Release version 3.0.0-alpha5

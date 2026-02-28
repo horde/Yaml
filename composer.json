@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/yaml",
     "description": "YAML parsing and writing library",
     "type": "library",
@@ -22,41 +21,41 @@
             "role": "lead"
         }
     ],
-    "time": "2022-08-18",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://horde-satis.maintaina.com"
-        }
-    ],
+    "time": "2026-02-28",
+    "repositories": [],
     "require": {
-        "php": "^8.2",
+        "php": "^7.4 || ^8",
         "ext-ctype": "*"
     },
     "require-dev": {
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
-        "phpunit/phpunit": "^12"
+        "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
-        "psr-4": {
-            "Horde\\Yaml\\": "src/"
-        },
         "psr-0": {
             "Horde_Yaml": "lib/"
+        },
+        "psr-4": {
+            "Horde\\Yaml\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Horde\\Yaml\\Test\\": "test/"
+            "Horde\\Yaml\\Test\\": "test/",
+            "Horde\\Yaml\\Test\\Fixtures\\": "test/fixtures/"
         }
     },
     "config": {
-        "allow-plugins": {
-            "horde/horde-installer-plugin": true
+        "allow-plugins": {}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-FRAMEWORK_6_0": "3.x-dev"
         }
     }
 }
