@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde\Yaml\Helper\LoaderTestMockLoader
  *

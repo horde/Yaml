@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde\Yaml\Node test
  *
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
+ * @coversNothing
  */
 class NodeTest extends TestCase
 {

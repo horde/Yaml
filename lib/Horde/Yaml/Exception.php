@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde YAML package
  *
@@ -20,6 +21,4 @@
  * @category Horde
  * @package  Yaml
  */
-class Horde_Yaml_Exception extends Horde_Exception_LastError
-{
-}
+class Horde_Yaml_Exception extends Horde_Exception_LastError {}

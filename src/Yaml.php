@@ -21,6 +21,7 @@ namespace Horde\Yaml;
 
 use InvalidArgumentException;
 use RuntimeException;
+use Traversable;
 
 /**
  * Horde YAML parser.
@@ -30,8 +31,8 @@ use RuntimeException;
  * subsection of the YAML spec, but if the syck extension is present,
  * that will be used for parsing.
  *
- * Copyright 2005-2006 Chris Wanstrath <chris@ozmm.org>
- * Copyright 2006-2008 Alexey Zakhlestin <indeyets@gmail.com>
+ * Copyright 2005-2026 Chris Wanstrath <chris@ozmm.org>
+ * Copyright 2006-2026 Alexey Zakhlestin <indeyets@gmail.com>
  * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @category Horde
@@ -159,12 +160,12 @@ class Yaml
      * The dump method, when supplied with an array, will do its best to
      * convert the array into friendly YAML.
      *
-     * @param  array<mixed>|\Traversable $value  PHP array or Traversable object.
+     * @param  array<mixed>|Traversable $value  PHP array or Traversable object.
      * @param  array<string, mixed> $options  Options to pass to dumper.
      *
      * @return string  YAML representation of $value.
      */
-    public static function dump(array|\Traversable $value, array $options = []): string
+    public static function dump(array|Traversable $value, array $options = []): string
     {
         if (is_callable(self::$dumpfunc)) {
             return call_user_func(self::$dumpfunc, $value);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Yaml test helpers
  *
@@ -16,6 +17,4 @@ namespace Horde\Yaml\Test\Helper;
  * @package    Yaml
  * @subpackage UnitTests
  */
-class TestNotSerializable
-{
-}
+class TestNotSerializable {}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This package is heavily inspired by the Spyc PHP YAML implementation
  * (http://spyc.sourceforge.net/), and portions are copyright 2005-2006 Chris
@@ -24,7 +25,7 @@
  */
 class Horde_Yaml_Dumper
 {
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Dumps PHP array to YAML.
@@ -43,7 +44,7 @@ class Horde_Yaml_Dumper
      *
      * @return string  YAML representation of $value.
      */
-    public function dump($value, $options = array())
+    public function dump($value, $options = [])
     {
         // validate & merge default options
         if (!is_array($options)) {
@@ -51,7 +52,7 @@ class Horde_Yaml_Dumper
         }
 
         $this->_options = array_merge(
-            array('indent' => 2, 'wordwrap' => 40),
+            ['indent' => 2, 'wordwrap' => 40],
             $options
         );
 
@@ -165,9 +166,9 @@ class Horde_Yaml_Dumper
         } elseif (is_string($value)) {
             $literal = false;
             // Do some folding here, for blocks.
-            if (strpos($value, "\n") !== false ||
-                strpos($value, ': ') !== false ||
-                strpos($value, '- ') !== false) {
+            if (strpos($value, "\n") !== false
+                || strpos($value, ': ') !== false
+                || strpos($value, '- ') !== false) {
                 $value = $this->_doLiteralBlock($value, $indent);
                 $literal = true;
             } else {
@@ -176,10 +177,10 @@ class Horde_Yaml_Dumper
 
 
             // Quote strings if necessary, and not folded
-            if (!$literal &&
-                strlen($value) &&
-                strpos($value, "\n") === false &&
-                (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
+            if (!$literal
+                && strlen($value)
+                && strpos($value, "\n") === false
+                && (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
                 $value = "'{$value}'";
             }
         }

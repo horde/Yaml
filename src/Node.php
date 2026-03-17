@@ -22,8 +22,8 @@ namespace Horde\Yaml;
 /**
  * A node, used for parsing YAML.
  *
- * Copyright 2005-2006 Chris Wanstrath <chris@ozmm.org>
- * Copyright 2006-2008 Alexey Zakhlestin <indeyets@gmail.com>
+ * Copyright 2005-2026 Chris Wanstrath <chris@ozmm.org>
+ * Copyright 2006-2026 Alexey Zakhlestin <indeyets@gmail.com>
  * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @category Horde

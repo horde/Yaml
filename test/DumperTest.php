@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde\Yaml\Dumper test
  *
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
+ * @coversNothing
  */
 class DumperTest extends TestCase
 {

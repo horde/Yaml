@@ -24,8 +24,8 @@ use Traversable;
 /**
  * Dump PHP data structures to YAML.
  *
- * Copyright 2005-2006 Chris Wanstrath <chris@ozmm.org>
- * Copyright 2006-2008 Alexey Zakhlestin <indeyets@gmail.com>
+ * Copyright 2005-2026 Chris Wanstrath <chris@ozmm.org>
+ * Copyright 2006-2026 Alexey Zakhlestin <indeyets@gmail.com>
  * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author   Chris Wanstrath <chris@ozmm.org>
@@ -177,9 +177,9 @@ class Dumper
         } elseif (is_string($value)) {
             $literal = false;
             // Do some folding here, for blocks.
-            if (strpos($value, "\n") !== false ||
-                strpos($value, ': ') !== false ||
-                strpos($value, '- ') !== false) {
+            if (strpos($value, "\n") !== false
+                || strpos($value, ': ') !== false
+                || strpos($value, '- ') !== false) {
                 $value = $this->_doLiteralBlock($value, $indent);
                 $literal = true;
             } else {
@@ -188,10 +188,10 @@ class Dumper
 
 
             // Quote strings if necessary, and not folded
-            if (!$literal &&
-                strlen($value) &&
-                strpos($value, "\n") === false &&
-                (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
+            if (!$literal
+                && strlen($value)
+                && strpos($value, "\n") === false
+                && (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
                 $value = "'{$value}'";
             }
         }
@@ -200,10 +200,10 @@ class Dumper
 
         if ($sequence) {
             // It's a sequence.
-            $string = $spaces . '-' . (strlen((string)$value) ? ' ' : '') . $value . "\n";
+            $string = $spaces . '-' . (strlen((string) $value) ? ' ' : '') . $value . "\n";
         } else {
             // It's mapped.
-            $string = $spaces . $key . ':' . (strlen((string)$value) ? ' ' : '') . $value . "\n";
+            $string = $spaces . $key . ':' . (strlen((string) $value) ? ' ' : '') . $value . "\n";
         }
 
         return $string;

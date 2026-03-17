@@ -108,7 +108,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::loadFile($nonexistant);
             $this->fail();
-        } catch (Exception | RuntimeException $e) {
+        } catch (Exception|RuntimeException $e) {
             $this->assertMatchesRegularExpression('/failed to open/i', $e->getMessage());
         }
     }
@@ -291,7 +291,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('array: !php/array::Horde\Yaml\Test\Helper\TestNotSerializable []');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -300,7 +300,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('array: !php/array::Horde_Yaml_Test_OtherClass []');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -308,7 +308,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('array: !php/array::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -330,7 +330,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('hash: !php/hash::Horde\Yaml\Test\Helper\TestNotSerializable {}');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -339,7 +339,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('hash: !php/hash::Horde_Yaml_Test_OtherClass {}');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -347,7 +347,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('hash: !php/hash::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -367,7 +367,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('o: !php/object::Horde\Yaml\Test\Helper\TestNotSerializable string');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
         }
 
@@ -375,7 +375,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load('o: !php/object::Horde_Yaml_Test_Disallowed string');
             $this->fail();
-        } catch (Exception | LogicException $e) {
+        } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -402,7 +402,7 @@ class LoaderTest extends TestCase
         $parsed = Yaml::load($yaml);
 
         $expected = ["YAML is so easy to learn.",
-                          "Your config files will never be the same.", ];
+            "Your config files will never be the same.", ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -525,7 +525,7 @@ class LoaderTest extends TestCase
         $parsed = Yaml::load($yaml);
 
         $expected = ["This", ["Is", "Getting", ["Ridiculous", "Guys"]],
-                                            "Seriously", ["Show", "Mercy"], ];
+            "Seriously", ["Show", "Mercy"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -607,7 +607,7 @@ class LoaderTest extends TestCase
         $parsed = Yaml::load($yaml);
 
         $expected = ["name" => "mark", "age" => "older than chris",
-                                             "brand" => ["marlboro", "lucky strike"], ];
+            "brand" => ["marlboro", "lucky strike"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -713,7 +713,7 @@ class LoaderTest extends TestCase
         try {
             Yaml::load(" \tfoo: bar");
             $this->fail();
-        } catch (Exception | DomainException $e) {
+        } catch (Exception|DomainException $e) {
             $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
@@ -828,9 +828,9 @@ class LoaderTest extends TestCase
               . "      - Needs to be normalized\n"
               . "    type: mysql\n";
         $expected = ['databases' => [['name' => 'spartan',
-                                                     'notes' => ['Needs to be backed up',
-                                                                      'Needs to be normalized', ],
-                                                     'type' => 'mysql', ]]];
+            'notes' => ['Needs to be backed up',
+                'Needs to be normalized', ],
+            'type' => 'mysql', ]]];
         $actual = Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
 
@@ -916,8 +916,8 @@ class LoaderTest extends TestCase
     public function testEmptyStringKeySimplePair(): void
     {
         $yaml = <<<YAML
-"": value
-YAML;
+            "": value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -940,10 +940,10 @@ YAML;
     public function testEmptyStringKeyWithOtherKeys(): void
     {
         $yaml = <<<YAML
-"": empty-key-value
-normalKey: normal-value
-anotherKey: another-value
-YAML;
+            "": empty-key-value
+            normalKey: normal-value
+            anotherKey: another-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -964,13 +964,13 @@ YAML;
     public function testEmptyStringKeyNested(): void
     {
         $yaml = <<<YAML
-autoload:
-  psr-0:
-    "": compat/
-    Horde_Exception: lib/
-  psr-4:
-    Horde\\Exception\\: src/
-YAML;
+            autoload:
+              psr-0:
+                "": compat/
+                Horde_Exception: lib/
+              psr-4:
+                Horde\\Exception\\: src/
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -997,8 +997,8 @@ YAML;
     public function testEmptyStringKeyEmptyValue(): void
     {
         $yaml = <<<YAML
-"": ""
-YAML;
+            "": ""
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1015,8 +1015,8 @@ YAML;
     public function testEmptyStringKeyNullValue(): void
     {
         $yaml = <<<YAML
-"": null
-YAML;
+            "": null
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1031,12 +1031,12 @@ YAML;
     public function testEmptyStringKeyComplexValue(): void
     {
         $yaml = <<<YAML
-"":
-  nested: value
-  list:
-    - item1
-    - item2
-YAML;
+            "":
+              nested: value
+              list:
+                - item1
+                - item2
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1063,8 +1063,8 @@ YAML;
     public function testStringZeroKey(): void
     {
         $yaml = <<<YAML
-"0": string-zero
-YAML;
+            "0": string-zero
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1083,8 +1083,8 @@ YAML;
     public function testNumericZeroKey(): void
     {
         $yaml = <<<YAML
-0: numeric-zero
-YAML;
+            0: numeric-zero
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1100,8 +1100,8 @@ YAML;
     public function testBooleanFalseKey(): void
     {
         $yaml = <<<YAML
-false: bool-false
-YAML;
+            false: bool-false
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1120,10 +1120,10 @@ YAML;
     public function testArrayNotationUsesNumericIndex(): void
     {
         $yaml = <<<YAML
-- item1
-- item2
-- item3
-YAML;
+            - item1
+            - item2
+            - item3
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1152,12 +1152,12 @@ YAML;
     public function testEmptyStringKeyWithChildren(): void
     {
         $yaml = <<<YAML
-parent:
-  "":
-    child1: value1
-    child2: value2
-  other: other-value
-YAML;
+            parent:
+              "":
+                child1: value1
+                child2: value2
+              other: other-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1177,10 +1177,10 @@ YAML;
     public function testEmptyStringKeyLeafNode(): void
     {
         $yaml = <<<YAML
-parent:
-  "": leaf-value
-  other: other-value
-YAML;
+            parent:
+              "": leaf-value
+              other: other-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1201,10 +1201,10 @@ YAML;
     public function testNormalStringKeysPreserved(): void
     {
         $yaml = <<<YAML
-key1: value1
-key2: value2
-longKeyName: long-value
-YAML;
+            key1: value1
+            key2: value2
+            longKeyName: long-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1222,9 +1222,9 @@ YAML;
     public function testNumericStringKeysWork(): void
     {
         $yaml = <<<YAML
-"123": value1
-"456": value2
-YAML;
+            "123": value1
+            "456": value2
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1241,11 +1241,11 @@ YAML;
     public function testSpecialCharacterKeysWork(): void
     {
         $yaml = <<<YAML
-"key:with:colons": value1
-"key with spaces": value2
-"key-with-dashes": value3
-"key_with_underscores": value4
-YAML;
+            "key:with:colons": value1
+            "key with spaces": value2
+            "key-with-dashes": value3
+            "key_with_underscores": value4
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1265,11 +1265,11 @@ YAML;
     public function testArrayNumericIndicesWork(): void
     {
         $yaml = <<<YAML
-list:
-  - first
-  - second
-  - third
-YAML;
+            list:
+              - first
+              - second
+              - third
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1287,12 +1287,12 @@ YAML;
     public function testMixedArrayKeysWork(): void
     {
         $yaml = <<<YAML
-mixed:
-  0: numeric-zero
-  1: numeric-one
-  key: string-key
-  another: another-string
-YAML;
+            mixed:
+              0: numeric-zero
+              1: numeric-one
+              key: string-key
+              another: another-string
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1313,12 +1313,12 @@ YAML;
     public function testDeeplyNestedStructuresWork(): void
     {
         $yaml = <<<YAML
-level1:
-  level2:
-    level3:
-      level4:
-        level5: deep-value
-YAML;
+            level1:
+              level2:
+                level3:
+                  level4:
+                    level5: deep-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1341,11 +1341,11 @@ YAML;
     public function testPsr0EmptyPrefixRealWorld(): void
     {
         $yaml = <<<YAML
-autoload:
-  psr-0:
-    "": compat/
-    Horde_Exception: lib/
-YAML;
+            autoload:
+              psr-0:
+                "": compat/
+                Horde_Exception: lib/
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1369,15 +1369,15 @@ YAML;
     public function testMultipleEmptyPrefixesRealWorld(): void
     {
         $yaml = <<<YAML
-autoload:
-  psr-0:
-    "": compat/
-  classmap:
-    - legacy/
-autoload-dev:
-  psr-0:
-    "": test-compat/
-YAML;
+            autoload:
+              psr-0:
+                "": compat/
+              classmap:
+                - legacy/
+            autoload-dev:
+              psr-0:
+                "": test-compat/
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1396,13 +1396,13 @@ YAML;
     public function testHordeYmlAutoloadSectionComplete(): void
     {
         $yaml = <<<YAML
-autoload:
-  psr-0:
-    Horde_Exception: lib/
-    "": compat/
-  psr-4:
-    Horde\\Exception\\: src/
-YAML;
+            autoload:
+              psr-0:
+                Horde_Exception: lib/
+                "": compat/
+              psr-4:
+                Horde\\Exception\\: src/
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1431,8 +1431,8 @@ YAML;
     public function testSingleSpaceKeyNotEmpty(): void
     {
         $yaml = <<<YAML
-" ": space-value
-YAML;
+            " ": space-value
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1461,11 +1461,11 @@ YAML;
     public function testEmptyKeyMultilineValue(): void
     {
         $yaml = <<<YAML
-"": |
-  line1
-  line2
-  line3
-YAML;
+            "": |
+              line1
+              line2
+              line3
+            YAML;
 
         $result = Yaml::load($yaml);
 
@@ -1481,9 +1481,9 @@ YAML;
     public function testEmptyKeyAtDocumentRoot(): void
     {
         $yaml = <<<YAML
-"": root-value
-normal: other-value
-YAML;
+            "": root-value
+            normal: other-value
+            YAML;
 
         $result = Yaml::load($yaml);
 

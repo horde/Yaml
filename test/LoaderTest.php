@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Yaml_Loader test
  *
@@ -23,11 +24,13 @@ use LogicException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use XMLParser;
+use Exception;
 
 /**
  * @category   Horde
  * @package    Yaml
  * @subpackage UnitTests
+ * @coversNothing
  */
 class LoaderTest extends TestCase
 {
@@ -121,7 +124,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::loadFile($nonexistant);
             $this->fail();
-        } catch (Horde_Yaml_Exception | RuntimeException $e) {
+        } catch (Horde_Yaml_Exception|RuntimeException $e) {
             $this->assertMatchesRegularExpression('/failed to open/i', $e->getMessage());
         }
     }
@@ -306,7 +309,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('array: !php/array::Horde\Yaml\Test\Helper\TestNotSerializable []');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -315,7 +318,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('array: !php/array::Horde_Yaml_Test_OtherClass []');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -323,7 +326,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('array: !php/array::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -345,7 +348,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde\Yaml\Test\Helper\TestNotSerializable {}');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement ArrayAccess', $e->getMessage());
         }
 
@@ -354,7 +357,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde_Yaml_Test_OtherClass {}');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_OtherClass is not defined', $e->getMessage());
         }
 
@@ -362,7 +365,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('hash: !php/hash::Horde_Yaml_Test_Disallowed []');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -382,7 +385,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('o: !php/object::Horde\Yaml\Test\Helper\TestNotSerializable string');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde\Yaml\Test\Helper\TestNotSerializable does not implement Serializable', $e->getMessage());
         }
 
@@ -390,7 +393,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load('o: !php/object::Horde_Yaml_Test_Disallowed string');
             $this->fail();
-        } catch (Horde_Yaml_Exception | LogicException $e) {
+        } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
     }
@@ -417,7 +420,7 @@ class LoaderTest extends TestCase
         $parsed = Horde_Yaml::load($yaml);
 
         $expected = ["YAML is so easy to learn.",
-                          "Your config files will never be the same.", ];
+            "Your config files will never be the same.", ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -540,7 +543,7 @@ class LoaderTest extends TestCase
         $parsed = Horde_Yaml::load($yaml);
 
         $expected = ["This", ["Is", "Getting", ["Ridiculous", "Guys"]],
-                                            "Seriously", ["Show", "Mercy"], ];
+            "Seriously", ["Show", "Mercy"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -622,7 +625,7 @@ class LoaderTest extends TestCase
         $parsed = Horde_Yaml::load($yaml);
 
         $expected = ["name" => "mark", "age" => "older than chris",
-                                             "brand" => ["marlboro", "lucky strike"], ];
+            "brand" => ["marlboro", "lucky strike"], ];
         $actual = $parsed[0];
         $this->assertEquals($expected, $actual);
     }
@@ -728,7 +731,7 @@ class LoaderTest extends TestCase
         try {
             Horde_Yaml::load(" \tfoo: bar");
             $this->fail();
-        } catch (Horde_Yaml_Exception | DomainException $e) {
+        } catch (Horde_Yaml_Exception|DomainException $e) {
             $this->assertMatchesRegularExpression('/indent contains a tab/i', $e->getMessage());
         }
     }
@@ -746,7 +749,7 @@ class LoaderTest extends TestCase
             Horde_Yaml::load("\t");
             Horde_Yaml::load(" \t");
             Horde_Yaml::load("\t ");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $exception = $e;
         }
         $this->assertNull($exception);
@@ -843,9 +846,9 @@ class LoaderTest extends TestCase
               . "      - Needs to be normalized\n"
               . "    type: mysql\n";
         $expected = ['databases' => [['name' => 'spartan',
-                                                     'notes' => ['Needs to be backed up',
-                                                                      'Needs to be normalized', ],
-                                                     'type' => 'mysql', ]]];
+            'notes' => ['Needs to be backed up',
+                'Needs to be normalized', ],
+            'type' => 'mysql', ]]];
         $actual = Horde_Yaml::load($yaml);
         $this->assertEquals($expected, $actual);
 

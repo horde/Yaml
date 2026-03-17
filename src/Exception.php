@@ -29,6 +29,4 @@ use Horde_Exception_LastError;
  * @category Horde
  * @package  Yaml
  */
-class Exception extends Horde_Exception_LastError
-{
-}
+class Exception extends Horde_Exception_LastError {}

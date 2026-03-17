@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde YAML package
  *

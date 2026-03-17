@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This package is heavily inspired by the Spyc PHP YAML implementation
  * (http://spyc.sourceforge.net/), and portions are copyright 2005-2006 Chris
@@ -28,25 +29,25 @@ class Horde_Yaml_Loader
      * List of nodes with references
      * @var array
      */
-    protected $_haveRefs = array();
+    protected $_haveRefs = [];
 
     /**
      * All nodes
      * @var array
      */
-    protected $_allNodes = array();
+    protected $_allNodes = [];
 
     /**
      * Array of node parents
      * @var array
      */
-    protected $_allParent = array();
+    protected $_allParent = [];
 
     /**
      * References
      * @var array
      */
-    protected $_ref = array();
+    protected $_ref = [];
 
     /**
      * Last indent level
@@ -58,7 +59,7 @@ class Horde_Yaml_Loader
      * Nodes by indention level.
      * @var array
      */
-    protected $_indentSort = array();
+    protected $_indentSort = [];
 
     /**
      * Last node id
@@ -166,7 +167,7 @@ class Horde_Yaml_Loader
             return;
         }
         if ($this->_inBlock && empty($trimmed)) {
-            $last =& $this->_allNodes[$this->_lastNode];
+            $last = & $this->_allNodes[$this->_lastNode];
             $key = key($last->data);
             if ($this->_chomp != '+') {
                 $last->data[$key] = rtrim($last->data[$key]);
@@ -176,9 +177,9 @@ class Horde_Yaml_Loader
             }
             return;
         }
-        if (!$this->_inBlock &&
-            (substr($trimmed, 0, 1) == '#' ||
-             substr($trimmed, 0, 3) == '---')) {
+        if (!$this->_inBlock
+            && (substr($trimmed, 0, 1) == '#'
+             || substr($trimmed, 0, 3) == '---')) {
             return;
         }
 
@@ -190,12 +191,12 @@ class Horde_Yaml_Loader
         if ($this->_lastIndent == $node->indent) {
             // If we're in a block, add the text to the parent's data
             if ($this->_inBlock) {
-                $parent =& $this->_allNodes[$this->_lastNode];
+                $parent = & $this->_allNodes[$this->_lastNode];
                 $parent->data[key($parent->data)] .= preg_replace(
-                        '/^ {' . $this->_lastIndent . '}/',
-                        '',
-                        $line
-                    ) . $this->_lineEnd;
+                    '/^ {' . $this->_lastIndent . '}/',
+                    '',
+                    $line
+                ) . $this->_lineEnd;
             } else {
                 // The current node's parent is the same as the previous
                 // node's
@@ -205,12 +206,12 @@ class Horde_Yaml_Loader
             }
         } elseif ($this->_lastIndent < $node->indent) {
             if ($this->_inBlock) {
-                $parent =& $this->_allNodes[$this->_lastNode];
+                $parent = & $this->_allNodes[$this->_lastNode];
                 $parent->data[key($parent->data)] .= preg_replace(
-                        '/^ {' . $this->_lastIndent . '}/',
-                        '',
-                        $line
-                    ) . $this->_lineEnd;
+                    '/^ {' . $this->_lastIndent . '}/',
+                    '',
+                    $line
+                ) . $this->_lineEnd;
             } else {
                 // The current node's parent is the previous node
                 $node->parent = $this->_lastNode;
@@ -218,14 +219,14 @@ class Horde_Yaml_Loader
                 // If the value of the last node's data was > or | we need
                 // to start blocking i.e. taking in all lines as a text
                 // value until we drop our indent.
-                $parent =& $this->_allNodes[$node->parent];
+                $parent = & $this->_allNodes[$node->parent];
                 $parent->children = true;
                 if (is_array($parent->data)) {
                     $key = key($parent->data);
                     if (isset($parent->data[$key])) {
                         $chk = $parent->data[$key];
-                        if (!is_array($chk) &&
-                            preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
+                        if (!is_array($chk)
+                            && preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
                             if ($match[1] == '>') {
                                 $this->_lineEnd = ' ';
                             } else {
@@ -239,7 +240,9 @@ class Horde_Yaml_Loader
                                     $this->_chomp = '+';
                                 }
                                 $match[2] = str_replace(
-                                    array('-', '+'), '', $match[2]
+                                    ['-', '+'],
+                                    '',
+                                    $match[2]
                                 );
                             }
                             if ($match[2]) {
@@ -249,7 +252,9 @@ class Horde_Yaml_Loader
                             }
                             $this->_inBlock = $match[1];
                             $parent->data[$key] = str_replace(
-                                $match[0], '', $parent->data[$key]
+                                $match[0],
+                                '',
+                                $parent->data[$key]
                             );
                             $parent->data[$key] .= preg_replace(
                                 '/^ {' . $this->_lastIndent . '}/',
@@ -297,7 +302,7 @@ class Horde_Yaml_Loader
             $this->_allParent[intval($node->parent)][] = $node->id;
 
             // Add a reference to the node in an indent array
-            $this->_indentSort[$node->indent][] =& $this->_allNodes[$node->id];
+            $this->_indentSort[$node->indent][] = & $this->_allNodes[$node->id];
 
             // Add a reference to the node in a References array
             // if this node has a YAML reference in it.
@@ -307,18 +312,18 @@ class Horde_Yaml_Loader
             if ($isset) {
                 $nodeval = $node->data[$key];
                 if ($is_array) {
-                    if (is_string($nodeval) && strlen($nodeval) &&
-                        ($nodeval[0] == '&' || $nodeval[0] == '*') &&
-                        isset($nodeval[1]) && $nodeval[1] != ' ') {
-                        $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                    if (is_string($nodeval) && strlen($nodeval)
+                        && ($nodeval[0] == '&' || $nodeval[0] == '*')
+                        && isset($nodeval[1]) && $nodeval[1] != ' ') {
+                        $this->_haveRefs[] = & $this->_allNodes[$node->id];
                     } elseif (is_array($nodeval)) {
                         // Incomplete reference making code. Needs to be
                         // cleaned up.
                         foreach ($node->data[$key] as $d) {
-                            if (is_string($d) && strlen($d) &&
-                                ($d[0] == '&' || $d[0] == '*') &&
-                                isset ($d[1]) && $d[1] != ' ') {
-                                $this->_haveRefs[] =& $this->_allNodes[$node->id];
+                            if (is_string($d) && strlen($d)
+                                && ($d[0] == '&' || $d[0] == '*')
+                                && isset($d[1]) && $d[1] != ' ') {
+                                $this->_haveRefs[] = & $this->_allNodes[$node->id];
                             }
                         }
                     }
@@ -332,7 +337,7 @@ class Horde_Yaml_Loader
      */
     protected function _chomp()
     {
-        $last =& $this->_allNodes[$this->_lastNode];
+        $last = & $this->_allNodes[$this->_lastNode];
         $key = key($last->data);
         if (!$this->_chomp) {
             $last->data[$key] = rtrim($last->data[$key]) . "\n";
@@ -368,7 +373,7 @@ class Horde_Yaml_Loader
      */
     protected function _parseLine($line)
     {
-        $array = array();
+        $array = [];
 
         $line = trim($line);
         if (preg_match('/^- (.*):$/', $line)) {
@@ -381,7 +386,7 @@ class Horde_Yaml_Loader
                 // Set the type of the value. Int, string, etc
                 $array[] = $this->_toType(trim(substr($line, 1)));
             } else {
-                $array[] = array();
+                $array[] = [];
             }
         } elseif (preg_match('/^(.+):/', $line, $key)) {
             // It's a key/value pair most likely
@@ -433,11 +438,11 @@ class Horde_Yaml_Loader
         }
 
         if (preg_match('/^("(.*)"|\'(.*)\')/', $value, $matches)) {
-            $value = (string)str_replace(array('\'\'', '\\\''), "'", end($matches));
+            $value = (string) str_replace(['\'\'', '\\\''], "'", end($matches));
             $value = str_replace('\\"', '"', $value);
         } elseif (preg_match('/^\\[(\s*)\\]$/', $value)) {
             // empty inline mapping
-            $value = array();
+            $value = [];
         } elseif (preg_match('/^\\[(.+)\\]$/', $value, $matches)) {
             // Inline Sequence
 
@@ -445,22 +450,22 @@ class Horde_Yaml_Loader
             $explode = $this->_inlineEscape($matches[1]);
 
             // Propogate value array
-            $value  = array();
+            $value  = [];
             foreach ($explode as $v) {
                 $value[] = $this->_toType($v);
             }
         } elseif (preg_match('/^\\{(\s*)\\}$/', $value)) {
             // empty inline mapping
-            $value = array();
-        } elseif (strpos($value, ': ') !== false &&
-                  !preg_match('/^{(.+)/', $value)) {
+            $value = [];
+        } elseif (strpos($value, ': ') !== false
+                  && !preg_match('/^{(.+)/', $value)) {
             // inline mapping
             $array = explode(': ', $value);
             $key = trim($array[0]);
             array_shift($array);
             $value = trim(implode(': ', $array));
             $value = $this->_toType($value);
-            $value = array($key => $value);
+            $value = [$key => $value];
         } elseif (preg_match("/{(.+)}$/", $value, $matches)) {
             // Inline Mapping
 
@@ -468,7 +473,7 @@ class Horde_Yaml_Loader
             $explode = $this->_inlineEscape($matches[1]);
 
             // Propogate value array
-            $array = array();
+            $array = [];
             foreach ($explode as $v) {
                 $array = $array + $this->_toType($v);
             }
@@ -482,15 +487,19 @@ class Horde_Yaml_Loader
         } elseif ($lower_value == '-.inf') {
             $value = -INF;
         } elseif (ctype_digit($value)) {
-            $value = (int)$value;
-        } elseif (in_array($lower_value,
-                           array('true', 'on', '+', 'yes', 'y'))) {
+            $value = (int) $value;
+        } elseif (in_array(
+            $lower_value,
+            ['true', 'on', '+', 'yes', 'y']
+        )) {
             $value = true;
-        } elseif (in_array($lower_value,
-                           array('false', 'off', '-', 'no', 'n'))) {
+        } elseif (in_array(
+            $lower_value,
+            ['false', 'off', '-', 'no', 'n']
+        )) {
             $value = false;
         } elseif (is_numeric($value)) {
-            $value = (float)$value;
+            $value = (float) $value;
         } else {
             // Just a normal string, right?
             if (($pos = strpos($value, '#')) !== false) {
@@ -521,10 +530,10 @@ class Horde_Yaml_Loader
         $type = substr($data, 5, $first_space - 5);
         $class = null;
         if (strpos($type, '::') !== false) {
-            list($type, $class) = explode('::', $type);
+            [$type, $class] = explode('::', $type);
 
             if (!in_array($class, Horde_Yaml::$allowedClasses)) {
-                if (class_exists('Horde_Exception')){
+                if (class_exists('Horde_Exception')) {
                     throw new Horde_Yaml_Exception("$class is not in the list of allowed classes");
                 }
                 throw new LogicException("$class is not in the list of allowed classes");
@@ -532,58 +541,58 @@ class Horde_Yaml_Loader
         }
 
         switch ($type) {
-        case 'object':
-            if (!class_exists($class)) {
-                if (class_exists('Horde_Exception')) {
-                    throw new Horde_Yaml_Exception("$class is not defined");
+            case 'object':
+                if (!class_exists($class)) {
+                    if (class_exists('Horde_Exception')) {
+                        throw new Horde_Yaml_Exception("$class is not defined");
+                    }
+                    throw new LogicException("$class is not defined");
                 }
-                throw new LogicException("$class is not defined");
-            }
 
-            $reflector = new ReflectionClass($class);
-            if (!$reflector->implementsInterface('Serializable')) {
-                if (class_exists('Horde_Exception')) {
-                    throw new Horde_Yaml_Exception("$class does not implement Serializable");
-                } else {
-                    throw new LogicException("$class does not implement Serializable");
+                $reflector = new ReflectionClass($class);
+                if (!$reflector->implementsInterface('Serializable')) {
+                    if (class_exists('Horde_Exception')) {
+                        throw new Horde_Yaml_Exception("$class does not implement Serializable");
+                    } else {
+                        throw new LogicException("$class does not implement Serializable");
+                    }
                 }
-            }
 
-            $class_data = trim(substr($data, $first_space + 1));
-            $serialized = 'C:' . strlen($class) . ':"' . $class . '":' . strlen($class_data) . ':{' . $class_data . '}';
-            $data = unserialize($serialized);
-            break;
-
-        case 'array':
-        case 'hash':
-            $array_data = substr($data, $first_space + 1);
-            $array_data = Horde_Yaml::load('a: ' . $array_data);
-
-            if (is_null($class)) {
-                $data = $array_data['a'];
+                $class_data = trim(substr($data, $first_space + 1));
+                $serialized = 'C:' . strlen($class) . ':"' . $class . '":' . strlen($class_data) . ':{' . $class_data . '}';
+                $data = unserialize($serialized);
                 break;
-            }
-            if (!class_exists($class)) {
-                if (class_exists('Horde_Exception')) {
-                    throw new Horde_Yaml_Exception("$class is not defined");
+
+            case 'array':
+            case 'hash':
+                $array_data = substr($data, $first_space + 1);
+                $array_data = Horde_Yaml::load('a: ' . $array_data);
+
+                if (is_null($class)) {
+                    $data = $array_data['a'];
+                    break;
                 }
-                throw new LogicException("$class is not defined");
-            }
-
-            $array = new $class;
-            if (!$array instanceof ArrayAccess) {
-                if (class_exists('Horde_Exception')) {
-                    throw new Horde_Yaml_Exception("$class does not implement ArrayAccess");
+                if (!class_exists($class)) {
+                    if (class_exists('Horde_Exception')) {
+                        throw new Horde_Yaml_Exception("$class is not defined");
+                    }
+                    throw new LogicException("$class is not defined");
                 }
-                throw new LogicException("$class does not implement ArrayAccess");
-            }
 
-            foreach ($array_data['a'] as $key => $val) {
-                $array[$key] = $val;
-            }
+                $array = new $class();
+                if (!$array instanceof ArrayAccess) {
+                    if (class_exists('Horde_Exception')) {
+                        throw new Horde_Yaml_Exception("$class does not implement ArrayAccess");
+                    }
+                    throw new LogicException("$class does not implement ArrayAccess");
+                }
 
-            $data = $array;
-            break;
+                foreach ($array_data['a'] as $key => $val) {
+                    $array[$key] = $val;
+                }
+
+                $data = $array;
+                break;
         }
     }
 
@@ -601,7 +610,7 @@ class Horde_Yaml_Loader
      */
     protected function _inlineEscape($inline)
     {
-        $saved_strings = array();
+        $saved_strings = [];
 
         // Check for strings
         $regex = '/(?:(")|(?:\'))((?(1)[^"]+|[^\']+))(?(1)"|\')/';
@@ -670,7 +679,7 @@ class Horde_Yaml_Loader
      */
     protected function _buildArray()
     {
-        $trunk = array();
+        $trunk = [];
         if (!isset($this->_indentSort[0])) {
             return $trunk;
         }
@@ -730,8 +739,8 @@ class Horde_Yaml_Loader
             if (preg_match('/^&([^ ]+)/', $n->data[$key], $matches)) {
                 // Flag the node so we know it's a reference
                 $this->_allNodes[$n->id]->ref = substr($matches[0], 1);
-                $this->_allNodes[$n->id]->data[$key] =
-                    substr($n->data[$key], strlen($matches[0]) + 1);
+                $this->_allNodes[$n->id]->data[$key]
+                    = substr($n->data[$key], strlen($matches[0]) + 1);
                 // Look for *refs
             } elseif (preg_match('/^\*([^ ]+)/', $n->data[$key], $matches)) {
                 $ref = substr($matches[0], 1);
@@ -742,8 +751,8 @@ class Horde_Yaml_Loader
             if (preg_match('/^&([^ ]+)/', $v, $matches)) {
                 // Flag the node so we know it's a reference
                 $this->_allNodes[$n->id]->ref = substr($matches[0], 1);
-                $this->_allNodes[$n->id]->data[$key][$k] =
-                    substr($v, strlen($matches[0]) + 1);
+                $this->_allNodes[$n->id]->data[$key][$k]
+                    = substr($v, strlen($matches[0]) + 1);
                 // Look for *refs
             } elseif (preg_match('/^\*([^ ]+)/', $v, $matches)) {
                 $ref = substr($matches[0], 1);
@@ -764,11 +773,11 @@ class Horde_Yaml_Loader
      */
     protected function _gatherChildren($nid)
     {
-        $return = array();
-        $node =& $this->_allNodes[$nid];
-        if (is_array ($this->_allParent[$node->id])) {
+        $return = [];
+        $node = & $this->_allNodes[$nid];
+        if (is_array($this->_allParent[$node->id])) {
             foreach ($this->_allParent[$node->id] as $nodeZ) {
-                $z =& $this->_allNodes[$nodeZ];
+                $z = & $this->_allNodes[$nodeZ];
                 // We found a child
                 $this->_nodeArrayizeData($z);
 
@@ -806,8 +815,8 @@ class Horde_Yaml_Loader
                 // If it's an array, add to it of course
                 if (isset($node->data[$key])) {
                     if (is_array($node->data[$key])) {
-                        $node->data[$key] =
-                            $this->_array_kmerge($node->data[$key], $children);
+                        $node->data[$key]
+                            = $this->_array_kmerge($node->data[$key], $children);
                     } else {
                         $node->data[$key] = $children;
                     }
@@ -817,7 +826,7 @@ class Horde_Yaml_Loader
             } else {
                 // Same as above, find the children of this node
                 $children = $this->_gatherChildren($node->id);
-                $node->data = array();
+                $node->data = [];
                 $node->data[] = $children;
             }
         } else {
@@ -826,9 +835,9 @@ class Horde_Yaml_Loader
                 $key = key($node->data);
                 $key = $key === null ? 0 : $key;
 
-                if (!isset($node->data[$key]) ||
-                    is_array($node->data[$key]) ||
-                    is_object($node->data[$key])) {
+                if (!isset($node->data[$key])
+                    || is_array($node->data[$key])
+                    || is_object($node->data[$key])) {
                     return;
                 }
 
@@ -850,14 +859,14 @@ class Horde_Yaml_Loader
             // It is a reference
             $key = key($z->data);
             // Copy the data to this object for easy retrieval later
-            $this->_ref[$z->ref] =& $z->data[$key];
+            $this->_ref[$z->ref] = & $z->data[$key];
         } elseif (isset($z->refKey)) {
             // It has a reference
             if (isset($this->_ref[$z->refKey])) {
                 $key = key($z->data);
                 // Copy the data from this object to make the node a real
                 // reference
-                $z->data[$key] =& $this->_ref[$z->refKey];
+                $z->data[$key] = & $this->_ref[$z->refKey];
             }
         }
     }

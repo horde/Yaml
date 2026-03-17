@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Yaml test helpers
  *

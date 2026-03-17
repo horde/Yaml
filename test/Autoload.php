@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Setup autoloading for the tests.
  *
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * @category   Horde
  * @package    Yaml

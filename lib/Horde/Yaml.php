@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde YAML package
  *
@@ -51,7 +52,7 @@ class Horde_Yaml
      *
      * @var array
      */
-    public static $allowedClasses = array('ArrayObject');
+    public static $allowedClasses = ['ArrayObject'];
 
     /**
      * Load a string containing YAML and parse it into a PHP array.
@@ -72,10 +73,10 @@ class Horde_Yaml
         }
 
         if (strpos($yaml, "\r") !== false) {
-            $yaml = str_replace(array("\r\n", "\r"), array("\n", "\n"), $yaml);
+            $yaml = str_replace(["\r\n", "\r"], ["\n", "\n"], $yaml);
         }
         $lines = explode("\n", rtrim($yaml, "\n"));
-        $loader = new Horde_Yaml_Loader;
+        $loader = new Horde_Yaml_Loader();
 
         foreach ($lines as $line) {
             $loader->parse($line);
@@ -130,7 +131,7 @@ class Horde_Yaml
             return call_user_func(self::$loadfunc, stream_get_contents($stream));
         }
 
-        $loader = new Horde_Yaml_Loader;
+        $loader = new Horde_Yaml_Loader();
         while (!feof($stream)) {
             $loader->parse(stream_get_line($stream, 100000, "\n"));
         }
@@ -149,7 +150,7 @@ class Horde_Yaml
      *
      * @return string  YAML representation of $value.
      */
-    public static function dump($value, $options = array())
+    public static function dump($value, $options = [])
     {
         if (is_callable(self::$dumpfunc)) {
             return call_user_func(self::$dumpfunc, $value);
