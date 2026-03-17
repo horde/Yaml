@@ -901,4 +901,614 @@ class LoaderTest extends TestCase
     {
         return __DIR__ . "/../fixtures/{$name}.yml";
     }
+
+    // =========================================================================
+    // GROUP 1: Root Cause - Line 410 (_parseLine)
+    // These tests verify the fix at the source where keys first enter the system.
+    // =========================================================================
+
+    /**
+     * Test that empty string keys are preserved in simple key-value pairs.
+     *
+     * Root cause test: Line 410 in _parseLine() should NOT use empty($key)
+     * which incorrectly treats "" as missing key.
+     */
+    public function testEmptyStringKeySimplePair(): void
+    {
+        $yaml = <<<YAML
+"": value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // Assert empty string key exists
+        $this->assertArrayHasKey('', $result);
+        $this->assertEquals('value', $result['']);
+
+        // Assert it wasn't converted to numeric 0
+        $this->assertArrayNotHasKey(0, $result);
+
+        // Verify array has exactly 1 element
+        $this->assertCount(1, $result);
+    }
+
+    /**
+     * Test empty string key coexisting with normal keys.
+     *
+     * Verifies line 410 doesn't affect other keys in same associative array.
+     */
+    public function testEmptyStringKeyWithOtherKeys(): void
+    {
+        $yaml = <<<YAML
+"": empty-key-value
+normalKey: normal-value
+anotherKey: another-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertEquals('empty-key-value', $result['']);
+        $this->assertArrayHasKey('normalKey', $result);
+        $this->assertEquals('normal-value', $result['normalKey']);
+        $this->assertArrayHasKey('anotherKey', $result);
+        $this->assertEquals('another-value', $result['anotherKey']);
+        $this->assertCount(3, $result);
+    }
+
+    /**
+     * Test empty string key in nested YAML structures.
+     *
+     * Real-world case: PSR-0 autoload with empty prefix.
+     */
+    public function testEmptyStringKeyNested(): void
+    {
+        $yaml = <<<YAML
+autoload:
+  psr-0:
+    "": compat/
+    Horde_Exception: lib/
+  psr-4:
+    Horde\\Exception\\: src/
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('autoload', $result);
+        $this->assertArrayHasKey('psr-0', $result['autoload']);
+
+        // Critical assertion: empty string key preserved
+        $this->assertArrayHasKey('', $result['autoload']['psr-0']);
+        $this->assertEquals('compat/', $result['autoload']['psr-0']['']);
+
+        // Critical assertion: NOT converted to 0
+        $this->assertArrayNotHasKey(0, $result['autoload']['psr-0']);
+
+        // Other keys unaffected
+        $this->assertArrayHasKey('Horde_Exception', $result['autoload']['psr-0']);
+        $this->assertEquals('lib/', $result['autoload']['psr-0']['Horde_Exception']);
+    }
+
+    /**
+     * Test empty string key with empty string value.
+     *
+     * Edge case: Both key and value are empty strings.
+     */
+    public function testEmptyStringKeyEmptyValue(): void
+    {
+        $yaml = <<<YAML
+"": ""
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertSame('', $result['']);
+        $this->assertArrayNotHasKey(0, $result);
+    }
+
+    /**
+     * Test empty string key with null value.
+     *
+     * Distinguishes empty string key from null value.
+     */
+    public function testEmptyStringKeyNullValue(): void
+    {
+        $yaml = <<<YAML
+"": null
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertNull($result['']);
+        $this->assertArrayNotHasKey(0, $result);
+    }
+
+    /**
+     * Test empty string key with complex nested value.
+     */
+    public function testEmptyStringKeyComplexValue(): void
+    {
+        $yaml = <<<YAML
+"":
+  nested: value
+  list:
+    - item1
+    - item2
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertIsArray($result['']);
+        $this->assertArrayHasKey('nested', $result['']);
+        $this->assertEquals('value', $result['']['nested']);
+        $this->assertArrayHasKey('list', $result['']);
+        $this->assertIsArray($result['']['list']);
+        $this->assertEquals(['item1', 'item2'], $result['']['list']);
+    }
+
+    // =========================================================================
+    // GROUP 2: Edge Cases - Falsy Values as Keys
+    // These tests verify the fix handles ALL PHP falsy values correctly.
+    // =========================================================================
+
+    /**
+     * Test string "0" as key (different from numeric 0).
+     *
+     * Note: PHP treats "0" and 0 as same array key due to type juggling.
+     * This test documents current behavior.
+     */
+    public function testStringZeroKey(): void
+    {
+        $yaml = <<<YAML
+"0": string-zero
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // PHP arrays: "0" and 0 are the same key
+        $this->assertArrayHasKey(0, $result);
+        $this->assertArrayHasKey('0', $result);
+        $this->assertEquals('string-zero', $result[0]);
+        $this->assertEquals('string-zero', $result['0']);
+    }
+
+    /**
+     * Test numeric 0 as key.
+     *
+     * Verifies fix doesn't break legitimate numeric keys.
+     */
+    public function testNumericZeroKey(): void
+    {
+        $yaml = <<<YAML
+0: numeric-zero
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey(0, $result);
+        $this->assertEquals('numeric-zero', $result[0]);
+    }
+
+    /**
+     * Test boolean false as key.
+     *
+     * YAML allows false as key. Should be preserved or converted per spec.
+     */
+    public function testBooleanFalseKey(): void
+    {
+        $yaml = <<<YAML
+false: bool-false
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // YAML spec: false becomes boolean, PHP converts to empty string key
+        // This documents existing behavior
+        $this->assertTrue(
+            isset($result[false]) || isset($result[0]) || isset($result['false']) || isset($result[''])
+        );
+    }
+
+    /**
+     * Test that array notation uses numeric indices (null keys).
+     *
+     * This is the INTENDED behavior of line 410 check.
+     */
+    public function testArrayNotationUsesNumericIndex(): void
+    {
+        $yaml = <<<YAML
+- item1
+- item2
+- item3
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // Array notation should create numeric indices 0, 1, 2
+        $this->assertArrayHasKey(0, $result);
+        $this->assertEquals('item1', $result[0]);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertEquals('item2', $result[1]);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertEquals('item3', $result[2]);
+
+        // Should NOT have empty string key
+        $this->assertArrayNotHasKey('', $result);
+    }
+
+    // =========================================================================
+    // GROUP 3: Downstream Behavior - Lines 818/840
+    // These tests verify lines 818/840 don't reintroduce the bug.
+    // =========================================================================
+
+    /**
+     * Test empty string key when node has children.
+     *
+     * Exercises line 818 in _nodeArrayizeData() with children=true.
+     */
+    public function testEmptyStringKeyWithChildren(): void
+    {
+        $yaml = <<<YAML
+parent:
+  "":
+    child1: value1
+    child2: value2
+  other: other-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('parent', $result);
+        $this->assertArrayHasKey('', $result['parent']);
+        $this->assertIsArray($result['parent']['']);
+        $this->assertArrayHasKey('child1', $result['parent']['']);
+        $this->assertEquals('value1', $result['parent']['']['child1']);
+        $this->assertArrayNotHasKey(0, $result['parent']);
+    }
+
+    /**
+     * Test empty string key in leaf node (no children).
+     *
+     * Exercises line 840 in _nodeArrayizeData() with children=false.
+     */
+    public function testEmptyStringKeyLeafNode(): void
+    {
+        $yaml = <<<YAML
+parent:
+  "": leaf-value
+  other: other-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('parent', $result);
+        $this->assertArrayHasKey('', $result['parent']);
+        $this->assertEquals('leaf-value', $result['parent']['']);
+        $this->assertArrayNotHasKey(0, $result['parent']);
+    }
+
+    // =========================================================================
+    // GROUP 4: Already-Good Cases (Regression Tests)
+    // These tests ensure the fix doesn't break existing functionality.
+    // =========================================================================
+
+    /**
+     * Regression test: Normal string keys should continue working.
+     */
+    public function testNormalStringKeysPreserved(): void
+    {
+        $yaml = <<<YAML
+key1: value1
+key2: value2
+longKeyName: long-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('key1', $result);
+        $this->assertEquals('value1', $result['key1']);
+        $this->assertArrayHasKey('key2', $result);
+        $this->assertEquals('value2', $result['key2']);
+        $this->assertArrayHasKey('longKeyName', $result);
+        $this->assertEquals('long-value', $result['longKeyName']);
+    }
+
+    /**
+     * Regression test: Numeric string keys should work.
+     */
+    public function testNumericStringKeysWork(): void
+    {
+        $yaml = <<<YAML
+"123": value1
+"456": value2
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // PHP converts numeric strings to integers as array keys
+        $this->assertArrayHasKey(123, $result);
+        $this->assertEquals('value1', $result[123]);
+        $this->assertArrayHasKey(456, $result);
+        $this->assertEquals('value2', $result[456]);
+    }
+
+    /**
+     * Regression test: Special characters in keys.
+     */
+    public function testSpecialCharacterKeysWork(): void
+    {
+        $yaml = <<<YAML
+"key:with:colons": value1
+"key with spaces": value2
+"key-with-dashes": value3
+"key_with_underscores": value4
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('key:with:colons', $result);
+        $this->assertEquals('value1', $result['key:with:colons']);
+        $this->assertArrayHasKey('key with spaces', $result);
+        $this->assertEquals('value2', $result['key with spaces']);
+        $this->assertArrayHasKey('key-with-dashes', $result);
+        $this->assertEquals('value3', $result['key-with-dashes']);
+        $this->assertArrayHasKey('key_with_underscores', $result);
+        $this->assertEquals('value4', $result['key_with_underscores']);
+    }
+
+    /**
+     * Regression test: Array notation with numeric indices.
+     */
+    public function testArrayNumericIndicesWork(): void
+    {
+        $yaml = <<<YAML
+list:
+  - first
+  - second
+  - third
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('list', $result);
+        $this->assertIsArray($result['list']);
+        $this->assertCount(3, $result['list']);
+        $this->assertEquals('first', $result['list'][0]);
+        $this->assertEquals('second', $result['list'][1]);
+        $this->assertEquals('third', $result['list'][2]);
+    }
+
+    /**
+     * Regression test: Mixed numeric and string keys.
+     */
+    public function testMixedArrayKeysWork(): void
+    {
+        $yaml = <<<YAML
+mixed:
+  0: numeric-zero
+  1: numeric-one
+  key: string-key
+  another: another-string
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('mixed', $result);
+        $this->assertArrayHasKey(0, $result['mixed']);
+        $this->assertEquals('numeric-zero', $result['mixed'][0]);
+        $this->assertArrayHasKey(1, $result['mixed']);
+        $this->assertEquals('numeric-one', $result['mixed'][1]);
+        $this->assertArrayHasKey('key', $result['mixed']);
+        $this->assertEquals('string-key', $result['mixed']['key']);
+        $this->assertArrayHasKey('another', $result['mixed']);
+        $this->assertEquals('another-string', $result['mixed']['another']);
+    }
+
+    /**
+     * Regression test: Deeply nested YAML structures.
+     */
+    public function testDeeplyNestedStructuresWork(): void
+    {
+        $yaml = <<<YAML
+level1:
+  level2:
+    level3:
+      level4:
+        level5: deep-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertEquals(
+            'deep-value',
+            $result['level1']['level2']['level3']['level4']['level5']
+        );
+    }
+
+    // =========================================================================
+    // GROUP 5: Real-World Use Cases
+    // These tests verify actual use cases from Horde framework.
+    // =========================================================================
+
+    /**
+     * Real-world test: PSR-0 autoload with empty prefix for global namespace.
+     *
+     * This is the case that prompted the bug report and fix.
+     */
+    public function testPsr0EmptyPrefixRealWorld(): void
+    {
+        $yaml = <<<YAML
+autoload:
+  psr-0:
+    "": compat/
+    Horde_Exception: lib/
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $psr0 = $result['autoload']['psr-0'];
+
+        // Must have empty string key for global namespace fallback
+        $this->assertArrayHasKey('', $psr0);
+        $this->assertEquals('compat/', $psr0['']);
+
+        // Must NOT have numeric 0 key
+        $this->assertArrayNotHasKey(0, $psr0);
+
+        // Must have normal PSR-0 prefix
+        $this->assertArrayHasKey('Horde_Exception', $psr0);
+        $this->assertEquals('lib/', $psr0['Horde_Exception']);
+    }
+
+    /**
+     * Real-world test: Empty prefix in multiple autoload sections.
+     */
+    public function testMultipleEmptyPrefixesRealWorld(): void
+    {
+        $yaml = <<<YAML
+autoload:
+  psr-0:
+    "": compat/
+  classmap:
+    - legacy/
+autoload-dev:
+  psr-0:
+    "": test-compat/
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        // Production autoload empty prefix
+        $this->assertArrayHasKey('', $result['autoload']['psr-0']);
+        $this->assertEquals('compat/', $result['autoload']['psr-0']['']);
+
+        // Dev autoload empty prefix
+        $this->assertArrayHasKey('', $result['autoload-dev']['psr-0']);
+        $this->assertEquals('test-compat/', $result['autoload-dev']['psr-0']['']);
+    }
+
+    /**
+     * Real-world test: Complete .horde.yml autoload section.
+     */
+    public function testHordeYmlAutoloadSectionComplete(): void
+    {
+        $yaml = <<<YAML
+autoload:
+  psr-0:
+    Horde_Exception: lib/
+    "": compat/
+  psr-4:
+    Horde\\Exception\\: src/
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $autoload = $result['autoload'];
+
+        // PSR-0 section
+        $this->assertArrayHasKey('psr-0', $autoload);
+        $this->assertArrayHasKey('', $autoload['psr-0']);
+        $this->assertEquals('compat/', $autoload['psr-0']['']);
+        $this->assertArrayHasKey('Horde_Exception', $autoload['psr-0']);
+        $this->assertEquals('lib/', $autoload['psr-0']['Horde_Exception']);
+
+        // PSR-4 section
+        $this->assertArrayHasKey('psr-4', $autoload);
+        $this->assertArrayHasKey('Horde\\Exception\\', $autoload['psr-4']);
+        $this->assertEquals('src/', $autoload['psr-4']['Horde\\Exception\\']);
+    }
+
+    // =========================================================================
+    // GROUP 6: Edge Cases and Boundaries
+    // =========================================================================
+
+    /**
+     * Edge case: Single space as key (not empty string).
+     */
+    public function testSingleSpaceKeyNotEmpty(): void
+    {
+        $yaml = <<<YAML
+" ": space-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey(' ', $result);
+        $this->assertEquals('space-value', $result[' ']);
+        $this->assertArrayNotHasKey('', $result);
+        $this->assertArrayNotHasKey(0, $result);
+    }
+
+    /**
+     * Edge case: Tab character as key.
+     */
+    public function testTabCharacterKey(): void
+    {
+        $yaml = "\"\t\": tab-value";
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey("\t", $result);
+        $this->assertEquals('tab-value', $result["\t"]);
+    }
+
+    /**
+     * Edge case: Multiline value with empty string key.
+     */
+    public function testEmptyKeyMultilineValue(): void
+    {
+        $yaml = <<<YAML
+"": |
+  line1
+  line2
+  line3
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertStringContainsString('line1', $result['']);
+        $this->assertStringContainsString('line2', $result['']);
+        $this->assertStringContainsString('line3', $result['']);
+    }
+
+    /**
+     * Edge case: Empty string key at document root.
+     */
+    public function testEmptyKeyAtDocumentRoot(): void
+    {
+        $yaml = <<<YAML
+"": root-value
+normal: other-value
+YAML;
+
+        $result = Yaml::load($yaml);
+
+        $this->assertArrayHasKey('', $result);
+        $this->assertEquals('root-value', $result['']);
+        $this->assertArrayHasKey('normal', $result);
+        $this->assertEquals('other-value', $result['normal']);
+        $this->assertCount(2, $result);
+    }
+
+    /**
+     * Edge case: Empty string with single quotes vs double quotes.
+     */
+    public function testEmptyStringSingleVsDoubleQuote(): void
+    {
+        // Double quotes
+        $yaml1 = '"": double-quote';
+        $result1 = Yaml::load($yaml1);
+        $this->assertArrayHasKey('', $result1);
+        $this->assertEquals('double-quote', $result1['']);
+
+        // Single quotes
+        $yaml2 = "'': single-quote";
+        $result2 = Yaml::load($yaml2);
+        $this->assertArrayHasKey('', $result2);
+        $this->assertEquals('single-quote', $result2['']);
+    }
 }

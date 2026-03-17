@@ -407,7 +407,7 @@ class Loader
 
             // Set the type of the value. Int, string, etc
             $value = $this->_toType($value);
-            if (empty($key)) {
+            if ($key === null) {
                 $array[] = $value;
             } else {
                 $array[$key] = $value;
@@ -815,7 +815,7 @@ class Loader
                 // We've gathered all our children's data and are ready to use
                 // it
                 $key = key($node->data);
-                $key = empty($key) ? 0 : $key;
+                $key = $key === null ? 0 : $key;
                 // If it's an array, add to it of course
                 if (isset($node->data[$key])) {
                     if (is_array($node->data[$key])) {
@@ -837,7 +837,7 @@ class Loader
             // The node is a single string. See if we need to unserialize it.
             if (is_array($node->data)) {
                 $key = key($node->data);
-                $key = empty($key) ? 0 : $key;
+                $key = $key === null ? 0 : $key;
 
                 if (!isset($node->data[$key]) ||
                     is_array($node->data[$key]) ||
