@@ -1,0 +1,47 @@
+---
+id: Css_Parser
+name: Css_Parser
+full: CSS parser library
+description: >-
+  A library that provides access to the Sabberworm CSS Parser from within the
+  Horde framework.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-beta7
+  api: 2.0.0-beta1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      sabberworm/php-css-parser: ^8.9 || ^9.3
+      horde/exception: ^3
+  optional:
+    ext:
+      mbstring: '*'
+autoload:
+  psr-4:
+    Horde\Css\Parser\: src/
+  classmap:
+    - lib/
+vendor: horde
+keywords:
+  - css
+  - sabberworm
+  - facade
+quality:
+  phpstan:
+    level: 9

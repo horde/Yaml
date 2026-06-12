@@ -1,0 +1,38 @@
+---
+id: Kolab_Session
+name: Kolab_Session
+full: Kolab session management library
+description: A library to store Kolab specific user data in the session.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Kolab_Session
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+version:
+  release: 2.0.4
+  api: 1.1.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/exception: ^3
+  optional:
+    composer:
+      horde/imap_client: ^3
+      horde/kolab_server: ^3
+      horde/log: ^3
+      horde/test: ^3
+  dev:
+    composer:
+      horde/test: ^3

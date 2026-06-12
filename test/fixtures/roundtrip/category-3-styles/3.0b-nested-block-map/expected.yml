@@ -1,0 +1,7 @@
+servers:
+  mail:
+    host: smtp.example.com
+    port: 25
+  db:
+    host: localhost
+    port: 5432

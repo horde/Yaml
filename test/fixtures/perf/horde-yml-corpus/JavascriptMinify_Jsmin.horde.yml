@@ -1,0 +1,31 @@
+---
+id: JavascriptMinify_Jsmin
+name: JavascriptMinify_Jsmin
+full: |-
+  JavaScript minification library - JSMin driver
+description: >-
+  The JSMin javascript minifier driver for use with the Horde_JavascriptMinify
+  library.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0alpha5
+  api: 2.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: JSMin
+  uri: ~
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/javascriptminify: ^2

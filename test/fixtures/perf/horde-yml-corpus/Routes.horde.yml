@@ -1,0 +1,54 @@
+---
+id: Routes
+name: Routes
+full: URL routing/mapping library
+description: >-
+  A library for mapping URLs into the controllers and actions of an MVC system.
+  It is a port of a Python library, Routes, by Ben Bangert
+  (http://routes.groovie.org).
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Routes
+authors:
+  -
+    name: Mike Naberezny
+    user: mnaberez
+    email: mike@maintainable.com
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC2
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/util: ^3
+      horde/support: ^3
+      psr/http-message: ^2
+  dev:
+    composer:
+      horde/test: ^3
+      horde/cache: ^3
+      horde/controller: ^3
+  optional:
+    composer:
+      horde/cache: ^3
+      horde/controller: ^3
+vendor: horde
+keywords:
+  - routing
+  - match

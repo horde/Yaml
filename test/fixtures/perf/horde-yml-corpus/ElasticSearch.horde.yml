@@ -1,0 +1,37 @@
+---
+id: ElasticSearch
+name: ElasticSearch
+full: ElasticSearch client library
+description: A lightweight library for ElasticSearch (http://www.elasticsearch.org/).
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_ElasticSearch
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-beta1
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7 || ^8
+    composer:
+      horde/exception: ^3
+      horde/http: ^3
+vendor: horde

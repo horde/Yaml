@@ -1,0 +1,27 @@
+---
+id: Queue
+name: Queue
+full: Message and data queuing client library
+description: A queue library with various storage backends and runners.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Queue
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0alpha6
+  api: 2.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7 || ^8

@@ -1,0 +1,36 @@
+---
+id: Service_Facebook
+name: Service_Facebook
+full: Facebook client library
+description: A client library for the Facebook REST API.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Service_Facebook
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0alpha2
+  api: 2.0.0
+state:
+  release: alpha
+  api: stable
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7
+    composer:
+      horde/exception: ^3
+      horde/http: ^3
+      horde/translation: ^3
+      horde/support: ^3
+      horde/util: ^3
+    ext:
+      json: '*'
+      SimpleXML: '*'

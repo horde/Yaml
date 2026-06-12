@@ -1,0 +1,39 @@
+---
+id: Cli_Application
+name: Cli_Application
+full: Library for creating command line applications
+description: A library that builds a complete command line application.
+list: dev
+type: library
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.0-beta1
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7 || ^8
+    composer:
+      horde/argv: ^3
+      horde/cli: ^3
+autoload:
+  classmap:
+    - lib/
+vendor: horde

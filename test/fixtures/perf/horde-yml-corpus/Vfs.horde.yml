@@ -1,0 +1,71 @@
+---
+id: Vfs
+name: Vfs
+full: Virtual file system library
+description: >-
+  A library that provides a Virtual File System API, with backends for SQL, FTP,
+  Local filesystems, Hybrid SQL and filesystem, Samba, SSH2/SFTP, MongoDB.
+  Reading, writing and listing of files are all supported.
+list: dev
+type: horde-library
+homepage: https://www.horde.org/libraries/Horde_Vfs
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: maintainer
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/auth: ^3
+      horde/core: ^3
+      horde/db: ^3
+      horde/mime: ^3
+      horde/mongo: ^2
+      horde/perms: ^3
+      horde/test: ^3
+  dev:
+    composer:
+      horde/auth: ^3
+      horde/core: ^3
+      horde/db: ^3
+      horde/mime: ^3
+      horde/mongo: ^2
+      horde/perms: ^3
+      horde/test: ^3
+    ext:
+      ftp: '*'
+      ssh2: '*'
+vendor: horde
+keywords:
+  - filesystem
+  - abstraction

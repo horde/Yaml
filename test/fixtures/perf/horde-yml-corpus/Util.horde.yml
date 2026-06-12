@@ -1,0 +1,65 @@
+---
+id: Util
+name: Util
+full: Utility library
+description: A library that provides functionality useful for all kind of applications.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Util
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
+version:
+  release: 3.0.0-beta6
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    ext:
+      dom: '*'
+  optional:
+    composer:
+      horde/imap_client: ^3
+    ext:
+      ctype: '*'
+      filter: '*'
+      iconv: '*'
+      intl: '*'
+      json: '*'
+      mbstring: '*'
+      xml: '*'
+  dev:
+    composer:
+      horde/imap_client: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Util\: src/
+vendor: horde
+quality:
+  phpstan:
+    level: 2
+keywords: []

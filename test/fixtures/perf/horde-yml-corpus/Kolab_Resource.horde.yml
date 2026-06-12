@@ -1,0 +1,34 @@
+---
+id: Kolab_Resource
+name: Kolab_Resource
+full: Kolab resource management library
+description: A library to allow booking of Kolab server resources.
+list: dev
+type: library
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha2
+  api: 1.0.0
+state:
+  release: beta
+  api: beta
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      pear/http_request: '*'
+      horde/icalendar: ^3
+      horde/mime: ^3
+      horde/kolab_server: ^3
+      horde/kolab_storage: ^3
+      horde/translation: ^3
+      horde/util: ^3

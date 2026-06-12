@@ -1,0 +1,32 @@
+---
+id: luxor
+name: Luxor
+full: Source code cross referencer
+description: Luxor is a port of LXR (Linux Cross Referencer) to PHP.
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha1
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Luxor\: src/
+vendor: horde

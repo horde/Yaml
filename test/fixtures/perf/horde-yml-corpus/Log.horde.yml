@@ -1,0 +1,64 @@
+---
+id: Log
+name: Log
+full: Logging library
+description: A logging library with configurable handlers, filters, and formatting.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Log
+authors:
+  -
+    name: Mike Naberezny
+    user: mnaberez
+    email: mike@maintainable.com
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: maintainer
+version:
+  release: 3.0.0-beta7
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+provides:
+  psr/log-implementation: 3.0.0
+dependencies:
+  required:
+    php: ^8
+    composer:
+      psr/log: ^3
+      horde/constraint: ^3
+      horde/exception: ^3
+      horde/util: ^3
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+      horde/cli: ^3
+      horde/scribe: ^3
+  optional:
+    composer:
+      horde/cli: ^3
+      horde/scribe: ^3
+    ext:
+      dom: '*'
+vendor: horde
+keywords: []
+quality:
+  phpstan:
+    level: 2

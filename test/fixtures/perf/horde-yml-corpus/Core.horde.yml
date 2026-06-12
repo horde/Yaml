@@ -1,0 +1,134 @@
+---
+id: Core
+name: Core
+full: Core Horde Framework library
+description: >-
+  A library that provides the core functionality of the Horde Application
+  Framework.
+list: dev
+type: horde-library
+homepage: https://www.horde.org/libraries/Horde_Core
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: maintainer
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: developer
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
+version:
+  release: 3.0.0-RC9
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/alarm: ^3
+      horde/auth: ^3
+      horde/autoloader: ^3
+      horde/browser: ^3
+      horde/cache: ^3
+      horde/cli: ^3
+      horde/compress: ^3
+      horde/compress_fast: ^2
+      horde/controller: ^3
+      horde/cssminify: ^2.0.0-beta2
+      horde/data: ^3
+      horde/date: ^3
+      horde/eventdispatcher: ^1
+      horde/exception: ^3
+      horde/group: ^3
+      horde/hashtable: ^2
+      horde/history: ^3
+      horde/hordeymlfile: ^1
+      horde/http: ^3
+      horde/http_server: ^1
+      horde/identity: ^1
+      horde/injector: ^3
+      horde/javascriptminify: ^2
+      horde/lock: ^3
+      horde/log: ^3
+      horde/logintasks: ^3
+      horde/mime: ^3
+      horde/mime_viewer: ^3
+      horde/notification: ^3
+      horde/pack: ^2
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/rpc: ^3
+      horde/secret: ^3
+      horde/serialize: ^3
+      horde/sessionhandler: ^3
+      horde/share: ^3
+      horde/support: ^3
+      horde/template: ^3
+      horde/token: ^3
+      horde/text_filter: ^3
+      horde/translation: ^3
+      horde/url: ^3
+      horde/util: ^3
+      horde/oauth: ^4
+      horde/view: ^3
+      php81_bc/strftime: ^0.7
+      psr/simple-cache-implementation: ^3
+      psr/simple-cache: ^3
+    ext:
+      session: '*'
+  optional:
+    composer:
+      pear/text_captcha: '*'
+      pear/text_figlet: '*'
+    ext:
+      dom: '*'
+      hash: '*'
+      SimpleXML: '*'
+      sockets: '*'
+  dev:
+    composer:
+      horde/activesync: ^3
+      horde/form: ^3
+      horde/ldap: ^3
+      horde/mongo: ^2
+      horde/routes: ^3
+      horde/tree: ^3
+      horde/vfs: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Core\: src/
+vendor: horde
+keywords:
+  - glue
+  - framework
+  - config
+  - errorhandler

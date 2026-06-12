@@ -1,0 +1,38 @@
+---
+id: History
+name: History
+full: History tracking library
+description: >-
+  A library that provides a way to track changes on arbitrary pieces of data in
+  Horde applications.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_History
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/db: ^3
+      horde/exception: ^3
+  optional:
+    composer:
+      horde/hashtable: ^2
+      horde/mongo: ^2
+      horde/test: ^3
+vendor: horde

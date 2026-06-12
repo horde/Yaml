@@ -1,0 +1,45 @@
+---
+id: hordeymlfile
+name: HordeYmlFile
+full: Handle .horde.yml file and changelog.yml file
+description: Handle .horde.yml file and changelog.yml file
+list: horde
+type: library
+keywords:
+  - metadata
+  - changelog
+  - composer
+support:
+  issues: https://github.com/horde/horde/issues
+  source: https://github.com/horde/HordeYmlFile
+  email: dev@lists.horde.org
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 1.0.0-RC2
+  api: 1.0.0-alpha4
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  uses: readonly-parameters
+  required:
+    php: ^8.2
+    composer:
+      horde/composer: ^1
+      horde/version: ^1
+      horde/yaml: ^3
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+vendor: horde

@@ -1,0 +1,65 @@
+---
+id: content
+name: Content
+full: Tagging application
+description: This application provides tagging support for the other Horde applications.
+list: ~
+type: application
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/core: ^3
+      horde/date: ^3
+      horde/exception: ^3
+      horde/db: ^3
+      horde/injector: ^3
+      horde/rdo: ^3
+      horde/rpc: ^3
+      horde/util: ^3
+    ext:
+      gettext: '*'
+      json: '*'
+  optional:
+    composer:
+      horde/argv: ^3
+      horde/controller: ^3
+      horde/elasticsearch: ^2
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+  psr-4:
+    Horde\Content\: /src
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Content\: /src
+keywords:
+  - tagger
+  - tags
+vendor: horde

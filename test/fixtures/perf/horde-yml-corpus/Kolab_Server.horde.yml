@@ -1,0 +1,43 @@
+---
+id: Kolab_Server
+name: Kolab_Server
+full: Kolab user database library
+description: A library to read and write entries in the Kolab user database stored in LDAP.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Kolab_Server
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+version:
+  release: 2.0.6
+  api: 1.0.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/auth: ^3
+      horde/exception: ^3
+      horde/util: ^3
+    ext:
+      hash: '*'
+  optional:
+    composer:
+      horde/date: ^3
+      horde/ldap: ^3
+      horde/test: ^3
+    ext:
+      ldap: '*'
+  dev:
+    composer:
+      horde/test: ^3

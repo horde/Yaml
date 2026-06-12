@@ -1,0 +1,53 @@
+---
+id: Injector
+name: Injector
+full: Dependency injection container library
+description: A dependency injection container for Horde.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Injector
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta4
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      psr/container: ^2
+      horde/exception: ^3
+  dev:
+    composer:
+      psr/event-dispatcher: ^1
+  suggests:
+    psr/event-dispatcher: Required for injector event support (dev/profiling)
+provides:
+  psr/container-implementation: 2.0.1
+vendor: horde
+autoload-dev:
+  psr-4:
+    Horde\Injector\Test\: test/
+quality:
+  phpstan:
+    level: 5
+keywords:
+  - psr-11
+  - psr-container
+  - dic
+  - ioc
+  - service-container
+  - dependency-injection
+  - container
+  - autowiring

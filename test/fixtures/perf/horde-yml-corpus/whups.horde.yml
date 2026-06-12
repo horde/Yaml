@@ -1,0 +1,77 @@
+---
+id: whups
+name: Whups
+full: Ticket-tracking application
+description: >-
+  Whups is a Horde ticket-tracking application. It is very flexible in design,
+  and can be used for help-desk requests, tracking software development, and
+  anything else that needs to track a set of requests and their status.
+list: horde
+type: application
+homepage: https://www.horde.org/apps/whups
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 4.0.0-RC1
+  api: 4.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsdl.php
+dependencies:
+  suggested:
+    composer:
+      horde/githubapiclient: ^1
+  required:
+    php: ^8.1
+    composer:
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/autoloader: ^3
+      horde/cache: ^3
+      horde/compress: ^3
+      horde/core: ^3
+      horde/date: ^3
+      horde/db: ^3
+      horde/exception: ^3
+      horde/form: ^3
+      horde/group: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/mime_viewer: ^3
+      horde/notification: ^3
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/scheduler: ^3
+      horde/share: ^3
+      horde/support: ^3
+      horde/text_filter: ^3
+      horde/util: ^3
+      horde/vfs: ^3
+      horde/view: ^3
+      psr/simple-cache: ^3
+    ext:
+      gettext: '*'
+      json: '*'
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Whups\: src/
+vendor: horde
+keywords:
+  - tickets
+  - helpdesk

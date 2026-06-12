@@ -1,0 +1,8 @@
+groups:
+  - name: admins
+    members:
+      - alice
+      - bob
+  - name: users
+    members:
+      - charlie

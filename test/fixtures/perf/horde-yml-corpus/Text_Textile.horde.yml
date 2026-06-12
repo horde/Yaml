@@ -1,0 +1,29 @@
+---
+id: Text_Textile
+name: Text_Textile
+full: Textile formatting library
+description: A Humane Web Text Generator.
+list: dev
+type: library
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0alpha3
+  api: 3.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+  optional:
+    composer:
+      horde/test: ^3

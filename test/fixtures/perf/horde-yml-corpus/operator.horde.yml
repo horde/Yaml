@@ -1,0 +1,40 @@
+---
+id: operator
+name: Operator
+full: Call records viewer application
+description: TODO
+list: ~
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0-alpha3
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: TODO
+  uri: TODO
+dependencies:
+  required:
+    php: ^7
+    composer:
+      horde/horde: ^6
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Operator\: /src
+vendor: horde

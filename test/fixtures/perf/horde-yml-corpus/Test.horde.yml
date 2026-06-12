@@ -1,0 +1,55 @@
+---
+id: Test
+name: Test
+full: Unit testing library
+description: Horde-specific PHPUnit base classes.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Test
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-alpha8
+  api: 3.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/support: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/cli: ^3
+      horde/log: ^3
+    ext:
+      dom: '*'
+      json: '*'
+  dev:
+    composer:
+      phpunit/phpunit: ^9
+      horde/injector: ^3
+      horde/log: ^3
+      horde/cache: ^3
+      horde/argv: ^3
+      horde/cli: ^3
+      horde/core: ^3
+      horde/history: ^3
+      horde/mongo: ^2
+vendor: horde

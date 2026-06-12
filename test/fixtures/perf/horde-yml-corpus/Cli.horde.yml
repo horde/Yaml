@@ -1,0 +1,38 @@
+---
+id: Cli
+name: Cli
+full: Command line interface library
+description: |
+  A library for basic command-line functionality and checks.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Cli
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta5
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/support: ^3
+      horde/translation: ^3
+vendor: horde

@@ -1,0 +1,32 @@
+---
+id: Kolab_Config
+name: Kolab_Config
+full: Kolab server configuration library
+description: >-
+  A library to read the various Kolab server configuration files. It should
+  also support retrieving configuration parameters from LDAP but this is not yet
+  implemented.
+list: dev
+type: library
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+version:
+  release: 1.0.0alpha1
+  api: 1.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+  optional:
+    composer:
+      horde/test: ^3

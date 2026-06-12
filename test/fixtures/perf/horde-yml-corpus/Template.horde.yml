@@ -1,0 +1,40 @@
+---
+id: Template
+name: Template
+full: Template library (deprecated)
+description: >-
+  Horde Template system. Adapted from bTemplate, by Brian Lozier
+  <brian@massassi.net>. Consider using horde/view instead.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Template
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+keywords: []
+vendor: horde
+quality:
+  phpstan:
+    level: 5

@@ -1,0 +1,48 @@
+---
+id: HashTable
+name: HashTable
+full: Hash table client library
+description: A library that provides access to various hash table implementations.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0
+  api: 2.0.0alpha1
+state:
+  release:
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+  optional:
+    composer:
+      horde/argv: ^3
+      horde/cli: ^3
+      horde/log: ^3
+      horde/memcache: ^3
+      horde/vfs: ^3
+      predis/predis: ^2 || ^3
+  dev:
+    composer:
+      horde/argv: ^3
+      horde/cli: ^3
+autoload-dev:
+  psr-4:
+    Horde\HashTable\Test\Lib\Unit\: test/lib/Unit
+    Horde\HashTable\Test\Lib\Integration\: test/lib/Integration
+    Horde\HashTable\Test\Src\Unit\: test/src/Unit
+    Horde\HashTable\Test\Src\Integration\: test/src/Integration
+vendor: horde
+keywords: []

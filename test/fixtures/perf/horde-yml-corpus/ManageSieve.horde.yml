@@ -1,0 +1,35 @@
+---
+id: ManageSieve
+name: ManageSieve
+full: ManageSieve client library
+description: A library that implements the ManageSieve protocol (RFC 5804).
+list: dev
+type: library
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.0-RC2
+  api: 2.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/exception: ^3
+      horde/socket_client: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      pear/auth_sasl: ^1.1
+vendor: horde
+keywords: []

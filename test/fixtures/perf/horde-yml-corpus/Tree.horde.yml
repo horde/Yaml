@@ -1,0 +1,60 @@
+---
+id: Tree
+name: Tree
+full: Tree rendering library
+description: >-
+  A library providing tree views of hierarchical information. It allows for
+  expanding/collapsing of branches and maintains their state.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Tree
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
+version:
+  release: 3.0.0-beta2
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/url: ^3
+      horde/util: ^3
+      psr/http-message: ^1.1 || ^2.0
+  optional:
+    ext:
+      gettext: '*'
+autoload:
+  psr-4:
+    Horde\Tree\: src/
+  psr-0:
+    Horde_Tree: lib/
+keywords:
+  - hierarchy
+vendor: horde
+quality:
+  phpstan:
+    level: 5

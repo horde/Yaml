@@ -1,0 +1,54 @@
+---
+id: kolab_webmail
+name: Horde Groupware Kolab Edition
+full: Horde Groupware Kolab Edition
+description: >-
+  Horde Groupware Kolab Edition is a free, enterprise ready, browser based
+  communication suite for the Kolab server. Users can read, send and organize
+  email messages via a webmail interface and manage and share calendars,
+  contacts, tasks and notes with the standards compliant components from the
+  Horde Project.
+list: kolab-users@kolab.org
+type: application
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: wrobel@horde.org
+    active: true
+    role: lead
+version:
+  release: 4.0.0alpha1
+  api: 4.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^5.2
+    pear:
+      pear.horde.org/groupware:
+        version: '*'
+        conflicts: true
+      pear.horde.org/webmail:
+        version: '*'
+        conflicts: true
+      pear.horde.org/content: ^1
+      pear.horde.org/horde: ^4.0.7
+      pear.horde.org/imp: ^5.0.8
+      pear.horde.org/ingo: ^2.0.3
+      pear.horde.org/kronolith: ^3.0.5
+      pear.horde.org/mnemo: ^3.0.1
+      pear.horde.org/nag: ^3.0.2
+      pear.horde.org/timeobjects: ^1.0.1
+      pear.horde.org/turba: ^3.0.4
+      pear.horde.org/Horde_Kolab_Server: ^1
+      pear.horde.org/Horde_Kolab_Session: ^1
+      pear.horde.org/Horde_Kolab_Storage: ^1
+      pear.horde.org/Horde_Ldap: ^1
+      pear.php.net/Net_SMTP: ^1.6
+      pear.php.net/Net_Sieve: '*'
+      pear.php.net/Auth_SASL: '*'

@@ -1,0 +1,44 @@
+---
+id: Identity
+name: Identity
+type: library
+full: Short headline for Identity
+description: >-
+  Foundation classes and interfaces for treating identities as first class
+  citizens at the centre of resource ownership, authentication and
+  authorization. Identity has roots in the concept of paypal principals and in
+  decoupling login users from persona. Identity is *not* the same as
+  Horde_Prefs_Identity which is more like an email profile but takes over some
+  of its concepts.
+list: horde
+homepage: http://www.horde.org/libraries/Horde_Identity
+version:
+  release: 1.0.0
+  api: 1.0.0
+state:
+  release:
+  api: alpha
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+authors:
+  -
+    name: Ralf Lang
+    user: ralf.lang
+    email: ralf.lang@ralf-lang.de
+    role: lead
+    active: true
+dependencies:
+  required:
+    php: ^8.1
+keywords:
+  - ownership
+  - authorization
+  - authentication
+  - principal
+  - persona
+  - events
+vendor: horde
+quality:
+  phpstan:
+    level: 9

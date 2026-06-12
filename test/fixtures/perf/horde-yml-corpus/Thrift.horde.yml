@@ -1,0 +1,27 @@
+---
+id: Thrift
+name: Thrift
+full: Thrift client library
+description: Packaged version of the PHP Thrift client
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Thrift
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.2
+  api: 1.0.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: Apache 2.0
+  uri: http://www.apache.org/licenses/LICENSE-2.0
+dependencies:
+  required:
+    php: ^7 || ^8

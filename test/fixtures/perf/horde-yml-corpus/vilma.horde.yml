@@ -1,0 +1,37 @@
+---
+id: vilma
+name: Vilma
+full: Domain and user administration application
+description: >-
+  Vilma is a tool for administrators who need to handle various aspects of
+  domain, user, and email administration.
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0-alpha3
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7 || ^8
+    composer:
+      horde/horde: ^6
+  optional:
+    composer:
+      horde/test: ^3
+autoload:
+  classmap:
+    - lib/
+vendor: horde

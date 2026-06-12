@@ -1,0 +1,37 @@
+---
+id: Mongo
+name: Mongo
+full: MongoDB client library
+description: A library that wraps different MongoDB extensions to provide a consistent API.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0
+  api: 1.0.0
+state:
+  release:
+  api: stable
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer: ~
+  optional:
+    extensions:
+      alcaeus/mongo-php-adapter: ^1.2
+      mongodb: '*'
+  dev:
+    composer:
+      horde/test: ^3
+      alcaeus/mongo-php-adapter: ^1.2
+keywords: []
+vendor: horde

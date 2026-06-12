@@ -1,0 +1,38 @@
+---
+id: phpconfigfile
+name: PhpConfigFile
+full: Read and write config files as PHP Code
+description: PHP 8 style wrappers for reading and writing config files
+list: horde
+type: library
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 0.0.1-RC1
+  api: 0.0.1alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+  dev:
+    composer:
+      phpunit/phpunit: ^11 || ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+nocommands:
+  - bin/demo-client.php
+vendor: horde
+keywords: []
+quality:
+  phpstan:
+    level: 5

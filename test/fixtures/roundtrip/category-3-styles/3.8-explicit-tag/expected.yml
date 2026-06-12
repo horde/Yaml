@@ -1,0 +1,2 @@
+port: !!int 25
+debug: !!str true

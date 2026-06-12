@@ -1,0 +1,34 @@
+---
+id: hylax
+name: hylax
+full: Fax frontend application
+description: Fax frontend
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha1
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/base: ^6
+autoload:
+  psr-0:
+    hylax: lib/
+  psr-4:
+    Horde\Hylax\: src/
+vendor: horde

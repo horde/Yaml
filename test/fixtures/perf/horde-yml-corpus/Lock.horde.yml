@@ -1,0 +1,50 @@
+---
+id: Lock
+name: Lock
+full: Resource locking library
+description: A library that implements a resource locking system.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Lock
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: maintainer
+  -
+    name: Ben Klang
+    user: bklang
+    email: ben@alkaloid.net
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/support: ^3
+  optional:
+    composer:
+      horde/db: ^3
+      horde/log: ^3
+      horde/mongo: ^2
+  dev:
+    composer:
+      horde/db: ^3
+      horde/log: ^3
+      horde/test: ^3
+keywords:
+  - resource_locking
+  - semaphore
+vendor: horde

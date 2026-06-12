@@ -1,0 +1,36 @@
+---
+id: LoginTasks
+name: LoginTasks
+full: Login tasks library
+description: A library for dealing with tasks run upon login to Horde applications.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_LoginTasks
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/translation: ^3
+  optional:
+    composer:
+      horde/date: ^3
+keywords:
+  - upgrade
+  - housekeeping
+vendor: horde

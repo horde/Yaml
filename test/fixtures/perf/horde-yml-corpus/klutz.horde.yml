@@ -1,0 +1,33 @@
+---
+id: klutz
+name: Klutz
+full: Comic reader application
+description: Klutz is a Horde comics-fetching module.
+list: horde
+type: application
+homepage: https://www.horde.org/apps/klutz
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.0alpha1
+  api: 2.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^5.3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Klutz\: /src
+vendor: horde

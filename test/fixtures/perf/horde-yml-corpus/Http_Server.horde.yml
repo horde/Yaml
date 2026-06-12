@@ -1,0 +1,51 @@
+---
+id: Http_Server
+name: Http_Server
+full: >-
+  HTTP Request Handling Library adhering to PSR-15 standard. This evolved out of
+  horde/controller.
+description: >-
+  A PSR-15 compatible Server/RequestHandler implementation with limited ties to
+  the Horde Framework.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Controller
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: lang@b1-systems.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0-RC2
+  api: 1.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+provides:
+  psr/http-server-middleware-implementation: ^1
+  psr/http-server-handler-implementation: ^1
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      psr/http-server-middleware: ^1
+      psr/http-server-handler: ^1
+      horde/exception: ^3
+      horde/http: ^3
+  optional:
+    composer:
+      psr/container: ^2.02
+      horde/injector: '*'
+    ext:
+      mbstring: '*'
+      zlib: '*'
+vendor: horde
+keywords:
+  - middleware
+  - requesthandler
+  - psr15
