@@ -1,0 +1,37 @@
+---
+id: CssMinify
+name: CssMinify
+full: CSS minification library
+description: A library that wraps various CSS minification backends.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-beta6
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/css_parser: ^2.0.0-beta4
+      horde/exception: ^3
+      horde/log: ^3
+      horde/url: ^3
+      psr/log: ^3
+quality:
+  phpstan:
+    level: 9
+vendor: horde
+keywords: []

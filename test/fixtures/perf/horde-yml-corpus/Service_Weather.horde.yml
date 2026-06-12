@@ -1,0 +1,39 @@
+---
+id: Service_Weather
+name: Service_Weather
+full: Weather service library
+description: >-
+  A library that provide an abstraction to various online weather service
+  providers. Includes drivers for WeatherUnderground and WorldWeatherOnline.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Service_Weather
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0-alpha5
+  api: 3.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/date: ^3
+      horde/exception: ^3
+      horde/http: ^3
+      horde/translation: ^3
+      horde/url: ^3
+  optional:
+    composer:
+      horde/test: ^3
+vendor: horde

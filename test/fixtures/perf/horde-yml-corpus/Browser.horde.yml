@@ -1,0 +1,47 @@
+---
+id: Browser
+name: Browser
+full: Browser detection library
+description: >-
+  A library for getting information about the current user's browser and its
+  capabilities.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Browser
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/http: '*'
+      horde/Exception: ^3
+      horde/Translation: ^3
+      horde/Util: ^3
+vendor: horde
+quality:
+  phpstan:
+    level: 9
+keywords:
+  - capability_detection
+  - file_upload

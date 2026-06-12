@@ -1,0 +1,75 @@
+---
+id: mnemo
+name: Mnemo
+full: Notes application
+description: >-
+  The Mnemo Note Manager is the Horde notes/memos application. It allows users
+  to keep web-based notes and freeform text. Notes may be shared with other
+  users via shared notepads. It requires the Horde Application Framework and an
+  SQL database for backend storage.
+list: horde
+type: application
+homepage: https://www.horde.org/apps/mnemo
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 5.0.0-beta5
+  api: 5.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: Apache-1.1
+  uri: http://www.horde.org/licenses/apache
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/content: ^3
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/core: ^3
+      horde/data: ^3
+      horde/exception: ^3
+      horde/form: ^3
+      horde/group: ^3
+      horde/history: ^3
+      horde/icalendar: ^3
+      horde/injector: ^3
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/share: ^3
+      horde/support: ^3
+      horde/text_filter: ^3
+      horde/util: ^3
+    ext:
+      gettext: '*'
+  optional:
+    composer:
+      horde/activesync: ^3
+      horde/backup: ^2
+      horde/cli: ^3
+      horde/crypt: ^3
+      horde/db: ^3
+      horde/pdf: ^3
+      horde/test: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Mnemo\: src/
+vendor: horde
+keywords:
+  - notes
+  - journals

@@ -1,0 +1,41 @@
+---
+id: Cli_Modular
+name: Cli_Modular
+full: Modular command line interface library
+description: >-
+  A library to allow application modules to influence the overall command line
+  interface.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Cli_Modular
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/argv: ^3
+  optional:
+    composer:
+      horde/test: ^3
+vendor: horde

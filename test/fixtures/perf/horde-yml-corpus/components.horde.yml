@@ -1,0 +1,80 @@
+---
+id: components
+name: Components
+full: Developer tool for managing Horde components
+description: >-
+  The package provides utility methods required when preparing a new component
+  release for Horde. It also includes quality control checks.
+list: horde
+type: component
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 1.0.0-RC1
+  api: 1.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.2
+    composer:
+      horde/autoloader: '*'
+      horde/argv: '*'
+      horde/cli: ^3
+      horde/cli_modular: ^3
+      horde/http: '*'
+      horde/pear: '*'
+      horde/role: '*'
+      horde/text_diff: '*'
+      horde/util: '*'
+      horde/injector: '*'
+      horde/release: ^4
+      horde/version: ^1.0.0-beta1
+      horde/yaml: '*'
+      horde/hordeymlfile: ^1
+      horde/eventdispatcher: '*'
+      horde/githubapiclient: '*'
+      horde/composer: '*'
+      horde/phpconfigfile: ^0.0.1-alpha4
+      horde/horde-installer-plugin: ^2.6
+  optional:
+    composer:
+      horde/test: ^3
+      squizlabs/php_codesniffer: ^3.5
+      pear/archive_tar: ^1.4
+      phploc/phploc: ^7
+      phpmd/phpmd: ^2.9
+      phpunit/phpunit: ^9
+  dev:
+    composer:
+      horde/test: ^3
+      phpunit/phpunit: ^12 || ^11 || ^10 || ^9
+nocommands:
+  - bin/horde-bootstrap
+  - bin/horde-components-prototype-transpile
+allow-plugins: ~
+quality:
+  phpstan:
+    level: 9
+vendor: horde

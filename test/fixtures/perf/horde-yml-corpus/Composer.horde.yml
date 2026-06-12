@@ -1,0 +1,46 @@
+---
+id: composer
+name: Composer
+full: >-
+  Handle composer.json files and composer directory structures without composer
+  dependency
+description: >-
+  Handle composer.json files and composer directory structures without composer
+  dependency
+list: horde
+type: library
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 1.0.0
+  api: 1.0.0alpha1
+state:
+  release:
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  uses: readonly-parameters
+  required:
+    php: ^8.2
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+keywords:
+  - support
+  - metadata
+  - composer
+  - json
+  - packagist
+vendor: horde
+quality:
+  phpstan:
+    level: 5

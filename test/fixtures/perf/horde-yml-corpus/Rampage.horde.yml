@@ -1,0 +1,34 @@
+---
+id: Rampage
+name: Rampage
+full: Rampage application server library
+description: Modern PHP application framework for Horde.
+list: dev
+type: library
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0-alpha3
+  api: 1.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/argv: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Rampage\: src/
+vendor: horde

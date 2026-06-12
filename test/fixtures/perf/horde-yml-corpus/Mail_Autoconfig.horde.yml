@@ -1,0 +1,42 @@
+---
+id: Mail_Autoconfig
+name: Mail_Autoconfig
+full: Mail server autoconfiguration library
+description: >-
+  A library to automatically determine configuration options for various remote
+  mail services (IMAP/POP3/SMTP).
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-beta1
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/http: ^3
+      horde/imap_client: ^3
+      horde/mail: ^3
+      horde/smtp: ^2
+      mikepultz/netdns2: ^2.0
+    ext:
+      SimpleXML: '*'
+vendor: horde
+keywords:
+  - autodiscovery
+  - imap
+  - smtp

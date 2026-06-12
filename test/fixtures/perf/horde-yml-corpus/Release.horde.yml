@@ -1,0 +1,38 @@
+---
+id: Release
+name: Release
+full: Component release library
+description: Tools necessary to create the Horde distribution packages.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Release
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 4.0.0alpha5
+  api: 4.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/exception: ^3
+      horde/http: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/rpc: ^3
+      horde/serialize: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/test: ^3

@@ -1,0 +1,112 @@
+---
+id: imp
+name: IMP
+full: Webmail application
+description: >-
+  IMP, the Internet Mail Program, is one of the most popular and widely deployed
+  open source webmail applications in the world. It allows universal, web-based
+  access to IMAP and POP3 mail servers and provides Ajax, mobile and traditional
+  interfaces with a rich range of features normally found only in desktop email
+  clients.
+list: ~
+type: application
+homepage: https://www.horde.org/apps/imp
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 7.0.0-RC5
+  api: 7.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: GPL-2.0-only
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/browser: ^3
+      horde/cache: ^3
+      horde/compress: ^3
+      horde/core: ^3
+      horde/crypt: ^3
+      horde/crypt_blowfish: ^2
+      horde/css_parser: ^2
+      horde/date: ^3
+      horde/editor: ^3
+      horde/exception: ^3
+      horde/icalendar: ^3
+      horde/image: ^3
+      horde/imap_client: ^3
+      horde/itip: ^3
+      horde/listheaders: ^2
+      horde/logintasks: ^3
+      horde/mail: ^3
+      horde/mail_autoconfig: ^2
+      horde/mime: ^3
+      horde/mime_viewer: ^3
+      horde/nls: ^3
+      horde/notification: ^3
+      horde/pack: ^2
+      horde/perms: ^3
+      horde/spellchecker: ^3
+      horde/stream: ^2
+      horde/stream_filter: ^3
+      horde/stream_wrapper: ^3
+      horde/support: ^3
+      horde/text_filter: ^3
+      horde/text_flowed: ^3
+      horde/tree: ^3
+      horde/url: ^3
+      horde/util: ^3
+      horde/vfs: ^3
+      horde/view: ^3
+      php81_bc/strftime: ^0.7.4 || ^1
+    ext:
+      dom: '*'
+      gettext: '*'
+      hash: '*'
+      json: '*'
+  optional:
+    composer:
+      horde/history: ^3
+      horde/http: ^3
+      horde/mongo: ^2
+      horde/service_gravatar: ^2
+    ext:
+      openssl: '*'
+  dev:
+    composer:
+      horde/test: ^3
+      horde/mongo: ^2
+      horde/kronolith: ^5
+      horde/nag: ^5
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Imp\: src/
+keywords:
+  - webmail
+  - imap
+vendor: horde

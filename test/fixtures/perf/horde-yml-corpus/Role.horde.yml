@@ -1,0 +1,33 @@
+---
+id: Role
+name: Role
+full: PEAR installer role
+description: Allows PEAR to install Horde components into a base Horde installation.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Role
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0alpha4
+  api: 2.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8

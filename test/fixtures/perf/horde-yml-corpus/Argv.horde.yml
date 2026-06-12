@@ -1,0 +1,56 @@
+---
+id: Argv
+name: Argv
+full: Command-line argument parsing library
+description: >-
+  A library for parsing command line arguments with various actions, providing
+  help, grouping options, and more.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Argv
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Mike Naberezny
+    user: mnaberez
+    email: mike@maintainable.com
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: stable
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/cli: ^3
+      horde/exception: ^3
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/test: ^3
+  dev:
+    composer:
+      horde/test: ^3
+vendor: horde
+keywords: []
+phpstan:
+  watermark: 1

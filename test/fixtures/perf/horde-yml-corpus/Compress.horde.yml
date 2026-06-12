@@ -1,0 +1,70 @@
+---
+id: Compress
+name: Compress
+full: Compression library
+description: A library to wrap various compression techniques.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Compress
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: developer
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta2
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/mime: ^3
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/icalendar: ^3
+      horde/mail: ^3
+      horde/mapi: ^2
+      horde/stream_filter: ^3
+    ext:
+      zlib: '*'
+  dev:
+    composer:
+      horde/icalendar: ^3
+      horde/mail: ^3
+      horde/mapi: ^2
+      horde/stream_filter: ^3
+Avendor: horde
+keywords:
+  - gzip
+  - zip
+  - tnef
+vendor: horde

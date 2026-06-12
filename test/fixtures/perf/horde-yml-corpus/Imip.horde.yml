@@ -1,0 +1,53 @@
+---
+id: IMip
+name: Imip
+full: iMip inivitation protocol library
+description: >-
+  A library to handle the iMip protocol to send MIME encapsuled iTip responses
+  to iCalendar invitations. Ties into horde/itip and horde/icalendar.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Imip
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: inherited
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0-beta2
+  api: 1.0.0alpha0
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/icalendar: ^3
+      horde/itip: ^3
+      horde/mime: ^3
+  optional:
+    composer:
+      horde/mail: ^3
+  dev:
+    composer:
+      horde/mail: ^3
+vendor: horde
+keywords:
+  - iMip
+  - invitations
+  - responses
+quality:
+  phpstan:
+    level: 9

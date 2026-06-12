@@ -1,0 +1,38 @@
+---
+id: Spam
+name: Spam
+full: Spam reporting library
+description: >-
+  An abstraction library for systems that allow the reporting of spam or
+  innocent email messages. Supported systems include reporting via email
+  redirection and digest reports, and through an executable.
+list: dev
+type: library
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha4
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL
+  uri: http://www.horde.org/licenses/lgpl
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/exception: ^3
+      horde/support: ^3
+  optional:
+    composer:
+      horde/log: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/translation: ^3

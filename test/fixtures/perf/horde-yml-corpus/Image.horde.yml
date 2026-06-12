@@ -1,0 +1,62 @@
+---
+id: Image
+name: Image
+full: Image library
+description: |
+  An image library, with backends for GD, GIF, PNG, SVG, SWF, ImageMagick's "convert" command line tool, imagick Extension.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Image
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC3
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/stream: ^2
+      horde/support: ^3
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      pear/xml_svg: '*'
+    ext:
+      gd: '*'
+      json: '*'
+      zlib: '*'
+      imagick: '*'
+vendor: horde
+autoload:
+  psr-0:
+    Horde_Image: lib/
+  psr-4:
+    Horde\Image\: src/
+autoload-dev:
+  psr-4:
+    Horde\Image\Test\: test/
+keywords:
+  - gd
+  - imagick
+  - exif
+  - metadata

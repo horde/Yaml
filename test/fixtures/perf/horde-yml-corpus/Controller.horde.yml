@@ -1,0 +1,53 @@
+---
+id: Controller
+name: Controller
+full: Controller library
+description: The controller part of an MVC system for Horde.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Controller
+authors:
+  -
+    name: Mike Naberezny
+    user: mnaberez
+    email: mike@naberezny.com
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/exception: ^3
+      horde/injector: ^3
+      horde/log: ^3
+      horde/support: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/http: '*'
+    ext:
+      mbstring: '*'
+      zlib: '*'
+  dev:
+    composer:
+      horde/test: ^3
+      horde/http: '*'
+quality:
+  phpstan:
+    level: 9
+vendor: horde

@@ -1,0 +1,52 @@
+---
+id: Pack
+name: Pack
+full: Data packing library
+description: >-
+  A replacement library for serialize()/json_encode() that will automatically
+  use the most efficient serialization available based on the input.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Pack
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-RC1
+  api: 2.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/compress_fast: ^2
+      horde/exception: ^3
+  optional:
+    ext:
+      igbinary: ^1.2
+      msgpack: '*'
+      json: '*'
+  dev:
+    composer:
+      horde/test: ^3
+autoload:
+  psr-0:
+    Horde_Pack: lib/
+  psr-4:
+    Horde\Pack\: src/
+keywords:
+  - serialization
+  - fast_compression
+vendor: horde
+quality:
+  phpstan:
+    level: 6

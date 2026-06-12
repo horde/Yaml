@@ -1,0 +1,42 @@
+---
+id: Otp
+name: Otp
+type: library
+full: Horde RFC 4226 HOTP and RFC 6238 TOTP Library
+description: >-
+  Implements HMAC-Based One-Time Password (HOTP, RFC 4226) and Time-Based
+  One-Time Password (TOTP, RFC 6238) algorithms as immutable value objects.
+list: horde
+homepage: http://www.horde.org/libraries/Horde_Otp
+version:
+  release: 1.0.0
+  api: 1.0.0alpha1
+state:
+  release:
+  api: alpha
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    role: maintainer
+    active: true
+dependencies:
+  required:
+    php: ^8.1
+    ext:
+      hash: '*'
+keywords:
+  - rfc4226
+  - rfc6238
+  - hotp
+  - totp
+  - otp
+  - 2fa
+vendor: horde
+quality:
+  phpstan:
+    level: 6

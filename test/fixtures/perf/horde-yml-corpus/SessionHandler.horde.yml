@@ -1,0 +1,60 @@
+---
+id: SessionHandler
+name: SessionHandler
+full: Session handler library
+description: >-
+  Horde_SessionHandler defines an API for implementing custom session handlers
+  for PHP.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_SessionHandler
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC2
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/exception: ^3
+      horde/support: ^3
+  optional:
+    composer:
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/log: ^3
+      horBde/mongo: ^2
+  dev:
+    composer:
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/log: ^3
+      horde/mongo: ^2
+keywords:
+  - sessions
+  - sessionless_sessions
+vendor: horde

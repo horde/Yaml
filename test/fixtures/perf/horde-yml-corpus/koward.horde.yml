@@ -1,0 +1,45 @@
+---
+id: koward
+name: Koward
+full: Kolab server administration application
+description: |
+  This package provides a web based frontend for the
+  administration of the Kolab server.
+list: horde
+type: application
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+version:
+  release: 0.99.1
+  api: 1.0.0
+state:
+  release: beta
+  api: beta
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^5.3 || ^7
+    pear:
+      pear.horde.org/Horde_Autoloader: '*'
+      pear.horde.org/Horde_Auth: '*'
+      pear.horde.org/Horde_Browser: '*'
+      pear.horde.org/Horde_Controller: '*'
+      pear.horde.org/Horde_Form: '*'
+      pear.horde.org/Horde_Nls: '*'
+      pear.horde.org/Horde_Notification: '*'
+      pear.horde.org/Horde_Ui: '*'
+      pear.horde.org/Horde_Kolab_Server: '*'
+      pear.horde.org/Horde_Kolab_Session: '*'
+      pear.horde.org/Horde_Perms: '*'
+      pear.horde.org/Horde_Routes: '*'
+      pear.horde.org/Horde_View: '*'
+  optional:
+    pear:
+      pear.phpunit.de/PHPUnit: '*'

@@ -1,0 +1,38 @@
+---
+id: Stringprep
+name: Stringprep
+full: Internationalized strings preparation library
+description: |-
+  PHP implementation library of StringPrep and PRECIS Profiles
+  RFC 3454 - Preparation of Internationalized Strings ("stringprep").
+  RFC 7564 - PRECIS
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.0-beta1
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-3.0-only
+  uri: http://opensource.org/licenses/lgpl-3.0.html
+dependencies:
+  required:
+    php: ^8.1
+    ext:
+      iconv: '*'
+      intl: '*'
+keywords:
+  - stringprep
+  - precis
+  - rfc7564
+  - rfc3454
+vendor: horde

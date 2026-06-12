@@ -1,0 +1,65 @@
+---
+id: Date
+name: Date
+full: Date library
+description: A library for creating and manipulating dates.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Date
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+  -
+    name: Torben Dannhauer
+    user: tdannhauer
+    email: torben@dannhauer.de
+    active: true
+    role: releasemanager
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: false
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC3
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/nls: ^3
+      horde/translation: ^3
+  optional:
+    composer:
+      horde/icalendar: ^3
+    ext:
+      calendar: '*'
+  dev:
+    composer:
+      horde/icalendar: ^3
+      horde/test: ^3
+    ext:
+      calendar: '*'
+vendor: horde
+keywords:
+  - recurrence
+  - legacy_timezones
+  - spans

@@ -1,0 +1,50 @@
+---
+id: Itip
+name: Itip
+full: iTip invitation response library
+description: A library to generate MIME encapsuled responses to iCalendar invitations.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Itip
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/icalendar: ^3
+      horde/mime: ^3
+      horde/translation: ^3
+  optional:
+    composer:
+      horde/prefs: ^3
+  dev:
+    composer:
+      horde/mail: ^3
+vendor: horde
+keywords:
+  - itip
+  - invitations
+quality:
+  phpstan:
+    level: 9

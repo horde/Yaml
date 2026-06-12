@@ -1,0 +1,51 @@
+---
+id: sesha
+name: Sesha
+full: Inventory application
+description: >-
+  Sesha allows you to define categories with a rich set of attributes to manage
+  your inventory stock
+list: horde
+type: application
+homepage: https://www.horde.org/apps/sesha
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Ralf Lang
+    user: rlang
+    email: lang@b1-systems.de
+    active: true
+    role: lead
+version:
+  release: 2.0.0-RC1
+  api: 1.0.0
+state:
+  release: RC
+  api: beta
+license:
+  identifier: GPL-2.0-only
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/core: ^3
+      horde/db: ^3
+      horde/exception: ^3
+      horde/form: ^3
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/rdo: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Sesha\: src/
+vendor: horde

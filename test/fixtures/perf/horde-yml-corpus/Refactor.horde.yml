@@ -1,0 +1,33 @@
+---
+id: Refactor
+name: Refactor
+full: PHP code refactoring library
+description: >-
+  An extendable library and command line tool to refactor files or complete
+  directories.
+list: dev
+type: library
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha2
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    pear:
+      horde/cli: ^3
+      horde/exception: ^3
+      horde/text_diff: ^3
+      horde/translation: ^3

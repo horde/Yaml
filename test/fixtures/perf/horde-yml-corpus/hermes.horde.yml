@@ -1,0 +1,72 @@
+---
+id: hermes
+name: Hermes
+full: Time tracking application
+description: >-
+  Hermes is the Horde time-tracking application. It ties into address books (to
+  retrieve clients) and task lists, bug trackers etc. (to retrieve cost
+  objects). It comes with timers, search and reporting capabilities, and an
+  invoice interface.
+list: horde
+type: application
+homepage: https://www.horde.org/apps/hermes
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0alpha1
+  api: 3.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsdl.php
+dependencies:
+  required:
+    php: ^7
+    composer:
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/autoloader: ^3
+      horde/core: ^3
+      horde/data: ^3
+      horde/date: ^3
+      horde/db: ^3
+      horde/exception: ^3
+      horde/form: ^3
+      horde/nls: ^3
+      horde/notification: ^3
+      horde/perms: ^3
+      horde/url: ^3
+      horde/util: ^3
+    ext:
+      gettext: '*'
+      json: '*'
+      SimpleXML: '*'
+  optional:
+    composer:
+      horde/nag: ^5
+      horde/turba: ^5
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Hermes\: /src
+vendor: horde

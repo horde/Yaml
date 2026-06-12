@@ -24,16 +24,16 @@
     "time": "2026-03-17",
     "repositories": [],
     "require": {
-        "php": "^7.4 || ^8",
-        "ext-ctype": "*"
+        "php": "^8.2",
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
     },
     "require-dev": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
@@ -57,5 +57,6 @@
         "branch-alias": {
             "dev-FRAMEWORK_6_0": "3.x-dev"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

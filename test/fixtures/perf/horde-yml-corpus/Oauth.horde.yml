@@ -1,0 +1,65 @@
+---
+id: Oauth
+name: Oauth
+full: OAuth 1.0a, OAuth 2.0 and OpenID Connect library
+description: >-
+  A library that provides OAuth 1.0a consumer support, OAuth 2.0 authorization
+  server and client, and OpenID Connect provider capabilities for the Horde
+  framework.
+list: horde
+type: library
+homepage: https://www.horde.org/libraries/Horde_Oauth
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Ralf Lang
+    user: ralf.lang
+    email: ralf.lang@ralf-lang.de
+    role: lead
+    active: true
+version:
+  release: 4.0.0-RC1
+  api: 4.0.0
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/jwt: ^1
+      psr/http-message: ^2
+      psr/http-factory: ^1.0.2
+      psr/http-client: ^1.0.3
+      psr/http-server-handler: ^1.0.2
+      psr/http-server-middleware: ^1.0.2
+    ext:
+      hash: '*'
+      json: '*'
+      openssl: '*'
+keywords:
+  - rfc6749
+  - rfc7636
+  - oauth2
+  - oidc
+  - openid-connect
+vendor: horde
+autoload:
+  psr-0:
+    Horde_Oauth: lib/
+  psr-4:
+    Horde\OAuth\: src/
+autoload-dev:
+  psr-4:
+    Horde\OAuth\Test\: test/
+quality:
+  phpstan:
+    level: 3

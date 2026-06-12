@@ -1,0 +1,47 @@
+---
+id: chora
+name: Chora
+full: VCS (Version Control System) repository viewer application
+description: >-
+  A horde-integrated web viewer/browser for the git, cvs and subversion version
+  control systems.
+list: ~
+type: application
+license:
+  identifier: GPL-2.0-only
+  uri: http://www.horde.org/licenses/gpl
+homepage: https://www.horde.org/apps/chora
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0-alpha4
+  api: 3.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+  license: ~
+  identifier: TODO
+  uri: TODO
+dependencies:
+  required:
+    php: ^8.2
+    composer:
+      horde/horde: ^6
+      horde/vcs: ^1
+autoload:
+  classmap:
+    - lib/
+    - app/
+  psr-4:
+    Horde\Wicked\: /src

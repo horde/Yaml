@@ -1,0 +1,47 @@
+---
+id: Timezone
+name: Timezone
+full: Timezone library
+description: >-
+  A library for parsing timezone databases and generating VTIMEZONE iCalendar
+  components.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Timezone
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.0-RC1
+  api: 2.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/date: ^3
+      horde/exception: ^3
+      horde/icalendar: ^3
+      horde/vfs: ^3
+  optional:
+    composer:
+      pear/archive_tar: '*'
+      psr/simple-cache: ^1 || ^2 || ^3
+    ext:
+      phar: '*'
+  dev:
+    composer:
+      pear/archive_tar: ^1.6
+      psr/simple-cache: ^1 || ^2 || ^3
+keywords:
+  - olsen
+vendor: horde

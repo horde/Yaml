@@ -1,0 +1,55 @@
+---
+id: Http
+name: Http
+full: HTTP client library
+description: A library for making HTTP requests.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Http
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC3
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+provides:
+  psr/http-message-implementation: ^2
+  psr/http-factory-implementation: ^1.0.2
+  psr/http-client-implementation: ^1.0.3
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/support: ^3
+      psr/http-message: ^2
+      psr/http-factory: ^1.0.2
+      psr/http-client: ^1.0.3
+  dev:
+    composer:
+      horde/url: ^3
+  optional:
+    ext:
+      curl: '*'
+      http: '*'
+vendor: horde
+quality:
+  phpstan:
+    level: 9
+keywords: []

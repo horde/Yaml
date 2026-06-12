@@ -1,0 +1,51 @@
+---
+id: jonah
+name: Jonah
+full: Newsfeed application
+description: |
+  Jonah is a portal system for displaying news and other data
+  from various sources, written in PHP and utilizing the Horde Application
+  Framework.
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0-RC2
+  api: 1.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/db: ^3
+      horde/core: ^3
+      horde/horde: ^6
+      horde/routes: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Jonah\: src/
+vendor: horde
+keywords:
+  - rss
+  - atom
+  - feed
+  - aggregator

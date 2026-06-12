@@ -1,0 +1,39 @@
+---
+id: SyncMl
+name: SyncMl
+full: SyncML server library
+description: A library that provides an API for processing SyncML requests.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_SyncMl
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0alpha4
+  api: 3.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/date: ^3
+      horde/icalendar: ^3
+      horde/log: ^3
+      horde/support: ^3
+      horde/util: ^3
+      horde/xml_wbxml: ^3
+      horde/translation: ^3
+  optional:
+    composer:
+      horde/auth: ^3
+      horde/core: ^3

@@ -1,0 +1,39 @@
+---
+id: version
+name: Version
+full: Handle Semantic Version 2.0.0 format and similar semantic version formats
+description: Handle Semantic Version 2.0.0 format and similar semantic version formats
+list: horde
+type: library
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 1.0.0-RC1
+  api: 1.0.0
+state:
+  release: RC
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  uses: readonly-parameters
+  required:
+    php: ^8.2
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+vendor: horde
+keywords:
+  - semver
+  - formatting
+quality:
+  phpstan:
+    level: 3

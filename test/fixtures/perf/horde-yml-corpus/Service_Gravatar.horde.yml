@@ -1,0 +1,42 @@
+---
+id: Service_Gravatar
+name: Service_Gravatar
+full: Gravatar client library
+description: A library for accessing the Avatar services at gravatar.com.
+list: dev
+type: library
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+version:
+  release: 2.0.0-alpha5
+  api: 2.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/http: ^3
+      horde/url: ^3
+  optional:
+    composer:
+      horde/test: ^3
+quality:
+  phpstan:
+    level: 3
+vendor: horde

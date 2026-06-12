@@ -1,0 +1,41 @@
+---
+id: ext-xxhash
+name: ext-xxhash
+full: xxHash hashing extension for PHP
+description: PHP extension that implements the xxHash32 hashing algorithm
+list: horde
+type: extension
+keywords:
+  - hash
+  - xxhash
+  - performance
+  - hashing
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+version:
+  release: 3.0.1-RC1
+  api: 3.0.0
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+provides:
+  ext-horde_xxhash: 3.0.0
+dependencies:
+  required:
+    php: ^8.0
+vendor: horde
+homepage: https://www.horde.org

@@ -1,0 +1,53 @@
+---
+id: Dav
+name: Dav
+full: WebDAV, CalDAV, and CardDAV library
+description: >-
+  A library that contains all Horde-specific wrapper classes for the Sabre DAV
+  library.
+list: dev
+type: library
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.0-beta2
+  api: 2.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/auth: ^3
+      horde/core: ^3
+      horde/http: ^3
+      horde/stream: ^2
+      horde/translation: ^3
+      sabre/dav: ^4.7
+    ext:
+      ctype: '*'
+      date: '*'
+      dom: '*'
+      iconv: '*'
+      libxml: '*'
+      mbstring: '*'
+      pcre: '*'
+      simplexml: '*'
+      spl: '*'
+  optional:
+    ext:
+      curl: '*'
+vendor: horde
+keywords:
+  - webdav
+  - caldav
+  - carddav

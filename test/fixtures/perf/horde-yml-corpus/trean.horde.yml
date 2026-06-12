@@ -1,0 +1,73 @@
+---
+id: trean
+name: Trean
+full: Bookmarks application
+description: >-
+  Trean is a web-based bookmarks application that provides management of browser
+  bookmarks, including support for tagging, link checking, and searching
+  bookmarks.
+list: horde
+type: application
+homepage: https://www.horde.org/apps/trean
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 2.0.3-RC1
+  api: 2.0.0
+state:
+  release: RC
+  api: beta
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+keywords:
+  - bookmarks
+  - links
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/horde: ^6
+      horde/content: ^3
+      horde/autoloader: ^3
+      horde/core: ^3
+      horde/date: ^3
+      horde/db: ^3
+      horde/exception: ^3
+      horde/form: ^3
+      horde/notification: ^3
+      horde/perms: ^3
+      horde/queue: ^2
+      horde/util: ^3
+      horde/vfs: ^3
+      horde/view: ^3
+    ext:
+      gettext: '*'
+      json: '*'
+  optional:
+    composer:
+      horde/browser: ^3
+      horde/cache: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Trean\: src/
+vendor: horde

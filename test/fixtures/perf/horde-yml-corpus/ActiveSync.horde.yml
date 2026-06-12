@@ -1,0 +1,69 @@
+---
+id: ActiveSync
+name: ActiveSync
+full: ActiveSync server library
+description: A library for implementing an ActiveSync server.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_ActiveSync
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0-RC3
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: GPL-2.0-only
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/compress: ^3
+      horde/date: ^3
+      horde/exception: ^3
+      horde/icalendar: ^3
+      horde/log: ^3
+      horde/mapi: ^2
+      horde/mime: ^3
+      horde/stream: ^2
+      horde/support: ^3
+      horde/translation: ^3
+      horde/util: ^3
+    ext:
+      ctype: '*'
+  optional:
+    composer:
+      horde/db: ^3
+      horde/imap_client: ^3
+      horde/mail: ^3
+      horde/mongo: ^2
+      horde/text_filter: ^3
+  dev:
+    composer:
+      horde/controller: ^3
+      horde/db: ^3
+      horde/imap_client: ^3
+autoload:
+  psr-0:
+    Horde_ActiveSync: lib/
+autoload-dev:
+  psr-4:
+    Horde\ActiveSync\:
+      - test/unit/Horde/ActiveSync/
+      - test/integration/Horde/ActiveSync/
+    Horde\ActiveSync\Test\Helpers\: test/unit/Horde/ActiveSync/Helpers/
+vendor: horde
+keywords:
+  - contacts
+  - outlook
+  - sync
+  - eas
+  - exchange

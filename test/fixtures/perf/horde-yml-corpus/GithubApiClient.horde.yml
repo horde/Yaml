@@ -1,0 +1,42 @@
+---
+id: githubapiclient
+name: GithubApiClient
+full: Interact with the Github API from PHP code
+description: Github REST API Client.
+list: horde
+type: library
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+version:
+  release: 0.0.1-RC1
+  api: 0.0.1alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.2
+    composer:
+      horde/http: '*'
+      psr/http-client: ^1.0
+      psr/http-factory: ^1.0
+      psr/http-message: ^2.0
+  dev:
+    composer:
+      phpunit/phpunit: ^11 || ^12
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+nocommands:
+  - bin/demo-client.php
+quality:
+  phpstan:
+    level: 5
+vendor: horde

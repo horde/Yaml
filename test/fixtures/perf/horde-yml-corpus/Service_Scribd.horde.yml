@@ -1,0 +1,30 @@
+---
+id: Service_Scribd
+name: Service_Scribd
+full: Scribd client library
+description: A client library for the Scribd API.
+list: dev
+type: library
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0alpha4
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/http: ^3
+      horde/translation: ^3
+      horde/xml_element: ^3

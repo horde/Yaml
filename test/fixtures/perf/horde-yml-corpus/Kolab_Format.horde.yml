@@ -1,0 +1,41 @@
+---
+id: Kolab_Format
+name: Kolab_Format
+full: Kolab data format library
+description: A library that allows converting Kolab data objects from XML to data arrays.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Kolab_Format
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+version:
+  release: 2.0.11
+  api: 2.0.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7 || ^8
+    composer:
+      horde/exception: ^3
+      horde/util: ^3
+    ext:
+      dom: '*'
+  optional:
+    composer:
+      horde/support: ^3
+      horde/test: ^3
+    ext:
+      mbstring: '*'
+  dev:
+    composer:
+      horde/test: ^3

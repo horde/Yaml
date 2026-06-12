@@ -1,0 +1,45 @@
+---
+id: folks
+name: Folks
+full: Social network application
+description: TODO
+list: ~
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0alpha1
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL
+  uri: https://www.horde.org/licenses
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/base: ^6
+      horde/horde: ^6
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Folks\: src/
+vendor: horde
+keywords: []
+quality:
+  phpstan:
+    level: 9

@@ -1,0 +1,42 @@
+---
+id: shout
+name: Shout
+full: Telephony management application
+description: TODO
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0-RC1
+  api: 1.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: TODO
+  uri: TODO
+dependencies:
+  required:
+    php: ^8
+  composer:
+    horde/horde: ^3
+    horde/core: ^3
+    horde/exception: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Shout\: src/
+vendor: horde

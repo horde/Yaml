@@ -1,0 +1,56 @@
+---
+id: satisfiend
+name: Satisfiend
+full: GitHub integration application
+description: >-
+  Receives GitHub webhooks, polls the GitHub API, stores events with
+  idempotency, and emits PSR events for other Horde applications.
+list: horde
+type: application
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0-alpha1
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/core: ^3
+      horde/db: ^3
+      horde/eventdispatcher: ^1
+      horde/exception: ^3
+      horde/githubapiclient: '*'
+      horde/injector: ^3
+      horde/rdo: ^3
+      horde/util: ^3
+      psr/event-dispatcher: ^1.0
+      psr/http-message: ^2.0
+      psr/http-server-handler: ^1.0
+    ext:
+      json: '*'
+  dev:
+    composer:
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+  psr-4:
+    Horde\Satisfiend\: /src
+autoload:
+  psr-4:
+    Horde\Satisfiend\: /src
+keywords:
+  - github
+  - webhooks
+  - events
+vendor: horde

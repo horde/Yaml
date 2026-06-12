@@ -1,0 +1,105 @@
+---
+id: turba
+name: Turba
+full: Address book application
+description: >-
+  Turba is the Horde contact management application. Leveraging the Horde
+  framework to provide seamless integration with IMP and other Horde
+  applications, it supports storing contacts in SQL, LDAP, and IMSP address
+  books.
+list: ~
+type: application
+homepage: https://www.horde.org/apps/turba
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 5.0.0-RC4
+  api: 5.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: Apache-1.1
+  uri: http://www.horde.org/licenses/apache
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/content: ^3
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/core: ^3
+      horde/data: ^3
+      horde/date: ^3
+      horde/dav: ^2
+      horde/exception: ^3
+      horde/form: ^3
+      horde/group: ^3
+      horde/history: ^3
+      horde/icalendar: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/nls: ^3
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/serialize: ^3
+      horde/share: ^3
+      horde/support: ^3
+      horde/url: ^3
+      horde/util: ^3
+      horde/vfs: ^3
+      horde/view: ^3
+      php81_bc/strftime: ^0.7
+    ext:
+      gettext: '*'
+      hash: '*'
+      json: '*'
+  optional:
+    composer:
+      horde/activesync: ^3
+      horde/backup: ^2
+      horde/db: ^3
+      horde/imsp: ^3
+      horde/ldap: ^3
+      horde/openxchange: ^2
+  dev:
+    composer:
+      horde/test: ^3
+      horde/activesync: ^3
+      horde/backup: ^2
+      horde/db: ^3
+      horde/imsp: ^3
+      horde/ldap: ^3
+      horde/openxchange: ^2
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Turba\: src/
+vendor: horde
+keywords:
+  - contacts
+  - addressbook

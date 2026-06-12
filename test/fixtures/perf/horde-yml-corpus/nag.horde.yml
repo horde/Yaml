@@ -1,0 +1,90 @@
+---
+id: nag
+name: Nag
+full: Task list application
+description: >-
+  Nag is a web-based application built upon the Horde Application Framework
+  which provides a simple, clean interface for managing online task lists (i.e.,
+  todo lists). It also includes strong integration with the other Horde
+  applications and allows users to share task lists or enable light-weight
+  project management.
+list: ~
+type: application
+homepage: https://www.horde.org/apps/nag
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 5.0.0-RC3
+  api: 5.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: GPL-2.0-only
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      php81_bc/strftime: ^0.7.6 || ^1
+      horde/content: ^3
+      horde/horde: ^6
+      horde/auth: ^3
+      horde/core: ^3
+      horde/data: ^3
+      horde/date: ^3
+      horde/date_parser: ^3
+      horde/dav: ^2
+      horde/exception: ^3
+      horde/form: ^3
+      horde/group: ^3
+      horde/history: ^3
+      horde/http_server: ^1
+      horde/icalendar: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/perms: ^3
+      horde/prefs: ^3
+      horde/routes: ^3
+      horde/share: ^3
+      horde/support: ^3
+      horde/text_filter: ^3
+      horde/url: ^3
+      horde/util: ^3
+      horde/view: ^3
+    ext:
+      gettext: '*'
+  optional:
+    composer:
+      horde/activesync: ^3
+      horde/backup: ^2
+      horde/db: ^3
+      horde/openxchange: ^2
+      horde/test: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Nag\: src/
+vendor: horde
+keywords:
+  - tasks
+  - caldav
+  - todo

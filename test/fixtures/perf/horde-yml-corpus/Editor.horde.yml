@@ -1,0 +1,54 @@
+---
+id: Editor
+name: Editor
+full: WYSIWYG editor library
+description: >-
+  A library to generate the code necessary for embedding javascript RTE editors
+  in a web page.
+list: dev
+type: horde-library
+homepage: https://www.horde.org/libraries/Horde_Editor
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta2
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/browser: ^3
+      horde/exception: ^3
+      horde/serialize: ^3
+      tinymce/tinymce: ^7 || ^8
+keywords:
+  - rte
+  - javascript
+  - wrapper
+vendor: horde
+vendor-assets:
+  -
+    package: tinymce/tinymce
+    type: js
+    source:
+    target: tinymce
+quality:
+  phpstan:
+    level: 9

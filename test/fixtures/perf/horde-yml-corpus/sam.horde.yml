@@ -1,0 +1,41 @@
+---
+id: sam
+name: Sam
+full: Anti-spam user preferences application
+description: >-
+  Sam allows each user to change their specific anti-spam rules for
+  SpamAssassion or Amavisd-new, given a general subset of the overall features
+  that are available.
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0-alpha3
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/horde: ^6
+      horde/core: ^3
+quality:
+  phpstan:
+    level: 9
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Sam\: src/
+vendor: horde

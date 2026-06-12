@@ -1,0 +1,49 @@
+---
+id: horde-installer-plugin
+name: horde-installer-plugin
+full: Horde Installer Plugin for Composer
+description: >-
+  This plugin allows composer-based installation of the Horde 6 Framework and
+  applications. It creates a var/ structure and a web/ structure in the root
+  project. web/ contains symlinks (or copies on Windows) of applications,
+  javascript and themes content. Supporting configuration for registry and
+  applications is auto-configured. The composer autoloader is injected into the
+  bootstrap process.
+list: dev
+type: composer-plugin
+homepage: https://github.com/horde/horde-installer-plugin
+authors:
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+version:
+  release: 3.6.1-RC2
+  api: 3.0.0
+state:
+  release: RC
+  api: stable
+license:
+  identifier: MIT
+  uri: https://opensource.org/licenses/MIT
+dependencies:
+  required:
+    php: >=8.1
+    composer:
+      composer-plugin-api: ^2.2.0
+  dev:
+    composer:
+      phpunit/phpunit: ^12
+      composer/composer: ^2.2
+      friendsofphp/php-cs-fixer: ^3
+      phpstan/phpstan: ^2
+autoload:
+  psr-4:
+    Horde\Composer\: src/
+extra:
+  class: Horde\Composer\HordeInstallerPlugin
+vendor: horde
+keywords:
+  - installer

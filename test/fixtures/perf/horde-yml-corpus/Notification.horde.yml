@@ -1,0 +1,42 @@
+---
+id: Notification
+name: Notification
+full: Notification library implementing subject-observer pattern
+description: >-
+  A library implementing a subject-observer pattern for raising and showing
+  messages of different types and to different listeners.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Notification
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/exception: ^3
+      horde/util: ^3
+    ext:
+      gettext: '*'
+  optional:
+    composer:
+      horde/alarm: ^3
+      horde/nls: ^3
+keywords:
+  - messages
+  - toast
+vendor: horde

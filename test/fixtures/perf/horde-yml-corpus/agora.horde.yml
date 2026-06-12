@@ -1,0 +1,37 @@
+---
+id: agora
+name: Agora
+full: Forum application
+description: Agora is a Horde-based forum program
+list: horde
+type: application
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha1
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: GPL-2.0
+  uri: http://www.horde.org/licenses/gpl
+dependencies:
+  required:
+    php: ^8
+    composer:
+      horde/horde: ^6
+      horde/base: ^6
+      horde/core: ^3
+      horde/db: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Agora\: src/
+vendor: horde

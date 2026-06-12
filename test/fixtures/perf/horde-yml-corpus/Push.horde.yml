@@ -1,0 +1,42 @@
+---
+id: Push
+name: Push
+full: Social network services library
+description: >-
+  A library allowing to push simple definitions of content elements to a number
+  of social network services.
+list: dev
+type: library
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: wrobel@pardus.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0alpha2
+  api: 1.0.0alpha1
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/argv: ^3
+      horde/cli: ^3
+      horde/feed: ^3
+      horde/http: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/service_twitter: ^3
+      horde/test: ^3
+      horde/yaml: ^3

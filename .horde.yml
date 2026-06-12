@@ -1,19 +1,25 @@
 ---
 id: Yaml
 name: Yaml
-full: YAML parsing and writing library
+full: Roundtrip-capable YAML parsing and writing library
 description: >-
-  A library for parsing YAML files into PHP arrays, and dumping PHP arrays into
-  YAML encoding.
+  A library for parsing YAML files into PHP data structures, authoring and writing back to YAML.
+  Preserves comments and formatting, exposes comments to PHP API.
 list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Yaml
 authors:
   -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: lead
+  -
     name: Jan Schneider
     user: jan
     email: jan@horde.org
-    active: true
+    active: false
     role: lead
   -
     name: Mike Naberezny

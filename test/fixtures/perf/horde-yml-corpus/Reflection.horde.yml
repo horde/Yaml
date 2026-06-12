@@ -1,0 +1,31 @@
+---
+id: Reflection
+name: Reflection
+full: Method reflection and documentation library
+description: |-
+  The Reflection library provides methods for generationg code reflection and automatic documentation of methods.
+  The package has a driver based output generation and currently generates HTML and Text_Wiki output.
+list: dev
+type: library
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 1.0.0alpha2
+  api: 1.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1
+  uri: http://www.gnu.org/licenses/lgpl.html
+dependencies:
+  required:
+    php: ^7
+  optional:
+    composer:
+      horde/cli: '*'

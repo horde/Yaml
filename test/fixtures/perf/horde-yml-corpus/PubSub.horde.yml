@@ -1,0 +1,28 @@
+---
+id: PubSub
+name: PubSub
+full: Publish/Subscribe library
+description: A Publish/Subscribe library that can act as an inter-app messaging hub.
+list: dev
+type: library
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 0.0.1-alpha2
+  api: 1.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: BSD-2-Clause
+  uri: http://www.horde.org/licenses/bsd
+dependencies:
+  required:
+    php: ^7.4 || ^8
+keywords: []
+vendor: horde

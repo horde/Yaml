@@ -1,0 +1,45 @@
+---
+id: Perms
+name: Perms
+full: Permissions library
+description: A permissions system library.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Perms
+authors:
+  -
+    name: Jan Schneider
+    user: jan
+    email: jan@horde.org
+    active: true
+    role: lead
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-RC1
+  api: 3.0.0alpha1
+state:
+  release: RC
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+keywords:
+  - permissions
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/db: ^3
+      horde/exception: ^3
+      horde/group: ^3
+      horde/util: ^3
+      horde/translation: ^3
+  optional:
+    composer:
+      horde/tree: ^3
+vendor: horde

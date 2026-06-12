@@ -1,0 +1,4 @@
+defaults: &defaults
+  timeout: 30
+production:
+  host: prod.example.com

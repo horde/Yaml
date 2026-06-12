@@ -1,0 +1,5 @@
+ports: [
+  25,    # smtp
+  587,   # submission
+  465,   # smtps
+]

@@ -1,0 +1,46 @@
+---
+id: Rdo
+name: Rdo
+full: ORM (object relational-mapping) library
+description: Rampage Data Objects. Lightweight ORM library.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Rdo
+authors:
+  -
+    name: Chuck Hagenbuch
+    user: chuck
+    email: chuck@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta2
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/db: ^3
+      horde/exception: ^3
+      horde/util: ^3
+  dev:
+    composer:
+      horde/test: ^3
+keywords:
+  - orm
+  - datamapper
+autoload:
+  psr-0:
+    Horde_Rdo: lib/
+  psr-4:
+    Horde\Rdo\: src/
+autoload-dev:
+  psr-4:
+    Horde\Rdo\Test\: test/
+vendor: horde

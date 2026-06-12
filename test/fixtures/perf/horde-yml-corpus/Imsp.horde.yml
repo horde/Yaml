@@ -1,0 +1,30 @@
+---
+id: Imsp
+name: Imsp
+full: IMSP client library
+description: A library to access IMSP servers for address books and options.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Imsp
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.0.11
+  api: 1.0.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^8.1
+    composer:
+      horde/translation: ^3
+      horde/util: ^3

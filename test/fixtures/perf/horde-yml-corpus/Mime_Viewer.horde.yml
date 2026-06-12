@@ -1,0 +1,50 @@
+---
+id: Mime_Viewer
+name: Mime_Viewer
+full: MIME viewer library
+description: A library that provides rendering drivers for MIME data.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Mime_Viewer
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: lead
+version:
+  release: 3.0.0-beta1
+  api: 3.0.0alpha1
+state:
+  release: beta
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/browser: ^3
+      horde/compress: ^3
+      horde/exception: ^3
+      horde/mime: ^3
+      horde/text_filter: ^3
+      horde/text_flowed: ^3
+      horde/util: ^3
+      horde/translation: ^3
+    ext:
+      xml: '*'
+  optional:
+    composer:
+      mikepultz/netdns2: ^2.0
+    ext:
+      dom: '*'
+      libxml: '*'
+      xsl: '*'
+  dev:
+    composer:
+      horde/test: ^3
+vendor: horde
+keywords: []

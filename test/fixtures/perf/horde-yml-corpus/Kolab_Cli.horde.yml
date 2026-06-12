@@ -1,0 +1,43 @@
+---
+id: Kolab_Cli
+name: Kolab_Cli
+full: Kolab storage command line interface library
+description: >-
+  A set of utilities to deal with the various aspects of a Kolab server as
+  backend. The primary focus is dealing with the data stored in IMAP.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Kolab_Cli
+authors:
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: true
+    role: lead
+version:
+  release: 1.0.0beta1
+  api: 1.0.0
+state:
+  release: alpha
+  api: alpha
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/autoloader: ^3
+      horde/cli: ^3
+      horde/cli_modular: ^3
+      horde/imap_client: ^3
+      horde/kolab_storage: ^3
+      horde/log: ^3
+      horde/translation: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/support: ^3
+      horde/test: ^3
+      horde/yaml: ^3

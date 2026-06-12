@@ -1,0 +1,57 @@
+---
+id: Kolab_Storage
+name: Kolab_Storage
+full: Kolab data storage library
+description: A library that deals with Kolab data storage effectively.
+list: dev
+type: library
+homepage: https://www.horde.org/libraries/Horde_Kolab_Storage
+authors:
+  -
+    name: Michael J Rubinsky
+    user: mrubinsk
+    email: mrubinsk@horde.org
+    active: true
+    role: lead
+  -
+    name: Gunnar Wrobel
+    user: wrobel
+    email: p@rdus.de
+    active: false
+    role: lead
+version:
+  release: 2.2.6-RC1
+  api: 2.2.0
+state:
+  release: RC
+  api: stable
+license:
+  identifier: LGPL-2.1-only
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^7.4 || ^8
+    composer:
+      horde/cache: ^3
+      horde/exception: ^3
+      horde/kolab_format: ^3
+      horde/mime: ^3
+      horde/translation: ^3
+      horde/support: ^3
+      horde/util: ^3
+  optional:
+    composer:
+      horde/imap_client: ^3
+      horde/history: ^3
+      pear/http_request: '*'
+      pear/net_imap: '*'
+    ext:
+      imap: '*'
+  dev:
+    horde/imap_client: ^3
+    horde/history: ^3
+    pear/http_request: '*'
+    pear/net_imap: ^1
+    horde/test: ^3
+    horde/kolab_format: ^2
+vendor: horde
