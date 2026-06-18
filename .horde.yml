@@ -35,17 +35,17 @@ authors:
     active: false
     role: lead
 version:
-  release: 3.0.0-beta1
+  release: 3.0.0-RC1
   api: 3.0.0alpha1
 state:
-  release: beta
+  release: RC
   api: alpha
 license:
   identifier: BSD-2-Clause
   uri: http://www.horde.org/licenses/bsd
 dependencies:
   required:
-    php: ^7.4 || ^8
+    php: ^8.2
     ext:
       ctype: '*'
   optional:
@@ -58,4 +58,7 @@ dependencies:
       horde/test: ^3
       horde/util: ^3
 vendor: horde
-keywords: []
+keywords:
+  - lossless
+  - roundtrip
+  - compliant

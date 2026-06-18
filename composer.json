@@ -1,10 +1,15 @@
 {
     "name": "horde/yaml",
-    "description": "YAML parsing and writing library",
+    "description": "Roundtrip-capable YAML parsing and writing library",
     "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Yaml",
     "license": "BSD-2-Clause",
     "authors": [
+        {
+            "name": "Ralf Lang",
+            "email": "ralf.lang@ralf-lang.de",
+            "role": "lead"
+        },
         {
             "name": "Jan Schneider",
             "email": "jan@horde.org",
@@ -21,19 +26,24 @@
             "role": "lead"
         }
     ],
-    "time": "2026-03-17",
+    "keywords": [
+        "lossless",
+        "roundtrip",
+        "compliant"
+    ],
+    "time": "2026-06-18",
     "repositories": [],
     "require": {
         "php": "^8.2",
-        "ext-ctype": "*",
-        "ext-mbstring": "*",
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
+        "ext-ctype": "*"
     },
     "require-dev": {
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
@@ -57,6 +67,5 @@
         "branch-alias": {
             "dev-FRAMEWORK_6_0": "3.x-dev"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
