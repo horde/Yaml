@@ -3,8 +3,9 @@ id: Yaml
 name: Yaml
 full: Roundtrip-capable YAML parsing and writing library
 description: >-
-  A library for parsing YAML files into PHP data structures, authoring and writing back to YAML.
-  Preserves comments and formatting, exposes comments to PHP API.
+  A library for parsing YAML files into PHP data structures, authoring and
+  writing back to YAML. Preserves comments and formatting, exposes comments to
+  PHP API.
 list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Yaml
@@ -57,3 +58,4 @@ dependencies:
       horde/test: ^3
       horde/util: ^3
 vendor: horde
+keywords: []
