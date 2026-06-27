@@ -31,7 +31,7 @@
         "roundtrip",
         "compliant"
     ],
-    "time": "2026-06-18",
+    "time": "2026-06-27",
     "repositories": [],
     "require": {
         "php": "^8.2",
