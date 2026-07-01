@@ -200,6 +200,17 @@ final class Emitter
             }
             return;
         }
+        // A Plain-styled synthesized scalar carrying a real newline
+        // would otherwise fall through to double-quoted and emit `\n`
+        // escapes, silently changing the byte sequence a reader gets
+        // back. Upgrade to a literal block so newlines round-trip.
+        if ($this->shouldUpgradePlainToLiteralBlock($node)) {
+            if ($properties !== '') {
+                $this->buffer .= rtrim($properties) . $this->lineEnding;
+            }
+            $this->emitPlainAsLiteralBlock($node, 0, atLineStart: true);
+            return;
+        }
         $this->buffer .= $properties . $this->scalarOrRaw($node);
         $this->buffer .= $this->lineEnding;
     }
@@ -320,6 +331,20 @@ final class Emitter
                     }
                     $this->emitBlockScalarSynthesized($value, $indent);
                 }
+                if (!str_ends_with($this->buffer, $this->lineEnding)) {
+                    $this->buffer .= $this->lineEnding;
+                }
+                return;
+            }
+            // Plain-styled synthesized value carrying real newlines:
+            // upgrade to literal block so a reader gets the same bytes
+            // back instead of an escaped `\n` sequence. See
+            // shouldUpgradePlainToLiteralBlock for the gating.
+            if ($this->shouldUpgradePlainToLiteralBlock($value)) {
+                if ($properties !== '') {
+                    $this->buffer .= ' ' . rtrim($properties);
+                }
+                $this->emitPlainAsLiteralBlock($value, $indent, atLineStart: false);
                 if (!str_ends_with($this->buffer, $this->lineEnding)) {
                     $this->buffer .= $this->lineEnding;
                 }
@@ -627,6 +652,143 @@ final class Emitter
         $style = $node->getStyle();
         return $style === ScalarStyle::LiteralBlock
             || $style === ScalarStyle::FoldedBlock;
+    }
+
+    /**
+     * True when a Plain-styled scalar carrying real newlines should
+     * be upgraded to a synthesized literal block on emit.
+     *
+     * Motivation: the Plain -> SingleQuoted -> DoubleQuoted upgrade
+     * ladder in emitString ends at DoubleQuoted for any string that
+     * contains "\n", which then escapes each newline as the two
+     * characters `\n`. That is a silent round-trip data change for
+     * callers that hand the AST a real multi-line string (for
+     * example horde/HordeYmlFile writing changelog entries).
+     * Emitting a literal block instead keeps newlines as newlines.
+     *
+     * Gating:
+     *  - Style must be Plain. Pinned SingleQuoted / DoubleQuoted are
+     *    honored (the existing style upgrade for pinned-single with
+     *    a newline still goes to DoubleQuoted).
+     *  - Value must be a string containing at least one "\n".
+     *  - No rawSource pinned (loader preserved a specific form).
+     *  - No tag pinned (a tag disambiguates the type and belongs on
+     *    the caller-chosen style).
+     *  - Content must be literal-block-safe: only "\n" and "\t" as
+     *    low control bytes, no lines starting with whitespace (would
+     *    require an explicit indent indicator we do not synthesize
+     *    yet), no lines consisting only of whitespace before a chomp
+     *    boundary. Otherwise fall through to double-quoted.
+     */
+    private function shouldUpgradePlainToLiteralBlock(ScalarNode $node): bool
+    {
+        if ($node->getStyle() !== ScalarStyle::Plain) {
+            return false;
+        }
+        if ($node->getRawSource() !== null) {
+            return false;
+        }
+        if ($node->getTag() !== null) {
+            return false;
+        }
+        $value = $node->getValue();
+        if (!is_string($value) || !str_contains($value, "\n")) {
+            return false;
+        }
+        // Only "\n" and "\t" are permitted as low control bytes. "\r",
+        // form feed, NUL, etc. force double-quoted with hex escapes.
+        for ($i = 0, $n = strlen($value); $i < $n; $i++) {
+            $byte = $value[$i];
+            $ord = ord($byte);
+            if ($ord < 0x20 && $byte !== "\n" && $byte !== "\t") {
+                return false;
+            }
+        }
+        // A line starting with space or tab is ambiguous without an
+        // explicit indent indicator (`|2` etc.). We do not synthesize
+        // that yet, so fall back to double-quoted for those.
+        //
+        // A line that is only spaces or tabs is also risky at chomp
+        // boundaries. Refuse those too.
+        $lines = explode("\n", $value);
+        // Strip a single trailing empty line (from a final "\n"); it
+        // just marks Clip chomp and is fine.
+        if ($lines !== [] && end($lines) === '') {
+            array_pop($lines);
+        }
+        foreach ($lines as $line) {
+            if ($line === '') {
+                continue; // blank line inside content is fine.
+            }
+            $first = $line[0];
+            if ($first === ' ' || $first === "\t") {
+                return false;
+            }
+            if (trim($line, " \t") === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Emit a Plain-styled multi-line string as a literal block. The
+     * caller has already written the map-entry key + `:` (or the
+     * root position is empty). The indicator is chosen from the
+     * value's trailing bytes:
+     *
+     *   ends with exactly one "\n"           -> `|`  (Clip)
+     *   does not end with "\n"                -> `|-` (Strip)
+     *   ends with more than one trailing "\n" -> `|+` (Keep)
+     *
+     * Content lines are written at parentIndent + 2. Blank interior
+     * lines are emitted as bare newlines (no trailing spaces).
+     *
+     * $atLineStart is true when the caller sits at column 0 (root
+     * scalar path); false when the caller has just written "key:" or
+     * similar and needs a single leading space before the indicator.
+     */
+    private function emitPlainAsLiteralBlock(
+        ScalarNode $node,
+        int $parentIndent,
+        bool $atLineStart,
+    ): void {
+        $value = (string) $node->getValue();
+
+        // Pick chomp from the trailing newline count.
+        $trailingNewlines = 0;
+        for ($i = strlen($value) - 1; $i >= 0 && $value[$i] === "\n"; $i--) {
+            $trailingNewlines++;
+        }
+        if ($trailingNewlines === 0) {
+            $indicator = '|-';
+        } elseif ($trailingNewlines === 1) {
+            $indicator = '|';
+        } else {
+            $indicator = '|+';
+        }
+
+        if (!$atLineStart) {
+            $this->buffer .= ' ';
+        }
+        $this->buffer .= $indicator . $this->lineEnding;
+
+        $contentIndent = $parentIndent + 2;
+        $lines = explode("\n", $value);
+        // Drop trailing empties: chomp handles them. `|-` has zero
+        // trailing "\n" so nothing to drop. `|` has one, giving one
+        // empty tail element. `|+` has more than one; those we do not
+        // re-emit because chomp restores them on read.
+        while ($lines !== [] && end($lines) === '') {
+            array_pop($lines);
+        }
+        foreach ($lines as $line) {
+            if ($line === '') {
+                $this->buffer .= $this->lineEnding;
+                continue;
+            }
+            $this->buffer .= str_repeat(' ', $contentIndent) . $line . $this->lineEnding;
+        }
     }
 
     /**
