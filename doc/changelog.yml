@@ -1,14 +1,14 @@
 ---
 3.0.1:
-  api: 3.0.0
+  api: 3.0.1
   state:
     release: stable
     api: stable
-  date: 2026-02-28
+  date: 2026-07-04
   license:
     identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: "[rla] Add PSR-4 autoloading support with Horde\\Yaml namespace.\n[rla] Maintain backward compatibility with PSR-0 Horde_Yaml classes.\n[rla] Modernize tests to PHPUnit 12 with test/unit structure.\n[rla] Add strict types and full type declarations.\n[rla] Update PHP requirement to ^8.2.\n"
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: "ci: checkout yaml-test-suite submodule (template 1.5.2)\nfix(emitter): emit plain multi-line scalars as literal blocks\nchore: refresh CI bootstrap"
 3.0.0:
   api: 3.0.0
   state:
