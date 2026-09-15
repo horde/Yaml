@@ -61,6 +61,19 @@ final class Pipeline
         if ($source !== '' && str_ends_with($source, "\n")) {
             $stream->setTrailingNewline(true);
         }
+        // Round-trip: the scanner normalises CRLF to LF so the rest of the
+        // parser sees one line ending, and the emitter already writes whatever
+        // the stream names - but nothing recorded what the source used, so a
+        // CRLF document was silently rewritten with LF.
+        //
+        // Set only when EVERY newline is CRLF. A file with mixed endings has no
+        // single ending to preserve, and quietly picking one would rewrite the
+        // other; LF leaves that document visibly changed rather than subtly, so
+        // a caller comparing input to output can still tell.
+        $lf = substr_count($source, "\n");
+        if ($lf > 0 && substr_count($source, "\r\n") === $lf) {
+            $stream->setLineEnding("\r\n");
+        }
         $this->resolver->resolve($stream);
 
         return $stream;

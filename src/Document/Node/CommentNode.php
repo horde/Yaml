@@ -34,7 +34,7 @@ final class CommentNode implements Node
     use NodeTrait;
 
     private string $text;
-    private int $indent;
+    private ?int $indent;
     private string $gap;
 
     /**
@@ -50,7 +50,7 @@ final class CommentNode implements Node
      *                       Empty for synthesized nodes; the emitter falls
      *                       back to a sensible default when emitting.
      */
-    public function __construct(string $text = '', int $indent = 0, string $gap = '')
+    public function __construct(string $text = '', ?int $indent = null, string $gap = '')
     {
         $this->text = $text;
         $this->indent = $indent;
@@ -67,12 +67,12 @@ final class CommentNode implements Node
         $this->text = $text;
     }
 
-    public function getIndent(): int
+    public function getIndent(): ?int
     {
         return $this->indent;
     }
 
-    public function setIndent(int $indent): void
+    public function setIndent(?int $indent): void
     {
         $this->indent = $indent;
     }

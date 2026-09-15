@@ -175,7 +175,7 @@ final class Emitter
     {
         $properties = $this->renderValueProperties($node);
         if ($this->isBlockStyleScalar($node)) {
-            $raw = $node->getRawSource();
+            $raw = $this->rawSource($node);
             if ($raw !== null) {
                 $this->buffer .= $properties . $raw;
             } else {
@@ -322,7 +322,7 @@ final class Emitter
             // Block scalars span multiple lines and end with their own
             // newline.
             if ($this->isBlockStyleScalar($value)) {
-                $rawSource = $value->getRawSource();
+                $rawSource = $this->rawSource($value);
                 if ($rawSource !== null) {
                     $this->buffer .= ' ' . $properties . $rawSource;
                 } else {
@@ -623,12 +623,40 @@ final class Emitter
 
     private function emitStandaloneComment(CommentNode $comment, int $indent): void
     {
-        // Use the comment's stored indent if it has one; otherwise
-        // the surrounding container's indent.
-        $useIndent = $comment->getIndent() > 0 ? $comment->getIndent() : $indent;
+        // Use the comment's own column when the parser recorded one, so a
+        // comment comes back where its author put it. null means no column was
+        // recorded - a comment built programmatically rather than read from a
+        // document - and those follow the surrounding container.
+        //
+        // Nullable rather than `> 0`: column 1 is a real position, and a
+        // flush-left comment inside an indented block is a deliberate style
+        // that was previously indistinguishable from "unset".
+        $useIndent = $comment->getIndent() ?? $indent;
         $this->buffer .= str_repeat(' ', $useIndent);
         $this->buffer .= $comment->getText();
         $this->buffer .= $this->lineEnding;
+    }
+
+    /**
+     * A node's raw source, in the line ending this document uses.
+     *
+     * Raw source is captured after the scanner has normalised CRLF to LF, so a
+     * multi-line scalar re-emitted verbatim carried LF into a CRLF document -
+     * a block scalar was the one construct that still broke a Windows file's
+     * round trip after the stream learned its line ending.
+     *
+     * A no-op for LF documents, which is every document until one says
+     * otherwise.
+     */
+    private function rawSource(ScalarNode $node): ?string
+    {
+        $raw = $node->getRawSource();
+
+        if ($raw === null || $this->lineEnding === "\n") {
+            return $raw;
+        }
+
+        return str_replace("\n", $this->lineEnding, $raw);
     }
 
     private function emitBlankLines(BlankLineNode $node): void
@@ -640,7 +668,7 @@ final class Emitter
 
     private function scalarOrRaw(ScalarNode $node): string
     {
-        $rawSource = $node->getRawSource();
+        $rawSource = $this->rawSource($node);
         if ($rawSource !== null) {
             return $rawSource;
         }
@@ -817,7 +845,7 @@ final class Emitter
 
     private function renderBlockScalar(ScalarNode $node, int $parentIndent): string
     {
-        $rawSource = $node->getRawSource();
+        $rawSource = $this->rawSource($node);
         if ($rawSource !== null) {
             return $rawSource;
         }
@@ -1003,9 +1031,22 @@ final class Emitter
             return false;
         }
         $first = $value[0];
-        $reservedLeaders = ['[', ']', '{', '}', '#', '&', '*', '!', '|', '>', "'", '"', '%', '@', '`', '?', ':', '-', ',', "\t", ' '];
+        $reservedLeaders = ['[', ']', '{', '}', '#', '&', '*', '!', '|', '>', "'", '"', '%', '@', '`', ',', "\t", ' '];
         if (in_array($first, $reservedLeaders, true)) {
             return false;
+        }
+        // "?", ":" and "-" are indicators only when they stand alone or are
+        // followed by a space. YAML 1.2 ns-plain-first admits them otherwise,
+        // so "--cert-dir=/tmp" and "-single-dash" are valid plain scalars and
+        // quoting them rewrites a line the author did not write that way.
+        if (in_array($first, ['?', ':', '-'], true)) {
+            if (strlen($value) === 1) {
+                return false;
+            }
+            $second = $value[1];
+            if ($second === ' ' || $second === "\t") {
+                return false;
+            }
         }
         if (str_contains($value, ': ') || str_contains($value, " #")) {
             return false;
