@@ -589,7 +589,7 @@ final class Parser
     {
         foreach ($trivia as $t) {
             if ($t->type === TriviaType::Comment) {
-                $node = new CommentNode($t->text, 0, $t->gap);
+                $node = new CommentNode($t->text, max(0, $t->column - 1), $t->gap);
                 $node->setPosition($t->line, $t->column);
                 $container->appendChildInternal($node);
                 continue;
@@ -652,7 +652,7 @@ final class Parser
     private function triviaToNode(TriviaToken $t): CommentNode|BlankLineNode|null
     {
         if ($t->type === TriviaType::Comment) {
-            $node = new CommentNode($t->text, 0, $t->gap);
+            $node = new CommentNode($t->text, max(0, $t->column - 1), $t->gap);
             $node->setPosition($t->line, $t->column);
             return $node;
         }
@@ -885,7 +885,7 @@ final class Parser
     {
         foreach ($token->trailingTrivia as $t) {
             if ($t->type === TriviaType::Comment) {
-                $node = new CommentNode($t->text, 0, $t->gap);
+                $node = new CommentNode($t->text, max(0, $t->column - 1), $t->gap);
                 $node->setPosition($t->line, $t->column);
                 return $node;
             }
@@ -955,7 +955,7 @@ final class Parser
                 $first->type === TriviaType::Comment
                 && $first->line === $valueToken->line
             ) {
-                $eolComment = new CommentNode($first->text, 0, $first->gap);
+                $eolComment = new CommentNode($first->text, max(0, $first->column - 1), $first->gap);
                 $eolComment->setPosition($first->line, $first->column);
                 // Strip this one trivia entry from the inner token so
                 // it isn't re-emitted as a child of the nested value.

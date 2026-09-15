@@ -317,7 +317,7 @@ final class Scanner
                     $commentColumn = $this->column;
                     $text = '';
                     while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                        $text .= $this->source[$this->pos];
+                        $text .= $this->currentChar();
                         $this->advance();
                     }
                     $this->triviaBuffer[] = TriviaToken::comment(
@@ -810,7 +810,7 @@ final class Scanner
             $commentColumn = $this->column;
             $text = '';
             while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                $text .= $this->source[$this->pos];
+                $text .= $this->currentChar();
                 $this->advance();
             }
             $this->triviaBuffer[] = TriviaToken::comment(
@@ -1746,7 +1746,7 @@ final class Scanner
             $commentColumn = $this->column;
             $text = '';
             while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                $text .= $this->source[$this->pos];
+                $text .= $this->currentChar();
                 $this->advance();
             }
             $this->triviaBuffer[] = TriviaToken::comment(
@@ -1821,7 +1821,7 @@ final class Scanner
                 $commentColumn = $this->column;
                 $text = '';
                 while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                    $text .= $this->source[$this->pos];
+                    $text .= $this->currentChar();
                     $this->advance();
                 }
                 $this->triviaBuffer[] = TriviaToken::comment(
@@ -2079,7 +2079,7 @@ final class Scanner
                 $startColumn = $this->column;
                 $text = '';
                 while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                    $text .= $this->source[$this->pos];
+                    $text .= $this->currentChar();
                     $this->advance();
                 }
                 $this->triviaBuffer[] = TriviaToken::comment(
@@ -2193,7 +2193,7 @@ final class Scanner
         $this->advance();
         $value = '';
         while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-            $value .= $this->source[$this->pos];
+            $value .= $this->currentChar();
             $this->advance();
         }
         if ($this->pos < $this->length && $this->source[$this->pos] === "\n") {
@@ -3950,7 +3950,7 @@ final class Scanner
             $startColumn = $this->column;
             $text = '';
             while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                $text .= $this->source[$this->pos];
+                $text .= $this->currentChar();
                 $this->advance();
             }
             $trailing[] = TriviaToken::comment($text, $startLine, $startColumn, $gap);
