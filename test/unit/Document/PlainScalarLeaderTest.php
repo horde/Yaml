@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
  * The emitter treated them as unconditionally reserved, so a command-line flag
  * such as `--cert-dir=/tmp` came back quoted - a change to a line the author
  * did not write that way, and one that breaks byte-identical round trips.
+ * @coversNothing
  */
 final class PlainScalarLeaderTest extends TestCase
 {
@@ -44,7 +45,7 @@ final class PlainScalarLeaderTest extends TestCase
         return [
             'bare dash'      => ["key: '-'\n"],
             'dash space'     => ["key: '- not a sequence'\n"],
-            'negative number'=> ["key: '-5'\n"],
+            'negative number' => ["key: '-5'\n"],
             'bare colon'     => ["key: ':'\n"],
             'bare question'  => ["key: '?'\n"],
         ];

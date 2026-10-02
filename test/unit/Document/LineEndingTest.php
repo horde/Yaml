@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  * ending, and the emitter already writes whatever the stream names - but
  * nothing recorded what the source used, so every Windows-authored document was
  * silently rewritten with LF.
+ * @coversNothing
  */
 final class LineEndingTest extends TestCase
 {

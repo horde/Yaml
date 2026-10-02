@@ -45,7 +45,7 @@ final class LegacyBooleansFlagTest extends TestCase
     }
 
     #[DataProvider('legacySpellings')]
-    public function testFlagOffKeepsAllSpellingsAsStrings(string $token): void
+    public function testFlagOffKeepsAllSpellingsAsStrings(string $token, bool $expected): void
     {
         $stream = (new YamlStringLoader())->load("x: $token\n");
         $value = $stream->getDocument(0)->root()->entry('x')->getValue()->getValue();

@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  * The indent is nullable rather than zero-defaulted because column 1 is a real
  * position: a flush-left comment inside an indented block is a deliberate style
  * that "0 means unset" could not express.
+ * @coversNothing
  */
 final class CommentIndentTest extends TestCase
 {
@@ -28,7 +29,7 @@ final class CommentIndentTest extends TestCase
     {
         return [
             'matching its sibling'   => ["parent:\n  # aligned\n  key: 1\n"],
-            'deeper than its sibling'=> ["parent:\n  child:\n      # over-indented\n    key: 1\n"],
+            'deeper than its sibling' => ["parent:\n  child:\n      # over-indented\n    key: 1\n"],
             'shallower'              => ["parent:\n    # four spaces\n  key: 1\n"],
             'flush left in a block'  => ["parent:\n# flush left\n  key: 1\n"],
             'before a nested block'  => ["a:\n  b:\n    # note\n    c: 1\n"],

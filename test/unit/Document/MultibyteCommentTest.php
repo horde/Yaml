@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  *
  * `currentChar()` already existed for exactly this reason - its docblock says
  * so - and was used for scalar content but not for trivia.
+ * @coversNothing
  */
 final class MultibyteCommentTest extends TestCase
 {
