@@ -14,7 +14,7 @@ namespace Horde\Yaml\Document\Node;
 /**
  * Round-trip metadata for flow-style nodes.
  *
- * Per Stage 3 §3 and Stage 2 §9.1, multi-line flow style preserves its
+ * Multi-line flow style preserves its
  * inner whitespace structure as opaque data on the flow node rather
  * than reconstructing whitespace from per-item trivia.
  *
@@ -23,7 +23,6 @@ namespace Horde\Yaml\Document\Node;
  * class is a placeholder: a single-line flag and raw source text
  * sufficient to satisfy the AST contract.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/02-roundtrip-semantics-2026-06-11.md §3.5
  */
 final readonly class FlowFormat
 {

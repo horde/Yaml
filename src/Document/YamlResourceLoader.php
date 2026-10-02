@@ -16,14 +16,13 @@ use Horde\Yaml\Document\Parser\Pipeline;
 /**
  * Load YAML from a PHP stream resource into a YamlStream.
  *
- * Per Stage 4 §3.2: stateless, single load() method. Reads from the
+ * Stateless, single load() method. Reads from the
  * resource to EOF using stream_get_contents(); does NOT close the
  * resource.
  *
  * Pass `legacyBooleans: true` to recognise YAML 1.1 boolean spellings
  * (`yes`, `no`, `on`, `off`, etc.). Default is strict YAML 1.2.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/04-public-api-2026-06-12.md §3.2
  */
 final class YamlResourceLoader
 {

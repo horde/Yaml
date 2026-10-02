@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 12 Chapter X: explicit-key indicator (`?`) in block context
+ * Explicit-key indicator (`?`) in block context
  * and the set tag.
  */
 #[CoversNothing]

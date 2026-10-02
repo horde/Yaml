@@ -56,8 +56,7 @@ final class LeniencyPolicy
         /**
          * Umbrella for whitespace and format quirks (trailing
          * whitespace, whitespace-only lines, redundant inter-token
-         * gap). The Stage 15 AY chapter splits this into individual
-         * flags as each case is reviewed; until then it is one
+         * gap). Individual flags will be added as each case is reviewed; until then it is one
          * setting.
          */
         public readonly bool $tolerateWhitespaceQuirks = false,

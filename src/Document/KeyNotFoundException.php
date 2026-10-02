@@ -14,7 +14,6 @@ namespace Horde\Yaml\Document;
 /**
  * Thrown by YamlDocument::requireEntry when the key is not found.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.4
  */
 final class KeyNotFoundException extends StructuralException
 {

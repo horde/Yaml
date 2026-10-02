@@ -26,7 +26,6 @@ use RuntimeException;
  * Synthesized nodes return 0 for line/column, which is itself useful
  * diagnostic info ("this came from API construction, not source").
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.2
  */
 class EmitException extends RuntimeException implements Exception, LogThrowable
 {

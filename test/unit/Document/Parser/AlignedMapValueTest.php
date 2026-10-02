@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 14 AJ: multiple spaces / tabs between `:` and the value
+ * Multiple spaces / tabs between `:` and the value
  * (column-aligned mappings).
  */
 #[CoversNothing]

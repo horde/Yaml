@@ -26,7 +26,6 @@ use LogicException;
  * naturally without explicit unwrap. Other casts (to int, to float)
  * are not provided; users call value() to get the typed PHP scalar.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.6
  */
 final class ScalarNode implements Node, Stringable
 {
@@ -66,7 +65,7 @@ final class ScalarNode implements Node, Stringable
     }
 
     /**
-     * Set a new value. Clears rawSource per Stage 3 §4: when the user
+     * Set a new value. Clears rawSource when the user
      * changes the value, the original source is no longer authoritative.
      * Also clears any resolved value placed by a TagHandler. Once the
      * lexical value changes, the handler's coercion is stale.

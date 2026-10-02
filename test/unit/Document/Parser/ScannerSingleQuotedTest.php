@@ -163,7 +163,7 @@ final class ScannerSingleQuotedTest extends TestCase
 
     public function testMultiLineSingleQuotedFolds(): void
     {
-        // Stage 13 Chapter AD: multi-line single-quoted scalars
+        // Multi-line single-quoted scalars
         // fold per YAML 1.2 §7.4.1. A single line break between
         // content lines folds to one space; leading whitespace on
         // the continuation is stripped.

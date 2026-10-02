@@ -113,7 +113,7 @@ final class ScannerPlainScalarTest extends TestCase
 
     public function testColonSpaceStartsEmptyKeyEntry(): void
     {
-        // Stage 13 AE: `: value` at line start is a block-mapping
+        // `: value` at line start is a block-mapping
         // entry with an empty (null) key.
         $tokens = (new Scanner())->scan(": value\n");
         $types = array_map(static fn($t) => $t->type->name, $tokens);

@@ -16,14 +16,13 @@ use Horde\Yaml\Document\Parser\Pipeline;
 /**
  * Load YAML from a file path into a YamlStream.
  *
- * Per Stage 4 §3.2: stateless, no constructor parameters, single
+ * Stateless, no constructor parameters, single
  * load() method. Throws FileNotFoundException if the path does not
  * exist or cannot be read; IoException for other read failures.
  *
  * Pass `legacyBooleans: true` to recognise YAML 1.1 boolean spellings
  * (`yes`, `no`, `on`, `off`, etc.). Default is strict YAML 1.2.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/04-public-api-2026-06-12.md §3.2
  */
 final class YamlFileLoader
 {

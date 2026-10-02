@@ -27,9 +27,8 @@ namespace Horde\Yaml\Document;
  * comment line that means the indentation before the `#`. Used by
  * the emitter to reproduce the original spacing byte-for-byte.
  *
- * Final readonly per Stage 5 Q11.1.
+ * Final readonly.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §2.3
  */
 final readonly class TriviaToken
 {

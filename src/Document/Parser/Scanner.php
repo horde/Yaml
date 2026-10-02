@@ -31,7 +31,6 @@ use Horde\Yaml\Document\TriviaType;
  * scalars, block scalars, anchors/aliases/tags arrive in later
  * phases.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §2
  */
 final class Scanner
 {
@@ -2599,7 +2598,7 @@ final class Scanner
      *
      * The source span from opening to closing bracket is captured on
      * the start token's rawSource field for round-trip preservation
-     * of multi-line flow layout (per Stage 2 §3.5 / §9.1).
+     * of multi-line flow layout.
      *
      * @param list<Token> $tokens
      */

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * Stage 12 Chapter Z gate: compare a candidate document-layer shim
+ * Compare a candidate document-layer shim
  * against the existing legacy `Horde_Yaml::loadFile()` across the
  * snapshotted .horde.yml corpus. The shim ships only if its corpus
  * median is no more than 2x the legacy implementation's median.
@@ -150,7 +150,7 @@ final class LegacyShimComparisonTest extends TestCase
         // Gate: per the recorded acceptance criterion, the shim
         // ships only if the ratio ≤ 2x. As of this writing the
         // ratio is around 4x. The document layer trades runtime
-        // for round-trip fidelity (Stage 1 §A4). The shim does not
+        // for round-trip fidelity. The shim does not
         // ship; legacy Horde_Yaml::loadFile keeps its existing
         // implementation.
         //

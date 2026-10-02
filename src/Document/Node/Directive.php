@@ -14,10 +14,9 @@ namespace Horde\Yaml\Document\Node;
 /**
  * A YAML directive (e.g. `%YAML 1.2`, `%TAG !my! tag:example.com,2026:`).
  *
- * Directives are preserved verbatim per Stage 1 §2.1. The parser does
+ * Directives are preserved verbatim. The parser does
  * not interpret them; the emitter writes them verbatim.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.10
  */
 final class Directive implements Node
 {

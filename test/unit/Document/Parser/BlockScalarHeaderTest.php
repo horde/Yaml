@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 11 Chapter T: block scalar header and content edge cases
+ * Block scalar header and content edge cases
  * per YAML 1.2 §8.1.
  *
  * Locks in correct behaviour for the consumer's full matrix:

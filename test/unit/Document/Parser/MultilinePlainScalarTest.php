@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 11 Chapter Q: multi-line plain scalar continuation per
+ * Multi-line plain scalar continuation per
  * YAML 1.2 §7.3.3.
  */
 #[CoversNothing]

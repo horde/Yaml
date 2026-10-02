@@ -15,6 +15,5 @@ namespace Horde\Yaml\Document;
  * Thrown by SequenceNode::setItemAt and insertItemAt when the index
  * is out of range.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.4
  */
 final class OutOfRangeException extends StructuralException {}

@@ -23,7 +23,6 @@ use InvalidArgumentException;
  * Holds a count (>= 1) of how many blank lines this node represents.
  * count must always be >= 1; "no blanks" means no node, not count = 0.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.9
  */
 final class BlankLineNode implements Node
 {

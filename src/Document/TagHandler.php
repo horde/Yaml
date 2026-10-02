@@ -33,7 +33,7 @@ interface TagHandler
      *
      * Both shorthand (`!!`, `!`) and full URI forms are accepted; the
      * resolver will normalise via the document's %TAG handle map
-     * before lookup (Stage 12 Y).
+     * before lookup.
      */
     public function tag(): string;
 

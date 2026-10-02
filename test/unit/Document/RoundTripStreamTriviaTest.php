@@ -21,8 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Round-trip: stream- and document-level trivia preservation.
  *
- * Covers the four lost-data cases from
- * `~/php/horde-development/libraries/yaml/18-roundtrip-lost-data-2026-06-18.md`:
+ * Covers four lost-data cases:
  *
  *   L1: stream-trailing comment after the last document.
  *   L2: pre-document-marker comment (before the first `---`).

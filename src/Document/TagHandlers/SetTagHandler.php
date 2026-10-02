@@ -21,7 +21,7 @@ use Horde\Yaml\Document\TagHandlerException;
  * Handler for `!!set`: a mapping where every value is null,
  * representing a de-duplicated unordered collection.
  *
- * Per Stage 12 §X path A: the resolved domain value is a PHP
+ * The resolved domain value is a PHP
  * `array<string, null>` keyed by member name. Round-trip preserves
  * the source mapping form (typically `? member` lines).
  *

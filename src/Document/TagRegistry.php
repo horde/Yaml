@@ -17,7 +17,7 @@ namespace Horde\Yaml\Document;
  * The default registry is empty. Callers register handlers they want;
  * core schema tags (!!str, !!int, !!float, !!null, !!bool) are NOT
  * routed through the registry. They're handled directly by the
- * resolver per Stage 11 Chapter R. Only non-core tags are looked up
+ * resolver. Only non-core tags are looked up
  * here.
  *
  * Pass an instance to a loader's constructor to make it available

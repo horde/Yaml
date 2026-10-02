@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 13 Chapter AA: content on the document-start (`---`) line.
+ * Content on the document-start (`---`) line.
  *
  * The marker line may carry a plain or quoted scalar, a tag/anchor
  * (whose value lives on the next indented line), or a block-scalar

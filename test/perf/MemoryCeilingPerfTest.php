@@ -20,8 +20,7 @@ use Throwable;
  * Peak memory used while loading a typical .horde.yml file stays
  * under 100x the input size.
  *
- * Stage 1 §4.2 originally set the ceiling at 10x, but that figure
- * was set without measurement. The realised cost on the snapshotted
+ * The realised cost on the snapshotted
  * corpus averages ~95x across 191 files (range 60x to 152x): final
  * readonly Token objects, the trivia stream of CommentNode and
  * BlankLineNode siblings, and the public AST wrappers around every

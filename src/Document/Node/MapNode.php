@@ -29,7 +29,6 @@ use Stringable;
  * round-trip. Public mutation API (setEntry/addEntry/insertX/etc.)
  * lands in chapter L.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.2
  */
 final class MapNode implements Node, ArrayAccess, Countable, IteratorAggregate
 {
@@ -130,7 +129,7 @@ final class MapNode implements Node, ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Return the merge-key entry (`<<: *anchor`) if present, null
-     * otherwise. Per Stage 1 §2.4: merge keys are preserved as syntax
+     * otherwise. Merge keys are preserved as syntax
      * in the AST; the resolved() view expands them on demand.
      */
     public function mergeEntry(): ?MapEntry
@@ -385,7 +384,7 @@ final class MapNode implements Node, ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Coerce a user-supplied value to a value-position Node. Accepts
-     * Node, scalar, null, or Stringable (per Stage 4 §4.1).
+     * Node, scalar, null, or Stringable.
      *
      * @param Node|scalar|null|Stringable $value
      */

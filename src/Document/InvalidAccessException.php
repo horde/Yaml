@@ -15,6 +15,5 @@ namespace Horde\Yaml\Document;
  * Thrown when subscripting a YamlDocument whose root cannot accept
  * the access (e.g. a scalar root being subscripted).
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.4
  */
 final class InvalidAccessException extends StructuralException {}

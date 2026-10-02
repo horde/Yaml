@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 14 AK: trailing comment after `:` with the value on the
+ * Trailing comment after `:` with the value on the
  * next indented line.
  */
 #[CoversNothing]

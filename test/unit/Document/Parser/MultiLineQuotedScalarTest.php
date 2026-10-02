@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 13 Chapter AD: multi-line quoted scalars per YAML 1.2
+ * Multi-line quoted scalars per YAML 1.2
  * §7.4.1 (single-quoted) and §7.5.2 (double-quoted).
  */
 #[CoversNothing]

@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 use function assert;
 
 /**
- * Stage 12 Chapter Y: per-document `%TAG` directive resolution.
+ * Per-document `%TAG` directive resolution.
  */
 #[CoversNothing]
 final class TagDirectiveResolutionTest extends TestCase

@@ -25,7 +25,6 @@ use RuntimeException;
  * consulted at call time, not at parse time. This keeps the AST
  * acyclic; aliases are not tree edges.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.7
  */
 final class AliasNode implements Node
 {
@@ -97,7 +96,7 @@ final class AliasNode implements Node
      * still resolve to the original); the original target is
      * unchanged.
      *
-     * Stage 2 case 6.2: detaching from a `<<:` merge context
+     * Detaching from a `<<:` merge context
      * preserves the merge form. The cloned map is inserted as the
      * new merge value.
      *

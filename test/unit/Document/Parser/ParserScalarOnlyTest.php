@@ -133,7 +133,7 @@ final class ParserScalarOnlyTest extends TestCase
 
     public function testParseAcceptsEmptyDocumentBetweenMarkers(): void
     {
-        // Stage 13 Chapter AB: empty document body is legal (root
+        // Empty document body is legal (root
         // stays null).
         $tokens = [
             new Token(TokenType::StreamStart, line: 1, column: 1),

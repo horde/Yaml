@@ -64,7 +64,7 @@ final class EmitterAnchorsAliasesTagsTest extends TestCase
 
     public function testAnchorBeforeTagInSourceEmitsCanonical(): void
     {
-        // Stage 6 §6.4 canonical order is tag before anchor; the
+        // The canonical order is tag before anchor; the
         // emitter normalises regardless of source order.
         $source = "foo: &x !!int 42\n";
         $stream = (new YamlStringLoader())->load($source);

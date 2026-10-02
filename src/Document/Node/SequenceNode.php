@@ -25,7 +25,6 @@ use Stringable;
  * BlankLineNode instances. Style is block or flow. Anchor and tag
  * are optional.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.4
  */
 final class SequenceNode implements Node, ArrayAccess, Countable, IteratorAggregate
 {

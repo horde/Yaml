@@ -16,7 +16,7 @@ use Horde\Yaml\Document\Parser\Pipeline;
 /**
  * Load YAML from a string into a YamlStream.
  *
- * Per Stage 4 §3.1, loaders are concrete classes with specific typed
+ * Loaders are concrete classes with specific typed
  * methods; there is no common interface and no static facade. To load
  * from a string, instantiate this class and call load():
  *
@@ -25,7 +25,6 @@ use Horde\Yaml\Document\Parser\Pipeline;
  * Pass `legacyBooleans: true` to recognise YAML 1.1 boolean spellings
  * (`yes`, `no`, `on`, `off`, etc.). Default is strict YAML 1.2.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/04-public-api-2026-06-12.md §3
  */
 final class YamlStringLoader
 {

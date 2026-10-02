@@ -15,8 +15,8 @@ namespace Horde\Yaml\Document\Node;
  * A standalone comment in the document.
  *
  * CommentNode is a first-class addressable node, not metadata attached
- * to nearby content (per the comments-as-first-class commitment in
- * Stage 2 §0). It appears as a child in the parent map's or sequence's
+ * to nearby content (per the comments-as-first-class commitment).
+ * It appears as a child in the parent map's or sequence's
  * children list, or in the leading/trailing trivia list of a stream
  * or document.
  *
@@ -27,7 +27,6 @@ namespace Horde\Yaml\Document\Node;
  * Holds the comment text (including the leading `#`) and the source
  * indent level.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.8
  */
 final class CommentNode implements Node
 {

@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 13 Chapter AB: empty document body is legal. The root
+ * Empty document body is legal. The root
  * stays null when no node appears between markers.
  */
 #[CoversNothing]

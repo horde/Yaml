@@ -31,7 +31,7 @@ use Stringable;
  * - is instantiable,
  * - implements the Node interface,
  * - returns 0 for line() and column() before any source position is
- *   stamped (synthesized-node behavior per Stage 3 §0.5),
+ *   stamped (synthesized-node behavior),
  * - returns null from parent() before being attached to a tree.
  *
  * Specific node behaviour (children lists, value fields, etc.) is

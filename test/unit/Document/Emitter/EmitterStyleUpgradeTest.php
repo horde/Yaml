@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Verifies E.04 emitter behavior: quote style preservation and the
- * Stage 6 §3.1 upgrade ladder (plain -> single -> double).
+ * Upgrade ladder (plain -> single -> double).
  */
 #[CoversClass(Emitter::class)]
 final class EmitterStyleUpgradeTest extends TestCase

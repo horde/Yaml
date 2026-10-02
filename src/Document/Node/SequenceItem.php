@@ -21,7 +21,6 @@ use Stringable;
  * value-position node (MapNode, SequenceNode, ScalarNode, or
  * AliasNode), never null. Carries an optional EOL comment.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.5
  */
 final class SequenceItem implements Node
 {

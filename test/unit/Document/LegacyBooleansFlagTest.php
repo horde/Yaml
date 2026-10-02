@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 11 Chapter S: opt-in YAML 1.1 boolean compatibility flag.
+ * Opt-in YAML 1.1 boolean compatibility flag.
  */
 #[CoversNothing]
 final class LegacyBooleansFlagTest extends TestCase

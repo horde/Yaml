@@ -25,7 +25,6 @@ use Horde\Yaml\Document\YamlStream;
  * (created post-parse via API) return 0 for both line() and column()
  * to indicate "not from source."
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.1
  */
 interface Node
 {

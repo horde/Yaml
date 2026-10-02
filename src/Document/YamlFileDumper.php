@@ -16,12 +16,11 @@ use Horde\Yaml\Document\Emitter\Emitter;
 /**
  * Dump a YamlStream to a file path.
  *
- * Per Stage 6 §9: atomic via temp file + rename. The temp path lives
+ * Atomic via temp file + rename. The temp path lives
  * in the target's directory so the rename stays intra-filesystem.
  * Cross-filesystem rename failure throws IoException rather than
  * silently degrading to non-atomic copy-and-delete.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/06-emitter-strategy-2026-06-12.md §9
  */
 final class YamlFileDumper
 {

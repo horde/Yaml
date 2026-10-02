@@ -32,7 +32,6 @@ use IteratorAggregate;
  * and the Node interface's document() walk-up. Root manipulation,
  * trivia handling, and the anchor index get filled in by later phases.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §1.2
  */
 final class YamlDocument implements ArrayAccess, Countable, IteratorAggregate
 {
@@ -233,7 +232,7 @@ final class YamlDocument implements ArrayAccess, Countable, IteratorAggregate
      * on either side do not affect the other. Anchor names are
      * registered with the new document's index. Stream-level
      * metadata (directives, leading file trivia, sibling documents)
-     * is not copied per Stage 4 §4.8.
+     * is not copied.
      */
     public function cloneDetached(): YamlDocument
     {

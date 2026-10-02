@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * Stage 1 §4.2 ceiling: load + dump every .horde.yml in the
+ * Load + dump every .horde.yml in the
  * snapshotted Horde-component corpus within 5 seconds.
  *
  * The corpus lives at test/fixtures/perf/horde-yml-corpus/. It is
@@ -58,8 +58,7 @@ final class MonorepoRoundTripPerfTest extends TestCase
                 $processed++;
             } catch (Throwable) {
                 // Some .horde.yml use YAML 1.1 booleans or other
-                // out-of-scope features; skip them. Per Stage 1 §B9,
-                // the document layer is strict 1.2.
+                // out-of-scope features; skip them. The document layer is strict YAML 1.2.
                 $skipped++;
             }
         }

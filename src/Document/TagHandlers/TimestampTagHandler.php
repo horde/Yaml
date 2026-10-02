@@ -39,7 +39,7 @@ use Exception;
  *   - YYYY-MM-DDTHH:MM:SS+HH:MM         (offset)
  *   - YYYY-MM-DDTHH:MM:SS-HHMM          (offset, no colon)
  *
- * Naive datetimes are interpreted as UTC. Per Stage 12 §V the
+ * Naive datetimes are interpreted as UTC. The
  * returned type is DateTimeImmutable (not DateTime).
  */
 final class TimestampTagHandler implements TagHandler

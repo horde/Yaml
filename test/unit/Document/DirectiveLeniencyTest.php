@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 15 AV: directive leniencies are gated by named flags. Under
+ * Directive leniencies are gated by named flags. Under
  * strictYaml12() each is rejected; under hordeCompat() each is
  * accepted.
  */

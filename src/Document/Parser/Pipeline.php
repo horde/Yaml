@@ -22,7 +22,6 @@ use Horde\Yaml\Document\YamlStream;
  * loaders are thin wrappers that obtain bytes from their source and
  * invoke this class.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §1.2
  */
 final class Pipeline
 {

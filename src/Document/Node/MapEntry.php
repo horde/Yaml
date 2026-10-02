@@ -17,7 +17,7 @@ use Stringable;
 /**
  * One key-value pair inside a MapNode.
  *
- * MapEntry is itself a Node (per Stage 3 decision 11.1) so tree walks
+ * MapEntry is itself a Node so tree walks
  * are uniform. Its key is any value-position node, typically a
  * ScalarNode, but a compound key (MapNode, SequenceNode, AliasNode)
  * is permitted per YAML 1.2 §8.1.3 (`? key\n: value` form). Its
@@ -25,7 +25,6 @@ use Stringable;
  * or AliasNode), never null. The optional eolComment is a
  * CommentNode sitting on the entry's line.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §2.3
  */
 final class MapEntry implements Node
 {

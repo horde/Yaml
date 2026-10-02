@@ -126,7 +126,7 @@ final class ScannerAnchorAliasTagTest extends TestCase
     public function testBareBangIsNonSpecificTag(): void
     {
         // YAML 1.2 §6.9.1: `!` alone is the non-specific tag.
-        // Stage 14 AO accepts it where Stage 7 had thrown.
+        // This was previously rejected; it is now accepted.
         $tokens = (new Scanner())->scan("foo: ! hello\n");
         $tagToken = null;
         foreach ($tokens as $t) {

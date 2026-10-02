@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * Stage 1 §4.2 ceiling: per-file load+dump on a typical config file
+ * Per-file load+dump on a typical config file
  * (<10 KB) completes in under 100 ms.
  *
  * The fixture is a representative .horde.yml from the snapshotted

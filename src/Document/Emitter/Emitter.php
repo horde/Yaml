@@ -39,7 +39,6 @@ use Horde\Yaml\Document\YamlStream;
  * with plain-scalar values. Nested mappings, sequences, anchors,
  * aliases, tags, and trivia positioning come in later phases.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/06-emitter-strategy-2026-06-12.md
  */
 final class Emitter
 {
@@ -315,7 +314,7 @@ final class Emitter
         $value = $entry->getValue();
 
         // Properties (tag, anchor) on the value go before the value
-        // bytes per Stage 6 §6.4 (tag before anchor).
+        // bytes (tag before anchor).
         $properties = $this->renderValueProperties($value);
 
         if ($value instanceof ScalarNode) {
@@ -425,7 +424,7 @@ final class Emitter
 
     /**
      * Render the property prefix (tag, anchor) for a value, in
-     * Stage 6 §6.4 order. Returns "" for nodes without properties,
+     * Returns "" for nodes without properties,
      * otherwise a string ending in a single space (so the caller
      * can concatenate the value bytes directly).
      */
@@ -597,8 +596,7 @@ final class Emitter
             // a MapEntry.
             //
             // Note: this is a corner case. Leading trivia inside a
-            // map under a dash. Stage 2 fixtures do not currently
-            // exercise this; if it surfaces, we revisit. The above
+            // map under a dash. This case is not currently exercised; if it surfaces, we revisit. The above
             // assumes entries[0] === children[0], which is only true
             // when the map starts with an entry.
             return;
@@ -919,7 +917,7 @@ final class Emitter
 
     /**
      * Convert a scalar's typed value to its emit string. Applies the
-     * Stage 6 §3.1 upgrade ladder: plain -> single-quoted ->
+     * Upgrade ladder: plain -> single-quoted ->
      * double-quoted. The user-set style is honored when compatible
      * with the content; otherwise the emitter upgrades to the lowest
      * sufficient style.
@@ -1016,7 +1014,7 @@ final class Emitter
     }
 
     /**
-     * Plain-safe content per Stage 6 §3.1: no leading reserved
+     * Plain-safe content: no leading reserved
      * indicator; no `: ` or ` #` inside; no control characters; not
      * empty; does not look like a different YAML type after parsing
      * (e.g. the string "true" must be quoted to stay a string).

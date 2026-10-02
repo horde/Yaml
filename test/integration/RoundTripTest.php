@@ -24,7 +24,6 @@ use PHPUnit\Framework\TestCase;
  * a mutation.php returning a closure (introduced when mutation
  * fixtures arrive in chapter G).
  *
- * Pattern per Stage 8 §2.3.
  * @coversNothing
  */
 final class RoundTripTest extends TestCase

@@ -20,7 +20,6 @@ namespace Horde\Yaml\Document;
  * BlankLines is a run of one or more blank lines. The count is in
  * TriviaToken::$count.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §2.3
  */
 enum TriviaType
 {

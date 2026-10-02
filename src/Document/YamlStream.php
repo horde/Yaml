@@ -29,7 +29,6 @@ use OutOfRangeException;
  * metadata: directives, leading and trailing trivia, line ending,
  * trailing-newline flag.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §1.1
  */
 final class YamlStream
 {
@@ -259,8 +258,7 @@ final class YamlStream
 
     /**
      * Deep-clone a document including its root subtree. Anchors are
-     * preserved per-clone (each document has its own anchor index
-     * per Stage 3 §5).
+     * preserved per-clone (each document has its own anchor index).
      */
     private function cloneDocument(YamlDocument $doc): YamlDocument
     {

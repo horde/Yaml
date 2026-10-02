@@ -22,7 +22,7 @@ use Error;
 
 /**
  * Smoke tests for the style enums and the FlowFormat record. Each
- * enum has the cases listed in Stage 3 §3; FlowFormat is a final
+ * enum has the required cases; FlowFormat is a final
  * readonly record.
  */
 #[CoversClass(ScalarStyle::class)]

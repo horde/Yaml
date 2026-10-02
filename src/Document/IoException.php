@@ -22,7 +22,6 @@ use Throwable;
  *
  * Carries the path or resource identifier when applicable.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.3
  */
 class IoException extends RuntimeException implements Exception, LogThrowable
 {

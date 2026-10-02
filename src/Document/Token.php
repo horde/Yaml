@@ -19,11 +19,11 @@ use Horde\Yaml\Document\Node\SequenceStyle;
 /**
  * A lexical token produced by the scanner and consumed by the parser.
  *
- * Final readonly per Stage 5 Q11.1. Tokens are conceptually values:
+ * Final readonly. Tokens are conceptually values:
  * produced once, consumed once, never mutated.
  *
- * Public type per Stage 5 §1.3 (appears on ParseException via
- * unexpectedToken). Shape locked from this stage.
+ * Public type (appears on ParseException via
+ * unexpectedToken).
  *
  * Field semantics:
  *
@@ -33,7 +33,7 @@ use Horde\Yaml\Document\Node\SequenceStyle;
  *   line, column     1-based source position of the first byte of
  *                    this token.
  *   style            the scalar/map/sequence style as observed by
- *                    the scanner (per Stage 5 Q11.3); null when the
+ *                    the scanner; null when the
  *                    token type doesn't carry style.
  *   chomp            block-scalar chomp indicator; null for non-block
  *                    scalars and for non-scalar tokens.
@@ -45,7 +45,6 @@ use Horde\Yaml\Document\Node\SequenceStyle;
  *                    token up to the next structural boundary
  *                    (typically just an EOL comment).
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §2.3
  */
 final readonly class Token
 {

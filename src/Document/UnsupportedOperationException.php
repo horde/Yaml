@@ -13,9 +13,8 @@ namespace Horde\Yaml\Document;
 
 /**
  * Thrown by ArrayAccess::offsetSet/offsetUnset on document-layer
- * containers. ArrayAccess is reads-only per Stage 4 §2.1; writes
+ * containers. ArrayAccess is reads-only; writes
  * go through named methods (setEntry, addEntry, etc.).
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/07-error-model-2026-06-12.md §4.4
  */
 final class UnsupportedOperationException extends StructuralException {}

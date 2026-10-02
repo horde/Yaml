@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 11 Chapter R: YAML 1.2 core schema tag coercion errors.
+ * YAML 1.2 core schema tag coercion errors.
  *
  * Existing happy-path coverage lives in TagTypingTest. This file
  * verifies that invalid input under each core tag throws rather

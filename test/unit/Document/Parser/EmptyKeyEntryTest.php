@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 13 Chapter AE: empty key in block mapping (`: value`).
+ * Empty key in block mapping (`: value`).
  */
 #[CoversNothing]
 final class EmptyKeyEntryTest extends TestCase

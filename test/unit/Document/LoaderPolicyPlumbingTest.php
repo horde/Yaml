@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 15 AU: confirm the policy reaches the parser. AU does not
+ * Confirm the policy reaches the parser. AU does not
  * change behaviour. Flags are not consumed yet, but the loader,
  * pipeline, and individual stage classes must accept the parameter
  * without error and the existing default-policy behaviour must be

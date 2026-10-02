@@ -23,7 +23,6 @@ use Horde\Yaml\Document\Node\Node;
  * Skeleton in this phase. Full implementation lands when the parser
  * starts stamping anchors (chapter H).
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/03-ast-and-document-model-2026-06-11.md §5
  */
 final class AnchorIndex
 {

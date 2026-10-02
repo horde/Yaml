@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 14 AL: anchor or tag with no following content materialises
+ * Anchor or tag with no following content materialises
  * an empty scalar node, so the anchor / tag is preserved and aliases
  * resolve.
  */

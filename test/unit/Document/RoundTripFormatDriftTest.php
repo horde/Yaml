@@ -20,8 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Round-trip: eliminate format drift.
  *
- * Covers the three drift cases from
- * `~/php/horde-development/libraries/yaml/19-roundtrip-format-drift-2026-06-18.md`:
+ * Covers three drift cases:
  *
  *   F1: EOL comment spacing (one space becomes two on round-trip).
  *   F2: `key: # eol\n  nested:` reflow (EOL becomes standalone).

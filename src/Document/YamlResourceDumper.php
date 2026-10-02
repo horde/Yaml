@@ -16,10 +16,9 @@ use Horde\Yaml\Document\Emitter\Emitter;
 /**
  * Dump a YamlStream to a PHP stream resource.
  *
- * Per Stage 4 §3.3: writes the emitted bytes via fwrite. Does NOT
+ * Writes the emitted bytes via fwrite. Does NOT
  * close the resource; the caller is responsible for that.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/04-public-api-2026-06-12.md §3.3
  */
 final class YamlResourceDumper
 {

@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * The first end-to-end round-trip test: load a YAML scalar document,
- * dump it, expect byte-identical output (Stage 1 §1.1).
+ * dump it, expect byte-identical output.
  *
  * Validates the entire pipeline: Scanner produces tokens, Parser
  * builds AST, Resolver applies typing, Emitter renders bytes.

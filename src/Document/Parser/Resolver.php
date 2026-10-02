@@ -39,7 +39,6 @@ use Horde\Yaml\Document\YamlStream;
  * (!!str, !!int, !!bool, !!null, !!float) override regex resolution.
  * Custom tags (!Foo) leave the value as the raw string.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §4
  */
 final class Resolver
 {
@@ -62,7 +61,7 @@ final class Resolver
      * @param bool $legacyBooleans When true, recognise YAML 1.1 boolean
      *     spellings (`yes`, `no`, `on`, `off`, `y`, `n` and their case
      *     variants) as booleans on plain scalars. Quoted scalars are
-     *     unaffected. Default false (strict YAML 1.2 per Stage 1 §B9).
+     *     unaffected. Default false (strict YAML 1.2).
      * @param ?TagRegistry $tagRegistry Custom-tag handler registry.
      *     Core schema tags (!!str, !!int, !!float, !!null, !!bool)
      *     are handled directly; non-core tags are looked up here.

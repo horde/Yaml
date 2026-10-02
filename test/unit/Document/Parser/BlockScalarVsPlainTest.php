@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Stage 14 AI: `>` and `|` are block-scalar header indicators only
+ * `>` and `|` are block-scalar header indicators only
  * when followed by a valid header character (digit, `+`, `-`, space,
  * tab, newline, comment). `>=8.1`, `|=`, `>2x` etc. are plain
  * scalars starting with `>` or `|`.
@@ -24,7 +24,6 @@ use PHPUnit\Framework\TestCase;
  * Regression: horde-installer-plugin.horde.yml ships
  * `php: >=8.1` and was over-folded into the next mapping line by
  * the multi-line plain scalar continuation logic introduced in
- * Stage 11 Q.
  */
 #[CoversNothing]
 final class BlockScalarVsPlainTest extends TestCase

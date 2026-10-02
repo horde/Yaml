@@ -47,7 +47,6 @@ use Horde\Yaml\Document\YamlStream;
  * Sequences, flow style, anchors, aliases, tags arrive in later
  * phases.
  *
- * @see /home/i567442/php/horde-development/libraries/yaml/05-parser-strategy-2026-06-12.md §3
  */
 final class Parser
 {
