@@ -33,6 +33,11 @@ final class MapEntry implements Node
     private MapNode|SequenceNode|ScalarNode|AliasNode $key;
     private MapNode|SequenceNode|ScalarNode|AliasNode $value;
     private ?CommentNode $eolComment;
+    private string $colonGap = '';
+    private bool $explicitKey = false;
+    private bool $explicitColon = true;
+    private ?CommentNode $keyEolComment = null;
+    private int $valueIndicatorLine = 0;
 
     public function __construct(
         MapNode|SequenceNode|ScalarNode|AliasNode $key,
@@ -144,6 +149,107 @@ final class MapEntry implements Node
     public function getEolComment(): ?CommentNode
     {
         return $this->eolComment;
+    }
+
+    /**
+     * The spaces or tabs written between the key and its `:`, as in
+     * `key : value`. Empty for the usual `key: value` and for an entry
+     * built in code.
+     */
+    public function getColonGap(): string
+    {
+        return $this->colonGap;
+    }
+
+    /**
+     * Whether the key is written in explicit form, `? key` with the
+     * value on a `:` line. The emitter also uses that form, whatever
+     * this says, for a key that cannot be written as an implicit one: a
+     * block scalar, a block collection, or anything spanning lines.
+     */
+    public function isExplicitKey(): bool
+    {
+        return $this->explicitKey;
+    }
+
+    /**
+     * Whether an explicit entry writes its `:` line. False for
+     * `? key` alone, whose value is null.
+     */
+    public function hasExplicitColon(): bool
+    {
+        return $this->explicitColon;
+    }
+
+    /**
+     * Write the key in explicit form, and say whether the `:` line is
+     * written. Without it, the value must be an empty node.
+     */
+    public function setExplicitKey(bool $explicit, bool $withColon = true): void
+    {
+        $this->explicitKey = $explicit;
+        $this->explicitColon = $withColon;
+    }
+
+    /**
+     * The comment at the end of an explicit key's `?` line, as in
+     * `? key # comment`. An implicit key shares its line with the value,
+     * whose comment is getEolComment().
+     */
+    public function getKeyEolComment(): ?CommentNode
+    {
+        return $this->keyEolComment;
+    }
+
+    /**
+     * Set or clear the comment at the end of an explicit key's line.
+     * Accepts a CommentNode, a comment text starting with `#`, or null.
+     * It is written only when the key is written in explicit form.
+     */
+    public function setKeyEolComment(CommentNode|string|null $comment): void
+    {
+        if (is_string($comment)) {
+            if (!str_starts_with($comment, '#')) {
+                throw new InvalidArgumentException(
+                    'Comment text must start with `#`; got: ' . $comment,
+                );
+            }
+            $comment = new CommentNode($comment);
+        }
+        $this->keyEolComment?->setParent(null);
+        $this->keyEolComment = $comment;
+        $comment?->setParent($this);
+    }
+
+    /**
+     * Package-internal: the source line of an explicit entry's `:`, 0
+     * when unknown. The emitter keeps a value that began on that line
+     * compact (`: - x`).
+     */
+    public function valueIndicatorLine(): int
+    {
+        return $this->valueIndicatorLine;
+    }
+
+    /**
+     * Package-internal: record the source line of an explicit `:`.
+     */
+    public function setValueIndicatorLineInternal(int $line): void
+    {
+        $this->valueIndicatorLine = $line;
+    }
+
+    /**
+     * Set the spaces or tabs written between the key and its `:`.
+     */
+    public function setColonGap(string $gap): void
+    {
+        if (trim($gap, " \t") !== '') {
+            throw new InvalidArgumentException(
+                'A colon gap may hold only spaces and tabs; got: ' . json_encode($gap),
+            );
+        }
+        $this->colonGap = $gap;
     }
 
     /**

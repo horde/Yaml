@@ -189,10 +189,9 @@ class Dumper
 
             // Quote strings if necessary, and not folded
             if (!$literal
-                && strlen($value)
                 && strpos($value, "\n") === false
-                && (strchr($value, '#') || $value[0] == '*' || $value[0] == '&')) {
-                $value = "'{$value}'";
+                && $this->_needsQuotes($value)) {
+                $value = "'" . str_replace("'", "''", $value) . "'";
             }
         }
 
@@ -207,6 +206,39 @@ class Dumper
         }
 
         return $string;
+    }
+
+    /**
+     * Whether a string must be quoted to be read back as the same string.
+     *
+     * Besides a comment, an alias or an anchor, that is a string the
+     * Loader would read as another type (`2048`, `1.5`, `yes`, `~`), or
+     * would trim or take apart, and a string ending in `:`, which is a
+     * mapping indicator in YAML 1.2 and does not parse there unquoted.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function _needsQuotes(string $value): bool
+    {
+        if ($value === '' || trim($value) !== $value) {
+            return true;
+        }
+        if (strchr($value, '#')
+            || in_array($value[0], ['*', '&', '[', '{', '"', "'"], true)
+            || str_ends_with($value, ':')) {
+            return true;
+        }
+        $lower = mb_strtolower($value);
+        return in_array(
+            $lower,
+            ['null', '~', '.nan', '.inf', '-.inf',
+             'true', 'on', '+', 'yes', 'y',
+             'false', 'off', '-', 'no', 'n'],
+            true
+        )
+            || is_numeric($value);
     }
 
     /**

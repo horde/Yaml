@@ -17,9 +17,11 @@ layer.
 
 ## Highlights
 
-- **100% YAML 1.2 conformance.** All 391 cases from the upstream
-  yaml-test-suite pass: every spec example loads as the spec says it
-  should, every malformed input is rejected.
+- **100% YAML 1.2 conformance.** 390 of the 391 cases from the
+  upstream yaml-test-suite pass: every spec example loads as the spec
+  says it should, every malformed input is rejected. The other, 2JQS,
+  repeats a mapping key; it is a valid event stream, but YAML 1.2
+  requires unique keys, so `strictYaml12()` refuses it by design.
 - **Byte-identical round-trip.** Loading a source file and dumping it
   back without mutation produces the exact same bytes. Comments,
   blank lines, end-of-line spacing, quoting style, and flow layout
@@ -40,7 +42,7 @@ layer.
 
 | Suite | Cases | Pass |
 |---|---|---|
-| yaml-test-suite (YAML 1.2 reference) | 391 | 391 (100%) |
+| yaml-test-suite (YAML 1.2 reference) | 391 | 390, and 2JQS refused by design |
 | Round-trip probe (comments, whitespace, trivia) | 15 | 15 (100%) |
 | Unit tests | 1401 | 1401 (100%) |
 

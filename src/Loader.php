@@ -232,7 +232,7 @@ class Loader
                 $parent->children = true;
                 if (is_array($parent->data)) {
                     $key = key($parent->data);
-                    if (isset($parent->data[$key])) {
+                    if ($key !== null && isset($parent->data[$key])) {
                         $chk = $parent->data[$key];
                         if (!is_array($chk)
                             && preg_match('/^(>|\|)([-+\d]*)/', $chk, $match)) {
@@ -317,7 +317,9 @@ class Loader
             // if this node has a YAML reference in it.
             $is_array = is_array($node->data);
             $key = key($node->data);
-            $isset = isset($node->data[$key]);
+            // key() is null for an empty array, and null as an offset is
+            // deprecated as of PHP 8.5.
+            $isset = $key !== null && isset($node->data[$key]);
             if ($isset) {
                 $nodeval = $node->data[$key];
                 if ($is_array) {
@@ -475,8 +477,10 @@ class Loader
             $value = trim(implode(': ', $array));
             $value = $this->_toType($value);
             $value = [$key => $value];
-        } elseif (preg_match("/{(.+)}$/", $value, $matches)) {
-            // Inline Mapping
+        } elseif (preg_match('/^\\{(.+)\\}$/', $value, $matches)) {
+            // Inline Mapping. Anchored at both ends: unanchored, a plain
+            // scalar that merely ends in braces, such as `${HOME}`, was
+            // taken for one and threw a TypeError.
 
             // Take out strings sequences and mappings
             $explode = $this->_inlineEscape($matches[1]);

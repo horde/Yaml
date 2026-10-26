@@ -259,7 +259,16 @@ final class Scanner
                         : $tokens[count($tokens) - 1]->type;
                     $previousWasProperty = $lastTokenType === TokenType::Anchor
                         || $lastTokenType === TokenType::Tag;
-                    if ($previousWasProperty || $startsWithAlias) {
+                    // Case (b) holds only for a property alone on its
+                    // line. One on the same line as the key is the
+                    // key's, as in case (a): U3XV's `top3:\n  &k3
+                    // key3: three` is `+MAP`, `=VAL &k3 :key3`. It was
+                    // given to the mapping.
+                    $afterProperties = $this->skipPropertiesOnLine($this->pos);
+                    $sharesLineWithKey = $afterProperties < $this->length
+                        && $this->source[$afterProperties] !== "\n"
+                        && $this->source[$afterProperties] !== '#';
+                    if ($previousWasProperty || $startsWithAlias || $sharesLineWithKey) {
                         // Alias-as-key path: BlockMappingStart goes
                         // BEFORE the alias so the alias is the key
                         // node inside the new map.
@@ -312,18 +321,8 @@ final class Scanner
                     ));
                 }
                 if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
-                    $commentLine = $this->line;
-                    $commentColumn = $this->column;
-                    $text = '';
-                    while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                        $text .= $this->currentChar();
-                        $this->advance();
-                    }
-                    $this->triviaBuffer[] = TriviaToken::comment(
-                        $text,
-                        $commentLine,
-                        $commentColumn,
-                    );
+                    // With its gap, so `&node # c` keeps its spacing.
+                    $this->triviaBuffer[] = $this->consumeCommentAfterProperties();
                 }
                 // If the property has no inline value, advance past
                 // the trailing newline so the next iteration picks up
@@ -544,13 +543,29 @@ final class Scanner
                     }
                     if ($startIdx !== null) {
                         $startTok = $tokens[$startIdx];
-                        // The entry's host indent is the flow's
-                        // opening column - 1, not the colon's column.
+                        // Anchors and tags on the same line as the
+                        // flow container are the key's, so they go
+                        // inside the mapping with it: between any
+                        // BlockMappingStart and the Key marker. Left
+                        // before BlockMappingStart they were the
+                        // mapping's (`- &k [x]: y`).
+                        $propIdx = $startIdx;
+                        while ($propIdx > 0
+                            && ($tokens[$propIdx - 1]->type === TokenType::Anchor
+                                || $tokens[$propIdx - 1]->type === TokenType::Tag)
+                            && $tokens[$propIdx - 1]->line === $startTok->line
+                        ) {
+                            $propIdx--;
+                        }
+                        // The entry's host indent is the column - 1
+                        // of the flow's opening, or of the first
+                        // property before it, not the colon's column.
                         // Used for both the indent stack push and
                         // the deeper-next-line value detection
                         // (yaml-test-suite Q9WF).
-                        $effectiveIndent = $startTok->column - 1;
-                        $before = array_slice($tokens, 0, $startIdx);
+                        $effectiveIndent = $tokens[$propIdx]->column - 1;
+                        $before = array_slice($tokens, 0, $propIdx);
+                        $properties = array_slice($tokens, $propIdx, $startIdx - $propIdx);
                         $flow = array_slice($tokens, $startIdx);
                         $tokens = $before;
                         if ($needPush) {
@@ -558,8 +573,11 @@ final class Scanner
                             $tokens[] = $this->makeStructural(
                                 TokenType::BlockMappingStart,
                                 $startTok->line,
-                                $startTok->column,
+                                $effectiveIndent + 1,
                             );
+                        }
+                        foreach ($properties as $ptok) {
+                            $tokens[] = $ptok;
                         }
                         $tokens[] = new Token(
                             type: TokenType::Key,
@@ -589,6 +607,7 @@ final class Scanner
                 if ($flowAsKey) {
                     // The flow container has already been emitted as
                     // the key node; emit only the Value indicator.
+                    $colonGap = $this->gapBeforeColon();
                     $this->advance(); // consume `:`
                     if ($this->pos < $this->length
                         && ($this->source[$this->pos] === ' '
@@ -600,6 +619,7 @@ final class Scanner
                         type: TokenType::Value,
                         line: $this->line,
                         column: $this->column,
+                        value: $colonGap,
                     );
                     // Skip a trailing EOL comment so the empty-value
                     // path fires for `: # comment\n  content` shapes
@@ -780,6 +800,7 @@ final class Scanner
         $dashIndent = $this->column - 1;
 
         $this->advance(); // consume `-`
+        $afterDash = $this->pos;
 
         $tokens[] = new Token(
             type: TokenType::BlockEntry,
@@ -804,19 +825,23 @@ final class Scanner
         // newline check below fires for `-  # comment\n` (per
         // YAML 1.2 §6.6 a comment ends the line). The comment text is
         // captured as trivia for the next token.
+        $emptyValueComment = null;
         if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
             $commentLine = $this->line;
             $commentColumn = $this->column;
+            $gap = substr($this->source, $afterDash, $this->pos - $afterDash);
             $text = '';
             while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
                 $text .= $this->currentChar();
                 $this->advance();
             }
-            $this->triviaBuffer[] = TriviaToken::comment(
+            $emptyValueComment = TriviaToken::comment(
                 $text,
                 $commentLine,
                 $commentColumn,
+                $gap,
             );
+            $this->triviaBuffer[] = $emptyValueComment;
         }
 
         // Empty value? End of line means either an empty scalar or a
@@ -840,12 +865,20 @@ final class Scanner
                 }
                 return;
             }
+            // An empty item: a comment after the dash is its end-of-line
+            // comment. Left in the buffer, it became the next item's
+            // leading comment, on a line of its own.
+            $trailing = [];
+            if ($emptyValueComment !== null && end($this->triviaBuffer) === $emptyValueComment) {
+                $trailing[] = array_pop($this->triviaBuffer);
+            }
             $tokens[] = new Token(
                 type: TokenType::Scalar,
                 line: $this->line,
                 column: $this->column,
                 value: '',
                 style: ScalarStyle::Plain,
+                trailingTrivia: $trailing,
             );
             return;
         }
@@ -863,9 +896,7 @@ final class Scanner
             || $this->source[$this->pos] === '{'
         ) {
             $this->scanFlowContainer($tokens);
-            if ($this->pos < $this->length && $this->source[$this->pos] === "\n") {
-                $this->advance();
-            }
+            $this->consumeNewlineAfterFlow();
             return;
         }
 
@@ -902,8 +933,25 @@ final class Scanner
         }
 
         if ($this->lineStartsBlockMappingEntry($this->column - 1)) {
+            // Anchors and tags before the first key, on the dash's line,
+            // are the key's. They were left to consumeScalar(), which
+            // read them as part of the key's text: `- &k a: b` had the
+            // key "&k a". A flow-collection key is left to the scan
+            // loop's `:` handling, as it is without properties; that
+            // splice moves the properties inside the mapping.
+            $afterProperties = $this->skipPropertiesOnLine($this->pos);
+            if ($afterProperties > $this->pos
+                && ($this->source[$afterProperties] === '['
+                    || $this->source[$afterProperties] === '{')
+            ) {
+                $this->scanProperties($tokens);
+                $this->scanFlowContainer($tokens);
+                return;
+            }
+
             // Block mapping starting on the same line as the `-`.
-            // The map's indent is the column of the first key.
+            // The map's indent is the column of the first key, or of
+            // the first property before it.
             $mapIndent = $this->column - 1;
             $top = $this->indentStack === [] ? null : end($this->indentStack);
             if ($top === null || $top[0] < $mapIndent || $top[1] !== 'map') {
@@ -913,6 +961,9 @@ final class Scanner
                     $this->line,
                     $this->column,
                 );
+            }
+            if ($afterProperties > $this->pos) {
+                $this->scanProperties($tokens);
             }
             $this->scanBlockMapEntry($tokens);
             return;
@@ -935,9 +986,10 @@ final class Scanner
                 $this->advance();
             }
             if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
-                while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                    $this->advance();
-                }
+                // Kept as trivia for the value that follows, as after a
+                // mapping value's properties. It was skipped and lost,
+                // so `- &a # c` dropped `# c`.
+                $this->triviaBuffer[] = $this->consumeCommentAfterProperties();
             }
         }
 
@@ -947,9 +999,7 @@ final class Scanner
                 || $this->source[$this->pos] === '{')
         ) {
             $this->scanFlowContainer($tokens);
-            if ($this->pos < $this->length && $this->source[$this->pos] === "\n") {
-                $this->advance();
-            }
+            $this->consumeNewlineAfterFlow();
             return;
         }
 
@@ -1024,6 +1074,13 @@ final class Scanner
                 }
                 continue;
             }
+            // A flow collection after the properties is a key only when a
+            // `:` follows its closing bracket (yaml-test-suite 6BFJ). A
+            // `: ` inside it is the collection's own; taken for a key
+            // boundary, `&m {a: 1}` read as the key "&m {a".
+            if ($c === '[' || $c === '{') {
+                return $this->flowCollectionIsImplicitKeyAt($i);
+            }
             // Non-property, non-whitespace, non-newline. Reuse the
             // existing helper to test whether this position starts a
             // block-mapping entry (`key: ...`).
@@ -1037,6 +1094,81 @@ final class Scanner
     }
 
     /**
+     * The offset of the first byte after any anchors and tags, and the
+     * spaces or tabs after them, from $i on the current line.
+     */
+    private function skipPropertiesOnLine(int $i): int
+    {
+        while ($i < $this->length
+            && ($this->source[$i] === '&' || $this->source[$i] === '!')
+        ) {
+            while ($i < $this->length
+                && !in_array($this->source[$i], [' ', "\t", "\n", ',', '[', ']', '{', '}'], true)
+            ) {
+                $i++;
+            }
+            while ($i < $this->length
+                && ($this->source[$i] === ' ' || $this->source[$i] === "\t")
+            ) {
+                $i++;
+            }
+        }
+        return $i;
+    }
+
+    /**
+     * Whether the flow collection opening at $i is an implicit key: it
+     * closes on the same line and its closing bracket is followed,
+     * after optional spaces, by a `:` and then whitespace or the end
+     * of the line. Brackets inside quoted scalars are not counted.
+     */
+    private function flowCollectionIsImplicitKeyAt(int $i): bool
+    {
+        $depth = 0;
+        while ($i < $this->length) {
+            $c = $this->source[$i];
+            if ($c === "\n") {
+                return false;
+            }
+            if ($c === '"' || $c === "'") {
+                $i++;
+                while ($i < $this->length && $this->source[$i] !== $c) {
+                    if ($this->source[$i] === "\n") {
+                        return false;
+                    }
+                    if ($c === '"' && $this->source[$i] === '\\') {
+                        $i++;
+                    }
+                    $i++;
+                }
+                $i++;
+                continue;
+            }
+            if ($c === '[' || $c === '{') {
+                $depth++;
+            } elseif ($c === ']' || $c === '}') {
+                $depth--;
+                if ($depth === 0) {
+                    $i++;
+                    break;
+                }
+            }
+            $i++;
+        }
+        if ($depth !== 0) {
+            return false;
+        }
+        while ($i < $this->length && ($this->source[$i] === ' ' || $this->source[$i] === "\t")) {
+            $i++;
+        }
+        if (($this->source[$i] ?? '') !== ':') {
+            return false;
+        }
+        $next = $this->source[$i + 1] ?? "\n";
+        return $next === ' ' || $next === "\t" || $next === "\n";
+    }
+
+    /**
      * Look ahead from the current position to determine whether this
      * line starts a block-mapping entry: a plain or quoted scalar
      * followed by `:` followed by whitespace or end-of-line.
@@ -1044,6 +1176,16 @@ final class Scanner
     private function lineStartsBlockMappingEntry(int $indent): bool
     {
         $i = $this->pos;
+
+        // Properties followed by a flow collection, as in a sequence
+        // item `- &m {a: 1}`: the same rule as in
+        // propertySequenceLeadsToBlockKey.
+        $j = $this->skipPropertiesOnLine($i);
+        if ($j > $i && $j < $this->length
+            && ($this->source[$j] === '[' || $this->source[$j] === '{')
+        ) {
+            return $this->flowCollectionIsImplicitKeyAt($j);
+        }
 
         // Skip a quoted scalar (single or double). Quoted keys are
         // common.
@@ -1137,6 +1279,7 @@ final class Scanner
         $qLine = $this->line;
         $qColumn = $this->column;
         $this->advance(); // consume `?`
+        $afterIndicator = $this->pos;
         // Skip exactly one whitespace after `?`.
         if ($this->pos < $this->length
             && ($this->source[$this->pos] === ' ' || $this->source[$this->pos] === "\t")
@@ -1144,22 +1287,26 @@ final class Scanner
             $this->advance();
         }
 
+        // The value `?` marks the key as written in explicit form, so the
+        // emitter can write it back that way.
         $tokens[] = new Token(
             type: TokenType::Key,
             line: $qLine,
             column: $qColumn,
+            value: '?',
             leadingTrivia: $this->flushTrivia(),
         );
 
-        // Skip an inline EOL comment after `?` so the empty-key
-        // path correctly fires.
-        if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
-            while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                $this->advance();
-            }
+        // A comment after `?` ends the line, so the empty-key path
+        // below fires. It was skipped and lost; it is now kept, as the
+        // key's end-of-line comment.
+        $keyComment = $this->takeIndicatorComment($afterIndicator);
+        if ($keyComment !== null) {
+            $this->triviaBuffer[] = $keyComment;
         }
 
         $compoundKeyEmitted = false;
+        $this->scanPropertiesBeforeNode($tokens);
         // Empty key on the same line as `?`. Decide whether the key
         // is truly empty (no indented content follows) or a compound
         // key (`?\n  - a\n  - b\n: value`, where the indented content
@@ -1187,12 +1334,18 @@ final class Scanner
                 $this->scanCompoundKeyOrValue($tokens, $entryIndent);
                 $compoundKeyEmitted = true;
             } else {
+                // An empty key; a comment after `?` is its own.
+                $trailing = [];
+                if ($keyComment !== null && end($this->triviaBuffer) === $keyComment) {
+                    $trailing[] = array_pop($this->triviaBuffer);
+                }
                 $tokens[] = new Token(
                     type: TokenType::Scalar,
                     line: $this->line,
                     column: $this->column,
                     value: '',
                     style: ScalarStyle::Plain,
+                    trailingTrivia: $trailing,
                 );
             }
         } elseif ($this->source[$this->pos] === '-'
@@ -1215,20 +1368,11 @@ final class Scanner
             // `? earth: blue\n  : moon: white`, where `earth: blue`
             // is a single-entry mapping serving as the key. Per
             // yaml-test-suite V9D5.
-            $keyMapIndent = $this->column - 1;
-            $this->indentStack[] = [$keyMapIndent, 'map'];
-            $tokens[] = $this->makeStructural(
-                TokenType::BlockMappingStart,
-                $this->line,
-                $this->column,
-            );
-            $this->scanBlockMapEntry($tokens);
-            array_pop($this->indentStack);
-            $tokens[] = new Token(
-                type: TokenType::BlockEnd,
-                line: $this->line,
-                column: $this->column,
-            );
+            //
+            // Scanned as compound content, which continues the mapping
+            // on the lines below at the same indent. Only the first
+            // entry was scanned, so `? a: 1\n  b: 2` did not parse.
+            $this->scanCompoundKeyOrValue($tokens, $entryIndent);
             $compoundKeyEmitted = true;
         } else {
             $tokens[] = $this->consumeScalar();
@@ -1266,19 +1410,32 @@ final class Scanner
                 $vLine = $this->line;
                 $vColumn = $this->column;
                 $this->advance(); // consume `:`
+                $afterColon = $this->pos;
                 if ($this->pos < $this->length
                     && ($this->source[$this->pos] === ' ' || $this->source[$this->pos] === "\t")
                 ) {
                     $this->advance();
                 }
+                // A written `:`, as opposed to the implied one below.
                 $tokens[] = new Token(
                     type: TokenType::Value,
                     line: $vLine,
                     column: $vColumn,
+                    value: '',
                 );
-                // Skip a trailing EOL comment after `: ` so the
-                // empty-value path fires for `: # comment\n  - x`.
-                if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
+                $beforeProperties = $this->pos;
+                $this->scanPropertiesBeforeNode($tokens);
+                // A comment after `: ` ends the line, so the empty-value
+                // path fires for `: # comment\n  - x`. It was skipped and
+                // lost; it is now kept, as the entry's end-of-line
+                // comment. After properties, the whitespace before it
+                // has gone with them.
+                $valueComment = $this->takeIndicatorComment(
+                    $this->pos === $beforeProperties ? $afterColon : $this->pos - 1,
+                );
+                if ($valueComment !== null) {
+                    $this->triviaBuffer[] = $valueComment;
+                } elseif ($this->pos < $this->length && $this->source[$this->pos] === '#') {
                     while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
                         $this->advance();
                     }
@@ -1298,12 +1455,18 @@ final class Scanner
                     ) {
                         $this->scanCompoundKeyOrValue($tokens, $entryIndent);
                     } else {
+                        // An empty value; a comment after `:` is its own.
+                        $trailing = [];
+                        if ($valueComment !== null && end($this->triviaBuffer) === $valueComment) {
+                            $trailing[] = array_pop($this->triviaBuffer);
+                        }
                         $tokens[] = new Token(
                             type: TokenType::Scalar,
                             line: $this->line,
                             column: $this->column,
                             value: '',
                             style: ScalarStyle::Plain,
+                            trailingTrivia: $trailing,
                         );
                     }
                 } elseif ($this->source[$this->pos] === '-'
@@ -1321,20 +1484,9 @@ final class Scanner
                 } elseif ($this->lineStartsBlockMappingEntry($this->column - 1)) {
                     // Inline compound value that is itself a block
                     // mapping: `: moon: white`. yaml-test-suite V9D5.
-                    $valueMapIndent = $this->column - 1;
-                    $this->indentStack[] = [$valueMapIndent, 'map'];
-                    $tokens[] = $this->makeStructural(
-                        TokenType::BlockMappingStart,
-                        $this->line,
-                        $this->column,
-                    );
-                    $this->scanBlockMapEntry($tokens);
-                    array_pop($this->indentStack);
-                    $tokens[] = new Token(
-                        type: TokenType::BlockEnd,
-                        line: $this->line,
-                        column: $this->column,
-                    );
+                    // Scanned as compound content, as the key is, so
+                    // `: b: 2\n  c: 3` continues on the lines below.
+                    $this->scanCompoundKeyOrValue($tokens, $entryIndent);
                 } else {
                     $tokens[] = $this->consumeScalar();
                 }
@@ -1348,6 +1500,7 @@ final class Scanner
         $this->pos = $savedPos;
         $this->line = $savedLine;
         $this->column = $savedColumn;
+        // No value (null): no `:` was written.
         $tokens[] = new Token(
             type: TokenType::Value,
             line: $qLine,
@@ -1360,6 +1513,34 @@ final class Scanner
             value: '',
             style: ScalarStyle::Plain,
         );
+    }
+
+    /**
+     * Scan the anchors and tags at the current position as tokens when
+     * they apply to the node that follows: an explicit key or value
+     * (`? &a a`, `: &b b`), including an empty one (`? &d`).
+     *
+     * They were left to consumeScalar(), which read them as part of the
+     * text, so `? &a a` had the key "&a a" and `: &a` the value "&a".
+     *
+     * Not when they precede the first key of an inline mapping
+     * (`? &k earth: blue`): those are the key's, and are left to the
+     * mapping branch, which scans them after its BlockMappingStart.
+     *
+     * @param list<Token> $tokens
+     */
+    private function scanPropertiesBeforeNode(array &$tokens): void
+    {
+        $after = $this->skipPropertiesOnLine($this->pos);
+        if ($after === $this->pos) {
+            return;
+        }
+        $flowFollows = $after < $this->length
+            && ($this->source[$after] === '[' || $this->source[$after] === '{');
+        if (!$flowFollows && $this->lineStartsBlockMappingEntry($this->column - 1)) {
+            return;
+        }
+        $this->scanProperties($tokens);
     }
 
     /**
@@ -1454,17 +1635,24 @@ final class Scanner
             // Repeatedly scan block-sequence items until we dedent
             // below contentIndent.
             while ($this->pos < $this->length) {
-                // Skip blank lines / trivia.
+                // Skip blank lines / trivia. Each newline here ends a
+                // blank line, and they are recorded as the scan loop
+                // records them. Skipped silently, a blank line after an
+                // explicit entry's sequence value was lost.
+                $blankLine = $this->line;
+                $blankLines = 0;
                 while ($this->pos < $this->length
                     && ($this->source[$this->pos] === ' '
                         || $this->source[$this->pos] === "\t"
                         || $this->source[$this->pos] === "\n")
                 ) {
-                    if ($this->atLineStart() && $this->source[$this->pos] === "\n") {
-                        $this->advance();
-                        continue;
+                    if ($this->source[$this->pos] === "\n") {
+                        $blankLines++;
                     }
                     $this->advance();
+                }
+                if ($blankLines > 0 && $this->pos < $this->length) {
+                    $this->triviaBuffer[] = TriviaToken::blankLines($blankLines, $blankLine, 1);
                 }
                 if ($this->pos >= $this->length) {
                     break;
@@ -1518,7 +1706,8 @@ final class Scanner
         // Block mapping starting on this line: `key: value` (possibly
         // followed by more entries on subsequent lines at
         // contentIndent). yaml-test-suite V9D5 / M2N8/00 / M2N8/01.
-        if ($this->canStartScalar()
+        $startsWithProperties = $this->skipPropertiesOnLine($this->pos) > $this->pos;
+        if (($this->canStartScalar() || $startsWithProperties)
             && $this->lineStartsBlockMappingEntry($contentIndent)
         ) {
             $this->indentStack[] = [$contentIndent, 'map'];
@@ -1527,15 +1716,30 @@ final class Scanner
                 $this->line,
                 $this->column,
             );
+            // Properties before the first key are the key's
+            // (`? &k earth: blue`).
+            if ($startsWithProperties) {
+                $this->scanProperties($tokens);
+            }
             $this->scanBlockMapEntry($tokens);
             // Continue with subsequent entries at the same indent.
             while ($this->pos < $this->length) {
+                // Blank lines are recorded, as in the sequence loop
+                // above.
+                $blankLine = $this->line;
+                $blankLines = 0;
                 while ($this->pos < $this->length
                     && ($this->source[$this->pos] === ' '
                         || $this->source[$this->pos] === "\t"
                         || $this->source[$this->pos] === "\n")
                 ) {
+                    if ($this->source[$this->pos] === "\n") {
+                        $blankLines++;
+                    }
                     $this->advance();
+                }
+                if ($blankLines > 0 && $this->pos < $this->length) {
+                    $this->triviaBuffer[] = TriviaToken::blankLines($blankLines, $blankLine, 1);
                 }
                 if ($this->pos >= $this->length) {
                     break;
@@ -1650,12 +1854,15 @@ final class Scanner
             );
         }
 
-        // Consume the `:` and emit Value.
+        // Consume the `:` and emit Value. An empty key has no gap
+        // before its colon; an alias key does (`*a : x`).
+        $colonGap = $aliasIsKey ? $this->gapBeforeColon() : '';
         $this->advance();
         $tokens[] = new Token(
             type: TokenType::Value,
             line: $colonLine,
             column: $colonColumn,
+            value: $colonGap,
         );
 
         // Skip a single space/tab after the colon.
@@ -1678,6 +1885,40 @@ final class Scanner
                 $this->advance();
             }
             return;
+        }
+
+        // An alias value is an alias, as after any other key. Left to
+        // consumeScalar(), `*b : *a` had the value "*a" (yaml-test-suite
+        // E76Z).
+        if ($this->pos < $this->length && $this->source[$this->pos] === '*') {
+            // Finish the line as consumeScalar() would have, keeping an
+            // end-of-line comment.
+            $tokens[] = $this->withTrailingEolTrivia($this->consumeAnchorOrAlias(TokenType::Alias));
+            if ($this->pos < $this->length && $this->source[$this->pos] === "\n") {
+                $this->advance();
+            }
+            return;
+        }
+
+        // Anchors and tags before the value are the value's. Left to
+        // consumeScalar(), they were read as its text, so `&c : &a`
+        // had the value "&a" rather than an empty node anchored `a`
+        // (yaml-test-suite PW8X).
+        if ($this->skipPropertiesOnLine($this->pos) > $this->pos) {
+            $this->scanProperties($tokens);
+            if ($this->pos >= $this->length || $this->source[$this->pos] === "\n") {
+                $tokens[] = new Token(
+                    type: TokenType::Scalar,
+                    line: $this->line,
+                    column: $this->column,
+                    value: '',
+                    style: ScalarStyle::Plain,
+                );
+                if ($this->pos < $this->length) {
+                    $this->advance();
+                }
+                return;
+            }
         }
 
         // Otherwise consume the value scalar.
@@ -1704,7 +1945,18 @@ final class Scanner
             column: $this->column,
         );
 
-        $tokens[] = $this->consumeScalar(stopAtColon: true);
+        if ($this->pos < $this->length && $this->source[$this->pos] === '*') {
+            // An alias key, as in a sequence item `- *a : x`. Left to
+            // consumeScalar(), it was the string "*a".
+            $tokens[] = $this->consumeAnchorOrAlias(TokenType::Alias);
+            while ($this->pos < $this->length
+                && ($this->source[$this->pos] === ' ' || $this->source[$this->pos] === "\t")
+            ) {
+                $this->advance();
+            }
+        } else {
+            $tokens[] = $this->consumeScalar(stopAtColon: true);
+        }
 
         // Now we expect `:`.
         if ($this->pos >= $this->length || $this->source[$this->pos] !== ':') {
@@ -1716,12 +1968,14 @@ final class Scanner
         }
         $colonLine = $this->line;
         $colonColumn = $this->column;
+        $colonGap = $this->gapBeforeColon();
         $this->advance();
 
         $tokens[] = new Token(
             type: TokenType::Value,
             line: $colonLine,
             column: $colonColumn,
+            value: $colonGap,
         );
 
         // Skip whitespace (one or more spaces/tabs) after the colon.
@@ -1740,6 +1994,7 @@ final class Scanner
         // Trailing comment after `:` introduces an empty value;
         // consume the comment to end of line so it becomes trivia
         // for the following content.
+        $emptyValueComment = null;
         if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
             $commentLine = $this->line;
             $commentColumn = $this->column;
@@ -1748,12 +2003,13 @@ final class Scanner
                 $text .= $this->currentChar();
                 $this->advance();
             }
-            $this->triviaBuffer[] = TriviaToken::comment(
+            $emptyValueComment = TriviaToken::comment(
                 $text,
                 $commentLine,
                 $commentColumn,
                 $gap,
             );
+            $this->triviaBuffer[] = $emptyValueComment;
         }
 
         // Empty value on this line.
@@ -1786,7 +2042,14 @@ final class Scanner
                 return;
             }
 
-            // No deeper content. This is an empty scalar.
+            // No deeper content. This is an empty scalar, and a comment
+            // after the `:` is its end-of-line comment. As leading
+            // trivia of the empty scalar, nothing read it, so `a: # c`
+            // lost `# c`.
+            $trailing = [];
+            if ($emptyValueComment !== null && end($this->triviaBuffer) === $emptyValueComment) {
+                $trailing[] = array_pop($this->triviaBuffer);
+            }
             $tokens[] = new Token(
                 type: TokenType::Scalar,
                 line: $this->line,
@@ -1794,6 +2057,7 @@ final class Scanner
                 value: '',
                 style: ScalarStyle::Plain,
                 leadingTrivia: $this->flushTrivia(),
+                trailingTrivia: $trailing,
             );
             return;
         }
@@ -1816,18 +2080,8 @@ final class Scanner
                 $this->advance();
             }
             if ($this->pos < $this->length && $this->source[$this->pos] === '#') {
-                $commentLine = $this->line;
-                $commentColumn = $this->column;
-                $text = '';
-                while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
-                    $text .= $this->currentChar();
-                    $this->advance();
-                }
-                $this->triviaBuffer[] = TriviaToken::comment(
-                    $text,
-                    $commentLine,
-                    $commentColumn,
-                );
+                // With its gap, so `e: &node # c` keeps its spacing.
+                $this->triviaBuffer[] = $this->consumeCommentAfterProperties();
             }
             // After properties, the value may be empty (alias stands
             // alone) or a scalar follows.
@@ -1844,10 +2098,7 @@ final class Scanner
             || $this->source[$this->pos] === '{'
         ) {
             $this->scanFlowContainer($tokens);
-            // Consume the trailing newline if present.
-            if ($this->pos < $this->length && $this->source[$this->pos] === "\n") {
-                $this->advance();
-            }
+            $this->consumeNewlineAfterFlow();
             return;
         }
 
@@ -2420,7 +2671,12 @@ final class Scanner
                 continue;
             }
             if ($c === '*') {
-                $tokens[] = $this->consumeAnchorOrAlias(TokenType::Alias);
+                // An alias ends its node, so an end-of-line comment after
+                // it is the entry's, as after a scalar. It was collected
+                // as a standalone comment, or skipped in a sequence item,
+                // so `b: *a # c` lost `# c` from its line.
+                $alias = $this->consumeAnchorOrAlias(TokenType::Alias);
+                $tokens[] = $this->eolCommentFollows() ? $this->withTrailingEolTrivia($alias) : $alias;
                 continue;
             }
             if ($c === '!') {
@@ -2450,7 +2706,10 @@ final class Scanner
             ) {
                 break;
             }
-            $name .= $c;
+            // advance() moves by a whole UTF-8 character, so append the
+            // whole character: appending $c kept only its first byte,
+            // and `&😁` was recorded as the anchor "\xF0".
+            $name .= $this->currentChar();
             $this->advance();
         }
 
@@ -2502,7 +2761,7 @@ final class Scanner
                         $startColumn,
                     ));
                 }
-                $tag .= $c;
+                $tag .= $this->currentChar();
                 $this->advance();
             }
             return new Token(
@@ -2522,7 +2781,7 @@ final class Scanner
             ) {
                 break;
             }
-            $tag .= $c;
+            $tag .= $this->currentChar();
             $this->advance();
         }
         // `!` alone is the non-specific tag per YAML 1.2 §6.9.1.
@@ -3446,6 +3705,7 @@ final class Scanner
     {
         $startLine = $this->line;
         $startColumn = $this->column;
+        $quoteStart = $this->pos;
 
         // Capture the parent block context's indent for the
         // quoted-continuation indent check.
@@ -3506,6 +3766,7 @@ final class Scanner
                 }
                 // Closing quote.
                 $this->advance();
+                $rawSource = $this->multiLineQuotedSource($quoteStart);
 
                 // Capture trailing trivia after the close (EOL comment etc).
                 $trailing = $this->collectTrailingEolTrivia();
@@ -3529,6 +3790,7 @@ final class Scanner
                     style: ScalarStyle::SingleQuoted,
                     leadingTrivia: $this->flushTrivia(),
                     trailingTrivia: $trailing,
+                    rawSource: $rawSource,
                 );
             }
 
@@ -3709,6 +3971,7 @@ final class Scanner
     {
         $startLine = $this->line;
         $startColumn = $this->column;
+        $quoteStart = $this->pos;
 
         // Capture the parent block context's indent for the
         // quoted-continuation indent check (YAML 1.2 §7.5,
@@ -3769,6 +4032,7 @@ final class Scanner
             if ($c === '"') {
                 // Closing quote.
                 $this->advance();
+                $rawSource = $this->multiLineQuotedSource($quoteStart);
                 $trailing = $this->collectTrailingEolTrivia();
                 // In a flow context, leave the trailing newline for
                 // the flow loop to validate (yaml-test-suite ZXT5).
@@ -3788,6 +4052,7 @@ final class Scanner
                     style: ScalarStyle::DoubleQuoted,
                     leadingTrivia: $this->flushTrivia(),
                     trailingTrivia: $trailing,
+                    rawSource: $rawSource,
                 );
             }
 
@@ -3926,6 +4191,139 @@ final class Scanner
      *
      * @return list<TriviaToken>
      */
+    /**
+     * The spaces and tabs between an implicit key and its `:`, with the
+     * current position on the `:`. Recorded so `key : value` is not
+     * re-emitted as `key: value`. Empty when nothing but whitespace
+     * precedes the colon on its line, which is an empty key.
+     */
+    private function gapBeforeColon(): string
+    {
+        $i = $this->pos - 1;
+        while ($i >= 0 && ($this->source[$i] === ' ' || $this->source[$i] === "\t")) {
+            $i--;
+        }
+        if ($i < 0 || $this->source[$i] === "\n") {
+            return '';
+        }
+        return substr($this->source, $i + 1, $this->pos - $i - 1);
+    }
+
+    /**
+     * When the rest of the line after an indicator (`?` or an explicit
+     * `:`) is only a comment, consume it and return it as trivia, with
+     * the bytes between the indicator and the `#` as its gap. Returns
+     * null and consumes nothing otherwise.
+     */
+    private function takeIndicatorComment(int $afterIndicator): ?TriviaToken
+    {
+        $i = $this->pos;
+        while ($i < $this->length && ($this->source[$i] === ' ' || $this->source[$i] === "\t")) {
+            $i++;
+        }
+        // A comment needs whitespace before its `#`.
+        if (($this->source[$i] ?? '') !== '#' || $i === $afterIndicator) {
+            return null;
+        }
+        while ($this->pos < $i) {
+            $this->advance();
+        }
+        $line = $this->line;
+        $column = $this->column;
+        $text = '';
+        while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
+            $text .= $this->currentChar();
+            $this->advance();
+        }
+        return TriviaToken::comment($text, $line, $column, substr($this->source, $afterIndicator, $i - $afterIndicator));
+    }
+
+    /**
+     * Step past the end of the line a block-context flow collection
+     * ended on, unless scanFlowContainer() already has. It steps past
+     * the newline after a closing bracket itself, so its callers then
+     * consumed the next line's newline, and a blank line after a flow
+     * value (`a: []\n\nb: 1`) was lost.
+     */
+    private function consumeNewlineAfterFlow(): void
+    {
+        if ($this->pos < $this->length
+            && $this->source[$this->pos] === "\n"
+            && ($this->pos === 0 || $this->source[$this->pos - 1] !== "\n")
+        ) {
+            $this->advance();
+        }
+    }
+
+    /**
+     * The source of a quoted scalar from its opening quote to the current
+     * position, just past the closing one, when it spans lines; null
+     * otherwise. A multi-line plain scalar already kept its source. A
+     * quoted one did not, so `"double\n  quotes"` was re-emitted folded
+     * onto one line: the same value, but not what was written.
+     */
+    private function multiLineQuotedSource(int $quoteStart): ?string
+    {
+        $source = substr($this->source, $quoteStart, $this->pos - $quoteStart);
+        return str_contains($source, "\n") ? $source : null;
+    }
+
+    /**
+     * Consume the comment at the current position, which must be on a
+     * `#`, and return it as trivia. Its gap is the spaces and tabs just
+     * before it, which scanProperties() has already consumed by the
+     * time a comment after properties is reached.
+     */
+    private function consumeCommentAfterProperties(): TriviaToken
+    {
+        $start = $this->pos;
+        while ($start > 0 && ($this->source[$start - 1] === ' ' || $this->source[$start - 1] === "\t")) {
+            $start--;
+        }
+        $gap = substr($this->source, $start, $this->pos - $start);
+        $line = $this->line;
+        $column = $this->column;
+        $text = '';
+        while ($this->pos < $this->length && $this->source[$this->pos] !== "\n") {
+            $text .= $this->currentChar();
+            $this->advance();
+        }
+        return TriviaToken::comment($text, $line, $column, $gap);
+    }
+
+    /**
+     * Whether the rest of the line is whitespace and then a comment.
+     */
+    private function eolCommentFollows(): bool
+    {
+        $i = $this->pos;
+        while ($i < $this->length && ($this->source[$i] === ' ' || $this->source[$i] === "\t")) {
+            $i++;
+        }
+        return $i > $this->pos && ($this->source[$i] ?? '') === '#';
+    }
+
+    /**
+     * $token with the rest of the line's whitespace and end-of-line
+     * comment as its trailing trivia, as consumeScalar() records for a
+     * scalar. Token is readonly, so this is a copy.
+     */
+    private function withTrailingEolTrivia(Token $token): Token
+    {
+        return new Token(
+            type: $token->type,
+            line: $token->line,
+            column: $token->column,
+            value: $token->value,
+            style: $token->style,
+            chomp: $token->chomp,
+            indentIndicator: $token->indentIndicator,
+            leadingTrivia: $token->leadingTrivia,
+            trailingTrivia: [...$token->trailingTrivia, ...$this->collectTrailingEolTrivia()],
+            rawSource: $token->rawSource,
+        );
+    }
+
     private function collectTrailingEolTrivia(): array
     {
         $trailing = [];

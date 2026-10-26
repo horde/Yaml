@@ -182,6 +182,9 @@ final class Resolver
             foreach ($node->entries() as $entry) {
                 $this->resolveNode($entry);
             }
+            if ($this->policy !== null && !$this->policy->acceptDuplicateMappingKeys) {
+                $this->refuseDuplicateKeys($node);
+            }
             return;
         }
 
@@ -211,6 +214,42 @@ final class Resolver
         }
     }
 
+    /**
+     * Per YAML 1.2 §3.2.1.1 the keys of a mapping are unique. Two
+     * scalar keys are the same key when they resolve to the same typed
+     * value, so `1` and `"1"` are different keys and `1` and `0x1` are
+     * the same. Runs after the keys are resolved, for that reason.
+     *
+     * Compound and alias keys are not compared, and nor is the merge
+     * key `<<`, which has its own meaning.
+     */
+    private function refuseDuplicateKeys(MapNode $map): void
+    {
+        $seen = [];
+        foreach ($map->entries() as $entry) {
+            $key = $entry->getKey();
+            if (!$key instanceof ScalarNode) {
+                continue;
+            }
+            $value = $key->getValue();
+            if ($value === '<<' && $key->getStyle() === ScalarStyle::Plain) {
+                continue;
+            }
+            $identity = var_export($value, true);
+            if (isset($seen[$identity])) {
+                throw new ParseException(sprintf(
+                    'Duplicate mapping key "%s" at line %d column %d, first '
+                        . 'at line %d (allow with acceptDuplicateMappingKeys)',
+                    $entry->getKeyString(),
+                    $entry->line(),
+                    $entry->column(),
+                    $seen[$identity]->line(),
+                ));
+            }
+            $seen[$identity] = $entry;
+        }
+    }
+
     private function resolveScalar(ScalarNode $node): void
     {
         $tag = $node->getTag();
@@ -221,6 +260,12 @@ final class Resolver
         if ($tag !== null) {
             $expanded = $this->expandTagShorthand($tag);
             $this->applyTag($node, $expanded, $sourceBytes);
+            // A tagged empty node keeps its empty source, as an untagged
+            // one does: `a: !!null` came back as `a: !!null null`, and
+            // `a: !!str` as `a: !!str ''`.
+            if ($sourceBytes === '' && $style === ScalarStyle::Plain) {
+                $node->setRawSource('');
+            }
             return;
         }
 
@@ -242,7 +287,10 @@ final class Resolver
         // Null
         if (preg_match(self::NULL_PATTERN, $source)) {
             $node->setValue(null);
-            $node->setRawSource($source === 'null' || $source === '' ? null : $source);
+            // An empty node keeps its empty source. Without it the emitter
+            // wrote the canonical `null`, so `a:` came back as `a: null`
+            // and `? \n: x` as `null: x`.
+            $node->setRawSource($source === 'null' ? null : $source);
             return;
         }
 
