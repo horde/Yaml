@@ -535,6 +535,18 @@ final class Parser
             if ($pendingTag !== null && !($keyNode instanceof AliasNode)) {
                 $keyNode->setTag($pendingTag->value ?? '');
             }
+            // An entry whose key carries properties starts at the first
+            // of them, not at the key. The emitter takes a mapping's
+            // indent from its entries' columns, so `&k a: b` indented
+            // two was re-emitted indented five.
+            foreach ([$pendingTag, $pendingAnchor] as $property) {
+                if ($property !== null
+                    && $property->line === $keyToken->line
+                    && $property->column < $entry->column()
+                ) {
+                    $entry->setPosition($property->line, $property->column);
+                }
+            }
             $map->appendChildInternal($entry);
         }
 
@@ -724,12 +736,15 @@ final class Parser
         $entryToken = $this->expect(TokenType::BlockEntry);
 
         // EOL comment, if any, is on the upcoming value token's
-        // trailing trivia.
+        // trailing trivia, whether a scalar or an alias.
         $valueLeader = $this->peek();
         $eolComment = null;
-        if ($valueLeader !== null && $valueLeader->type === TokenType::Scalar) {
+        if ($valueLeader !== null
+            && ($valueLeader->type === TokenType::Scalar || $valueLeader->type === TokenType::Alias)
+        ) {
             $eolComment = $this->extractEolCommentFromTrailingTrivia($valueLeader);
         }
+        $eolComment ??= $this->takeNestedBlockEolComment($entryToken->line);
 
         $value = $this->parseNode();
         if ($value === null) {
@@ -739,6 +754,8 @@ final class Parser
                 $entryToken->column,
             ));
         }
+
+        $eolComment ??= $this->flowValueEolComment($value);
 
         $item = new SequenceItem($value, $eolComment);
         $item->setPosition($entryToken->line, $entryToken->column);
@@ -909,6 +926,26 @@ final class Parser
                 $keyToken->column,
             ));
         }
+        // An explicit key's line can end in a comment of its own: on the
+        // key scalar's trailing trivia (`? key # c`), or, when the key is
+        // a block collection, first on that collection's leading trivia
+        // (`? # c\n  - a`), as for a value in the F2 case below.
+        $keyEolComment = null;
+        if ($keyToken->value === '?') {
+            if ($keyPeek->type === TokenType::Scalar || $keyPeek->type === TokenType::Alias) {
+                $keyEolComment = $this->extractEolCommentFromTrailingTrivia($keyPeek);
+            } elseif (($keyPeek->type === TokenType::BlockMappingStart
+                    || $keyPeek->type === TokenType::BlockSequenceStart)
+                && ($keyPeek->leadingTrivia[0] ?? null)?->type === TriviaType::Comment
+                && $keyPeek->leadingTrivia[0]->line === $keyToken->line
+            ) {
+                $first = $keyPeek->leadingTrivia[0];
+                $keyEolComment = new CommentNode($first->text, max(0, $first->column - 1), $first->gap);
+                $keyEolComment->setPosition($first->line, $first->column);
+                $this->stripFirstLeadingTriviaAt($this->pos);
+            }
+        }
+
         if ($keyPeek->type === TokenType::Scalar) {
             $keyNode = $this->buildScalarNode($this->consume());
         } else {
@@ -926,10 +963,13 @@ final class Parser
         $valueToken = $this->expect(TokenType::Value);
 
         // Capture the trailing trivia of the upcoming value token to
-        // produce the entry's EOL comment, if any.
+        // produce the entry's EOL comment, if any. An alias value
+        // carries one as a scalar does.
         $valueLeader = $this->peek();
         $eolComment = null;
-        if ($valueLeader !== null && $valueLeader->type === TokenType::Scalar) {
+        if ($valueLeader !== null
+            && ($valueLeader->type === TokenType::Scalar || $valueLeader->type === TokenType::Alias)
+        ) {
             $eolComment = $this->extractEolCommentFromTrailingTrivia($valueLeader);
         }
 
@@ -940,27 +980,7 @@ final class Parser
         // Extract it as the entry's EOL comment so round-trip puts
         // the `#` back on the colon's line instead of as a standalone
         // comment under the nested value.
-        if (
-            $eolComment === null
-            && $valueLeader !== null
-            && (
-                $valueLeader->type === TokenType::BlockMappingStart
-                || $valueLeader->type === TokenType::BlockSequenceStart
-            )
-            && count($valueLeader->leadingTrivia) > 0
-        ) {
-            $first = $valueLeader->leadingTrivia[0];
-            if (
-                $first->type === TriviaType::Comment
-                && $first->line === $valueToken->line
-            ) {
-                $eolComment = new CommentNode($first->text, max(0, $first->column - 1), $first->gap);
-                $eolComment->setPosition($first->line, $first->column);
-                // Strip this one trivia entry from the inner token so
-                // it isn't re-emitted as a child of the nested value.
-                $this->stripFirstLeadingTriviaAt($this->pos);
-            }
-        }
+        $eolComment ??= $this->takeNestedBlockEolComment($valueToken->line);
 
         // Value: a scalar, a nested mapping, or other node types.
         $value = $this->parseNode();
@@ -972,9 +992,91 @@ final class Parser
             ));
         }
 
+        $eolComment ??= $this->flowValueEolComment($value);
+
         $entry = new MapEntry($keyNode, $value, $eolComment);
         $entry->setPosition($keyToken->line, $keyToken->column);
+        if ($keyToken->value === '?') {
+            // `? key`, with a `:` line unless the Value token is the
+            // scanner's implied one.
+            $entry->setExplicitKey(true, withColon: $valueToken->value !== null);
+            $entry->setKeyEolComment($keyEolComment);
+            if ($valueToken->value !== null) {
+                $entry->setValueIndicatorLineInternal($valueToken->line);
+            }
+        } else {
+            // The scanner records the spaces before the colon on the
+            // Value token, so `key : value` keeps them.
+            $entry->setColonGap($valueToken->value ?? '');
+        }
         return $entry;
+    }
+
+    /**
+     * F2: when the value is a nested block (mapping/sequence), the
+     * scanner emits a BlockMappingStart / BlockSequenceStart for the
+     * inner container next. A `# comment` written on the SAME line as
+     * the indicator (`:` or `-`) lands on that inner token's
+     * leadingTrivia. Take it as the entry's EOL comment so round-trip
+     * puts the `#` back on the indicator's line instead of as a
+     * standalone comment under the nested value.
+     *
+     * The container may follow the value's anchor or tag
+     * (`e: &node # c`); only the token right after the indicator was
+     * looked at, so that comment was moved to a line of its own. Nor
+     * was a sequence item's (`- # c`) looked at, so that comment was
+     * moved too.
+     *
+     * A scalar value written on the next line (`c: # c\n  d`) carries
+     * the comment the same way, and nothing read it there, so it was
+     * lost. It is kept as the entry's EOL comment, written after the
+     * value.
+     */
+    private function takeNestedBlockEolComment(int $indicatorLine): ?CommentNode
+    {
+        $idx = $this->pos;
+        while (($this->tokens[$idx] ?? null)?->type === TokenType::Anchor
+            || ($this->tokens[$idx] ?? null)?->type === TokenType::Tag
+        ) {
+            $idx++;
+        }
+        $leader = $this->tokens[$idx] ?? null;
+        if ($leader === null
+            || ($leader->type !== TokenType::BlockMappingStart
+                && $leader->type !== TokenType::BlockSequenceStart
+                && $leader->type !== TokenType::Scalar)
+        ) {
+            return null;
+        }
+        $first = $leader->leadingTrivia[0] ?? null;
+        if ($first === null || $first->type !== TriviaType::Comment || $first->line !== $indicatorLine) {
+            return null;
+        }
+        $comment = new CommentNode($first->text, max(0, $first->column - 1), $first->gap);
+        $comment->setPosition($first->line, $first->column);
+        // Strip this one trivia entry from the inner token so it isn't
+        // re-emitted as a child of the nested value.
+        $this->stripFirstLeadingTriviaAt($idx);
+        return $comment;
+    }
+
+    /**
+     * The end-of-line comment after a flow collection just parsed as a
+     * value. The scanner records it on the closing bracket's token, not
+     * on the value's first token where the callers look, so
+     * `k: [x] # c` lost its comment.
+     */
+    private function flowValueEolComment(MapNode|SequenceNode|ScalarNode|AliasNode $value): ?CommentNode
+    {
+        $isFlow = ($value instanceof MapNode && $value->getStyle() === MapStyle::Flow)
+            || ($value instanceof SequenceNode && $value->getStyle() === SequenceStyle::Flow);
+        $closing = $this->tokens[$this->pos - 1] ?? null;
+        if (!$isFlow || $closing === null
+            || ($closing->type !== TokenType::FlowSequenceEnd && $closing->type !== TokenType::FlowMappingEnd)
+        ) {
+            return null;
+        }
+        return $this->extractEolCommentFromTrailingTrivia($closing);
     }
 
     private function parseScalar(): ScalarNode

@@ -29,7 +29,7 @@ return  [
     '2G84/01' => 'error',
     '2G84/02' => 'pass',
     '2G84/03' => 'pass',
-    '2JQS' => 'pass',
+    '2JQS' => 'skip:duplicate keys; a valid event stream, but YAML 1.2 §3.2.1.1 requires unique keys and strictYaml12 refuses them (acceptDuplicateMappingKeys)',
     '2LFX' => 'pass',
     '2SXE' => 'pass',
     '2XXW' => 'pass',

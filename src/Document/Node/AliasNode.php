@@ -158,6 +158,12 @@ final class AliasNode implements Node
                     $clonedKey = $this->cloneAnyValue($child->getKey());
                     $clonedValue = $this->cloneAnyValue($child->getValue());
                     $clonedEntry = new MapEntry($clonedKey, $clonedValue);
+                    $clonedEntry->setColonGap($child->getColonGap());
+                    $clonedEntry->setExplicitKey($child->isExplicitKey(), $child->hasExplicitColon());
+                    $keyEol = $child->getKeyEolComment();
+                    if ($keyEol !== null) {
+                        $clonedEntry->setKeyEolComment(new CommentNode($keyEol->getText()));
+                    }
                     $eol = $child->getEolComment();
                     if ($eol !== null) {
                         $clonedEntry->setEolComment(new CommentNode($eol->getText()));

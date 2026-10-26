@@ -170,11 +170,17 @@ final class YamlStream
     /**
      * Append a deep-clone of $doc to the end of this stream's
      * documents list. Returns the cloned document.
+     *
+     * A document after the first needs a `---` to separate it, so the
+     * marker is set then, as insertDocumentAt() does. The first keeps
+     * the marker setting it already had.
      */
     public function appendDocument(YamlDocument $doc): YamlDocument
     {
         $clone = $this->cloneDocument($doc);
-        $clone->setStartMarker(true);
+        if ($this->documents !== []) {
+            $clone->setStartMarker(true);
+        }
         $clone->setParentStream($this);
         $this->documents[] = $clone;
         return $clone;
@@ -311,6 +317,12 @@ final class YamlStream
                     $clonedKey = self::cloneValueNode($child->getKey(), $newIndex);
                     $clonedValue = self::cloneValueNode($child->getValue(), $newIndex);
                     $entry = new MapEntry($clonedKey, $clonedValue);
+                    $entry->setColonGap($child->getColonGap());
+                    $entry->setExplicitKey($child->isExplicitKey(), $child->hasExplicitColon());
+                    $keyEol = $child->getKeyEolComment();
+                    if ($keyEol !== null) {
+                        $entry->setKeyEolComment(new CommentNode($keyEol->getText()));
+                    }
                     $eol = $child->getEolComment();
                     if ($eol !== null) {
                         $entry->setEolComment(new CommentNode($eol->getText()));

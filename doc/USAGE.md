@@ -399,9 +399,13 @@ booleans, it loads as strings here. Re-quote or replace with
 
 ## Conformance
 
-The library passes 391 of 391 cases in the upstream yaml-test-suite
+The library passes 390 of 391 cases in the upstream yaml-test-suite
 (YAML 1.2 reference suite). Every spec example loads as the spec
-says it should; every malformed input is rejected.
+says it should; every malformed input is rejected. The remaining
+case, 2JQS, repeats a mapping key. It is valid as an event stream,
+which is what the suite tests, but YAML 1.2 §3.2.1.1 requires a
+mapping's keys to be unique, so `strictYaml12()` refuses it. The
+`acceptDuplicateMappingKeys` flag, on in `hordeCompat()`, accepts it.
 
 ```bash
 git submodule update --init   # fetch the suite

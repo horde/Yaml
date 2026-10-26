@@ -58,7 +58,9 @@ final class ResolverTypingTest extends TestCase
         yield 'null tilde' => ['~', null, '~'];
         yield 'null Capital' => ['Null', null, 'Null'];
         yield 'null UPPER' => ['NULL', null, 'NULL'];
-        yield 'empty string is null per YAML' => ['', null, null];
+        // Retained like `~`: the canonical `null` is not what was written,
+        // and without it `a:` was re-emitted as `a: null`.
+        yield 'empty string is null per YAML' => ['', null, ''];
         yield 'true' => ['true', true, null];
         yield 'True' => ['True', true, 'True'];
         yield 'TRUE' => ['TRUE', true, 'TRUE'];

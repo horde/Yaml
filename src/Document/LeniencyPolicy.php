@@ -54,6 +54,15 @@ final class LeniencyPolicy
          */
         public readonly bool $acceptUndefinedNamedTagHandle = false,
         /**
+         * Tolerate a mapping that repeats a key. Strict YAML 1.2
+         * (§3.2.1.1) requires a mapping's keys to be unique. With this
+         * flag on, the entries are kept and the last one wins when
+         * the mapping is resolved, as in go-yaml and Helm.
+         * yaml-test-suite 2JQS repeats the empty key: it is valid as
+         * an event stream, and so tagged `duplicate-key` there.
+         */
+        public readonly bool $acceptDuplicateMappingKeys = false,
+        /**
          * Umbrella for whitespace and format quirks (trailing
          * whitespace, whitespace-only lines, redundant inter-token
          * gap). Individual flags will be added as each case is reviewed; until then it is one
@@ -96,6 +105,7 @@ final class LeniencyPolicy
             acceptFlowSequenceAsKey: true,
             acceptUnindentedTagBody: true,
             acceptUndefinedNamedTagHandle: true,
+            acceptDuplicateMappingKeys: true,
             tolerateWhitespaceQuirks: true,
         );
     }
