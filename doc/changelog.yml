@@ -1,4 +1,17 @@
 ---
+3.0.3:
+  api: 3.0.3
+  state:
+    release: stable
+    api: stable
+  date: 2026-10-29
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: |-
+    security: Ensure Yaml loader doesn't load inner classes unless allowed
+    docs: Drop references to stages. They are not relevant.
+    doc: Don't mention stages from non-released document
 3.0.2:
   api: 3.0.2
   state:
