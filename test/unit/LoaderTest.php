@@ -22,6 +22,7 @@ use Horde\Yaml\Exception;
 use Horde\Yaml\Loader;
 use Horde\Yaml\Test\Helper\LoaderTestMockLoader;
 use Horde\Yaml\Test\Helper\TestNotSerializable;
+use Horde\Yaml\Test\Helper\TestPoiGadget;
 use Horde\Yaml\Test\Helper\TestSerializable;
 use Horde\Yaml\Yaml;
 use InvalidArgumentException;
@@ -378,6 +379,35 @@ class LoaderTest extends TestCase
         } catch (Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
+    }
+
+    /**
+     * A disallowed class smuggled inside the serialized payload of a
+     * whitelisted carrier must not be instantiated. The whitelist has to be enforced
+     * recursively. ArrayObject still implements Serializable itself.
+     */
+    public function testSerializableCarrierDoesNotBypassWhitelist(): void
+    {
+        $this->assertContains('ArrayObject', Yaml::$allowedClasses);
+        $this->assertNotContains(TestPoiGadget::class, Yaml::$allowedClasses);
+
+        // ArrayObject carrying a the POI gadget class which is not whitelisted itself.
+        $carrier = new ArrayObject(['evil' => new TestPoiGadget()]);
+        $yaml = 'o: !php/object::ArrayObject ' . $carrier->serialize();
+
+        TestPoiGadget::$awoken = false;
+        $result = Yaml::load($yaml);
+
+        // The gadget must never have woken up.
+        $this->assertFalse(
+            TestPoiGadget::$awoken,
+            'Class which was not whitelisted was instantiated through a whitelisted carrier'
+        );
+
+        // The whitelisted carrier itself still loads fine
+        $this->assertInstanceOf(ArrayObject::class, $result['o']);
+        // but the smuggled object is neutralised to an incomplete class.
+        $this->assertInstanceOf(\__PHP_Incomplete_Class::class, $result['o']['evil']);
     }
 
     // Parsing: Sequences
@@ -902,10 +932,6 @@ class LoaderTest extends TestCase
         return __DIR__ . "/../fixtures/{$name}.yml";
     }
 
-    // =========================================================================
-    // GROUP 1: Root Cause - Line 410 (_parseLine)
-    // These tests verify the fix at the source where keys first enter the system.
-    // =========================================================================
 
     /**
      * Test that empty string keys are preserved in simple key-value pairs.
@@ -1049,11 +1075,6 @@ class LoaderTest extends TestCase
         $this->assertEquals(['item1', 'item2'], $result['']['list']);
     }
 
-    // =========================================================================
-    // GROUP 2: Edge Cases - Falsy Values as Keys
-    // These tests verify the fix handles ALL PHP falsy values correctly.
-    // =========================================================================
-
     /**
      * Test string "0" as key (different from numeric 0).
      *
@@ -1139,11 +1160,6 @@ class LoaderTest extends TestCase
         $this->assertArrayNotHasKey('', $result);
     }
 
-    // =========================================================================
-    // GROUP 3: Downstream Behavior - Lines 818/840
-    // These tests verify lines 818/840 don't reintroduce the bug.
-    // =========================================================================
-
     /**
      * Test empty string key when node has children.
      *
@@ -1189,11 +1205,6 @@ class LoaderTest extends TestCase
         $this->assertEquals('leaf-value', $result['parent']['']);
         $this->assertArrayNotHasKey(0, $result['parent']);
     }
-
-    // =========================================================================
-    // GROUP 4: Already-Good Cases (Regression Tests)
-    // These tests ensure the fix doesn't break existing functionality.
-    // =========================================================================
 
     /**
      * Regression test: Normal string keys should continue working.
@@ -1328,11 +1339,6 @@ class LoaderTest extends TestCase
         );
     }
 
-    // =========================================================================
-    // GROUP 5: Real-World Use Cases
-    // These tests verify actual use cases from Horde framework.
-    // =========================================================================
-
     /**
      * Real-world test: PSR-0 autoload with empty prefix for global namespace.
      *
@@ -1420,10 +1426,6 @@ class LoaderTest extends TestCase
         $this->assertArrayHasKey('Horde\\Exception\\', $autoload['psr-4']);
         $this->assertEquals('src/', $autoload['psr-4']['Horde\\Exception\\']);
     }
-
-    // =========================================================================
-    // GROUP 6: Edge Cases and Boundaries
-    // =========================================================================
 
     /**
      * Edge case: Single space as key (not empty string).

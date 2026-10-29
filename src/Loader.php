@@ -570,7 +570,14 @@ class Loader
 
                 $class_data = trim(substr($data, $first_space + 1));
                 $serialized = 'C:' . strlen($class) . ':"' . $class . '":' . strlen($class_data) . ':{' . $class_data . '}';
-                $data = unserialize($serialized);
+                // Constrain unserialize() to the whitelist. Passing allowed_classes
+                // makes PHP enforce the whitelist recursively. Otherwise
+                // wrapping a disallowed class inside a whitelisted carrier
+                // restores full PHP object injection.
+                $data = unserialize(
+                    $serialized,
+                    ['allowed_classes' => Yaml::$allowedClasses]
+                );
                 break;
 
             case 'array':

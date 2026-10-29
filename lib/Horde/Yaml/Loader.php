@@ -560,7 +560,13 @@ class Horde_Yaml_Loader
 
                 $class_data = trim(substr($data, $first_space + 1));
                 $serialized = 'C:' . strlen($class) . ':"' . $class . '":' . strlen($class_data) . ':{' . $class_data . '}';
-                $data = unserialize($serialized);
+                // Passing allowed_classes makes PHP enforce the whitelist recursively.
+                // Otherwise wrapping a disallowed class inside a whitelisted carrier
+                // restores full PHP object injection.
+                $data = unserialize(
+                    $serialized,
+                    array('allowed_classes' => Horde_Yaml::$allowedClasses)
+                );
                 break;
 
             case 'array':

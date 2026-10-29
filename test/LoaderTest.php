@@ -16,6 +16,7 @@ use ArrayObject;
 use DomainException;
 use Horde\Yaml\Test\Helper\LoaderTestMockLoader;
 use Horde\Yaml\Test\Helper\TestNotSerializable;
+use Horde\Yaml\Test\Helper\TestPoiGadget;
 use Horde\Yaml\Test\Helper\TestSerializable;
 use Horde_Yaml;
 use Horde_Yaml_Exception;
@@ -396,6 +397,34 @@ class LoaderTest extends TestCase
         } catch (Horde_Yaml_Exception|LogicException $e) {
             $this->assertEquals('Horde_Yaml_Test_Disallowed is not in the list of allowed classes', $e->getMessage());
         }
+    }
+
+    /**
+     * A disallowed class smuggled inside the serialized payload of a
+     * whitelisted carrier (ArrayObject still implements Serializable)
+     * must not be instantiated. The whitelist has to be enforced
+     * recursively, not just against the tag's outer class name.
+     */
+    public function testSerializableCarrierDoesNotBypassWhitelist()
+    {
+        $this->assertContains('ArrayObject', Horde_Yaml::$allowedClasses);
+        $this->assertNotContains(TestPoiGadget::class, Horde_Yaml::$allowedClasses);
+
+        // ArrayObject carrying a non-whitelisted POI gadget.
+        $carrier = new ArrayObject(['evil' => new TestPoiGadget()]);
+        $yaml = 'o: !php/object::ArrayObject ' . $carrier->serialize();
+
+        TestPoiGadget::$awoken = false;
+        $result = Horde_Yaml::load($yaml);
+
+        // The gadget must never have woken up.
+        $this->assertFalse(
+            TestPoiGadget::$awoken,
+            'Non-whitelisted class was instantiated through a whitelisted carrier'
+        );
+
+        $this->assertInstanceOf(ArrayObject::class, $result['o']);
+        $this->assertInstanceOf(\__PHP_Incomplete_Class::class, $result['o']['evil']);
     }
 
     // Parsing: Sequences
