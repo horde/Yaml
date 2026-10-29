@@ -15,4 +15,5 @@
 if (!class_exists('Horde\Yaml\Helper\TestSerializable')) {
     require_once __DIR__ . '/Helper/TestSerializable.php';
     require_once __DIR__ . '/Helper/TestNotSerializable.php';
+    require_once __DIR__ . '/Helper/TestPoiGadget.php';
 }
