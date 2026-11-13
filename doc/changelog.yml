@@ -1,4 +1,14 @@
 ---
+3.0.4:
+  api: 3.0.4
+  state:
+    release: stable
+    api: stable
+  date: 2026-11-13
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: 'fix(document): faithful keys, properties, comments and empty nodes; explicit keys; refuse duplicate keys under strict'
 3.0.3:
   api: 3.0.3
   state:

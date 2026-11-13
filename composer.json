@@ -31,18 +31,19 @@
         "roundtrip",
         "compliant"
     ],
-    "time": "2026-10-29",
+    "time": "2026-11-13",
     "repositories": [],
     "require": {
         "php": "^8.2",
-        "ext-ctype": "*",
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0"
+        "ext-ctype": "*"
     },
     "require-dev": {
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
