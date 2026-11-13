@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use XMLParser;
 use Exception;
+use __PHP_Incomplete_Class;
 
 /**
  * @category   Horde
@@ -424,7 +425,7 @@ class LoaderTest extends TestCase
         );
 
         $this->assertInstanceOf(ArrayObject::class, $result['o']);
-        $this->assertInstanceOf(\__PHP_Incomplete_Class::class, $result['o']['evil']);
+        $this->assertInstanceOf(__PHP_Incomplete_Class::class, $result['o']['evil']);
     }
 
     // Parsing: Sequences

@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace Horde\Yaml\Document;
 
-use Horde\Exception\DetailsTrait;
-use Horde\Exception\LogThrowable;
-use Horde\Exception\LogTrait;
 use LogicException;
 
 /**
@@ -31,8 +28,4 @@ use LogicException;
  * @license   http://www.horde.org/licenses/bsd BSD
  * @package   Yaml
  */
-class StructuralException extends LogicException implements Exception, LogThrowable
-{
-    use DetailsTrait;
-    use LogTrait;
-}
+class StructuralException extends LogicException implements Exception {}

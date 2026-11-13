@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace Horde\Yaml\Document;
 
-use Horde\Exception\DetailsTrait;
-use Horde\Exception\LogThrowable;
-use Horde\Exception\LogTrait;
 use Horde\Yaml\Document\Node\Node;
 use RuntimeException;
 
@@ -27,11 +24,8 @@ use RuntimeException;
  * diagnostic info ("this came from API construction, not source").
  *
  */
-class EmitException extends RuntimeException implements Exception, LogThrowable
+class EmitException extends RuntimeException implements Exception
 {
-    use DetailsTrait;
-    use LogTrait;
-
     public function __construct(
         string $message,
         public readonly ?Node $node = null,

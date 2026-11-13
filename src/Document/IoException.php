@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace Horde\Yaml\Document;
 
-use Horde\Exception\DetailsTrait;
-use Horde\Exception\LogThrowable;
-use Horde\Exception\LogTrait;
 use RuntimeException;
 use Throwable;
 
@@ -23,11 +20,8 @@ use Throwable;
  * Carries the path or resource identifier when applicable.
  *
  */
-class IoException extends RuntimeException implements Exception, LogThrowable
+class IoException extends RuntimeException implements Exception
 {
-    use DetailsTrait;
-    use LogTrait;
-
     public function __construct(
         string $message,
         public readonly string $path = '',

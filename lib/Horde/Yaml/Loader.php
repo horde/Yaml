@@ -565,7 +565,7 @@ class Horde_Yaml_Loader
                 // restores full PHP object injection.
                 $data = unserialize(
                     $serialized,
-                    array('allowed_classes' => Horde_Yaml::$allowedClasses)
+                    ['allowed_classes' => Horde_Yaml::$allowedClasses]
                 );
                 break;
 

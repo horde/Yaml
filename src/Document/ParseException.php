@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace Horde\Yaml\Document;
 
-use Horde\Exception\DetailsTrait;
-use Horde\Exception\LogThrowable;
-use Horde\Exception\LogTrait;
 use RuntimeException;
 
 /**
@@ -39,8 +36,4 @@ use RuntimeException;
  * @license   http://www.horde.org/licenses/bsd BSD
  * @package   Yaml
  */
-class ParseException extends RuntimeException implements Exception, LogThrowable
-{
-    use DetailsTrait;
-    use LogTrait;
-}
+class ParseException extends RuntimeException implements Exception {}

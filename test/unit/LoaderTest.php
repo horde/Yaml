@@ -31,6 +31,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use XMLParser;
+use __PHP_Incomplete_Class;
 
 /**
  * @category   Horde
@@ -407,7 +408,7 @@ class LoaderTest extends TestCase
         // The whitelisted carrier itself still loads fine
         $this->assertInstanceOf(ArrayObject::class, $result['o']);
         // but the smuggled object is neutralised to an incomplete class.
-        $this->assertInstanceOf(\__PHP_Incomplete_Class::class, $result['o']['evil']);
+        $this->assertInstanceOf(__PHP_Incomplete_Class::class, $result['o']['evil']);
     }
 
     // Parsing: Sequences

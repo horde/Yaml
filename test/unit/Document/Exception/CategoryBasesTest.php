@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Horde\Yaml\Test\Unit\Document\Exception;
 
-use Horde\Exception\HordeThrowable;
 use Horde\Yaml\Document\EmitException;
 use Horde\Yaml\Document\Exception;
 use Horde\Yaml\Document\IoException;
@@ -25,8 +24,8 @@ use ReflectionClass;
 
 /**
  * Verifies the document layer's exception hierarchy: every category base
- * implements the umbrella interface, implements HordeThrowable, and is
- * catchable as the appropriate SPL ancestor.
+ * implements the umbrella interface and is catchable as the appropriate
+ * SPL ancestor.
  */
 #[CoversClass(ParseException::class)]
 #[CoversClass(EmitException::class)]
@@ -44,17 +43,6 @@ final class CategoryBasesTest extends TestCase
         }
         $this->assertInstanceOf(ParseException::class, $caught);
         $this->assertSame('parse went wrong', $caught->getMessage());
-    }
-
-    public function testParseExceptionIsCatchableViaHordeThrowable(): void
-    {
-        $caught = null;
-        try {
-            throw new ParseException('boom');
-        } catch (HordeThrowable $e) {
-            $caught = $e;
-        }
-        $this->assertInstanceOf(ParseException::class, $caught);
     }
 
     public function testParseExceptionIsCatchableAsRuntimeException(): void
@@ -147,17 +135,9 @@ final class CategoryBasesTest extends TestCase
         $this->assertInstanceOf(StructuralException::class, $caught);
     }
 
-    public function testCategoryBasesHaveDetailsTrait(): void
-    {
-        $e = new ParseException('msg');
-        $e->setDetails('extra context');
-        $this->assertSame('extra context', $e->getDetails());
-    }
-
-    public function testUmbrellaInterfaceExtendsHordeThrowable(): void
+    public function testUmbrellaInterfaceIsABareInterface(): void
     {
         $reflection = new ReflectionClass(Exception::class);
         $this->assertTrue($reflection->isInterface());
-        $this->assertTrue($reflection->implementsInterface(HordeThrowable::class));
     }
 }

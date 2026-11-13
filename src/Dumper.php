@@ -234,8 +234,8 @@ class Dumper
         return in_array(
             $lower,
             ['null', '~', '.nan', '.inf', '-.inf',
-             'true', 'on', '+', 'yes', 'y',
-             'false', 'off', '-', 'no', 'n'],
+                'true', 'on', '+', 'yes', 'y',
+                'false', 'off', '-', 'no', 'n'],
             true
         )
             || is_numeric($value);
