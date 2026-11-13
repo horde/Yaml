@@ -38,12 +38,10 @@
         "ext-ctype": "*"
     },
     "require-dev": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/test": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
